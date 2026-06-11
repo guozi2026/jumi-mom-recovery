@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>橘米 · 妈妈恢复周报编辑器</title>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap');
+
+:root {
+  --bg: #F5EDE3;
+  --editor-bg: #EBE3D7;
+  --card: #FDFBF7;
+  --warm: #EDE5D8;
+  --warm2: #DDD5C8;
+  --text: #5C4F3D;
+  --text2: #7A6E5B;
+  --text3: #A99E8E;
+  --pink: #D4A8A2;
+  --pink2: #C28F89;
+  --green: #8FAF8B;
+  --green2: #7A9E76;
+  --blue: #8FAAB8;
+  --blue2: #7A96A5;
+  --lavender: #B8ADC9;
+  --amber: #C4A862;
+  --rose: #C28F89;
+  --paper: #F5EDE3;
+  --tape: rgba(196,168,130,0.35);
+  --shadow: 0 2px 12px rgba(92,79,61,0.08);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background: var(--editor-bg);
+  color: var(--text);
+  line-height: 1.7;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===== 整体布局 ===== */
+.app-layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* ===== 左侧编辑面板 ===== */
+.editor-panel {
+  width: 380px;
+  min-width: 380px;
+  background: var(--editor-bg);
+  border-right: 1px solid var(--warm2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* 表单导航 */
+.form-nav {
+  display: flex;
+  gap: 6px;
+  padding: 12px 20px;
+  background: var(--editor-bg);
+  border-bottom: 1px solid var(--warm2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.form-nav button {
+  padding: 6px 10px;
+  border: 1px solid var(--warm2);
+  border-radius: 8px;
+  background: var(--card);
+  font-size: 12px;
+  color: var(--text2);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.form-nav button:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+  background: #FFFDF8;
+}
+
+/* 表单滚动容器 */
+.form-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 20px 40px;
+}
+
+.form-scroll-container::-webkit-scrollbar { width: 6px; }
+.form-scroll-container::-webkit-scrollbar-track { background: transparent; }
+.form-scroll-container::-webkit-scrollbar-thumb { background: var(--warm2); border-radius: 3px; }
+
+/* 旧编辑器标题区 */
+.editor-header-old {
+  padding: 16px 0 12px;
+  border-bottom: 1px solid var(--warm2);
+  margin-bottom: 16px;
+}
+
+.editor-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.editor-subtitle {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.editor-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.editor-actions button {
+  flex: 1;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 0;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+/* 模板选择器 */
+.template-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--warm2);
+}
+
+.template-label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.template-status {
+  font-size: 10px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.template-status.active { background: #E8F5E9; color: var(--green2); }
+.template-status.modified { background: #FFF3E0; color: #E6A817; }
+.reset-template-btn {
+  font-size: 10px;
+  color: var(--pink2);
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: auto;
+}
+.reset-template-btn:hover { color: var(--rose); }
+
+/* 症状组合器 */
+.symptom-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.symptom-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.symptom-label {
+  font-size: 11px;
+  color: var(--text2);
+  font-weight: 500;
+}
+
+.symptom-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.symptom-pill {
+  padding: 5px 10px;
+  border: 1px solid var(--warm2);
+  border-radius: 14px;
+  background: var(--card);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--text2);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.symptom-pill:hover {
+  border-color: var(--amber);
+  background: #FFFDF8;
+}
+
+.symptom-pill.selected {
+  background: var(--amber);
+  color: #fff;
+  border-color: var(--amber);
+  font-weight: 500;
+}
+
+.symptom-pill.selected:hover {
+  background: #B8963D;
+}
+
+.btn-generate {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--green), var(--green2));
+  color: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: opacity 0.2s;
+}
+
+.btn-generate:hover { opacity: 0.9; }
+
+/* 快速模板按钮（保留常用） */
+.quick-templates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.quick-tpl-btn {
+  padding: 5px 10px;
+  border: 1px dashed var(--warm2);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--text3);
+  transition: all 0.15s;
+}
+
+.quick-tpl-btn:hover {
+  border-color: var(--amber);
+  color: var(--text);
+  background: #FFFDF8;
+}
+
+.btn-preview {
+  background: var(--green2);
+  color: #fff;
+}
+.btn-preview:hover { background: #6B8E68; }
+
+.btn-screenshot {
+  background: var(--pink2);
+  color: #fff;
+}
+.btn-screenshot:hover { background: #B07A75; }
+
+.btn-download {
+  background: var(--amber);
+  color: #fff;
+}
+.btn-download:hover { background: #C49538; }
+
+.form-section {
+  margin-top: 20px;
+}
+
+.form-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--warm2);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-section-title .emoji { font-size: 15px; }
+
+.form-row {
+  margin-bottom: 12px;
+}
+
+/* 紧凑表单行 - 客户信息区使用 */
+.form-row.compact {
+  margin-bottom: 8px;
+}
+
+/* 客户信息网格 - 双列紧凑布局 */
+.client-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 12px;
+}
+
+.form-row.half {
+  display: inline-block;
+  width: calc(50% - 6px);
+  margin-right: 6px;
+}
+
+.form-row.half:nth-child(even) {
+  margin-right: 0;
+  margin-left: 6px;
+}
+
+.form-label {
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  border: 1px solid var(--warm2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--card);
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px rgba(196,168,130,0.12);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 60px;
+  line-height: 1.6;
+}
+
+.form-hint {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 3px;
+}
+
+/* ===== 右侧预览面板 ===== */
+.preview-panel {
+  flex: 1;
+  background: var(--bg);
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  padding: 30px 20px 60px;
+}
+
+.preview-panel::-webkit-scrollbar { width: 6px; }
+.preview-panel::-webkit-scrollbar-track { background: transparent; }
+.preview-panel::-webkit-scrollbar-thumb { background: var(--warm2); border-radius: 3px; }
+
+.letter {
+  width: 100%;
+  max-width: 420px;
+  min-height: 100vh;
+  background: var(--card);
+  border-radius: 16px;
+  padding: 28px 22px;
+}
+
+/* ===== 信件样式（统一字体层级） ===== */
+/* 信封顶部 */
+.envelope { text-align: center; padding: 20px 0 24px; position: relative; }
+.envelope-header {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px;
+  margin: 0 auto 12px;
+}
+.envelope-seal {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink2), var(--rose));
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(194,143,137,0.25);
+}
+.envelope-seal svg {
+  width: 18px; height: 18px;
+}
+.envelope-lady {
+  width: 36px; height: 36px;
+  flex-shrink: 0;
+}
+.envelope-lady img {
+  width: 100%; height: 100%; object-fit: contain;
+}
+.envelope-brand {
+  font-size: 11px; letter-spacing: 5px; color: var(--text2); margin-bottom: 8px; font-weight: 500;
+}
+.envelope-line {
+  width: 56px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  margin: 0 auto 10px;
+}
+.envelope-date {
+  font-size: 12px; color: var(--text3); letter-spacing: 0.5px;
+}
+.envelope-sub {
+  font-size: 11px; color: var(--text3); margin-top: 6px; font-style: italic;
+}
+/* 出所提醒卡片 */
+.checkout-reminder {
+  margin: 16px 0;
+  background: var(--card);
+  border-radius: 14px; padding: 14px 16px;
+  border: 1px dashed var(--amber);
+  position: relative;
+}
+.checkout-reminder-icon {
+  font-size: 16px; margin-right: 6px;
+}
+.checkout-reminder-title {
+  font-size: 13px; font-weight: 600; color: var(--amber); margin-bottom: 4px;
+  display: flex; align-items: center;
+}
+.checkout-reminder-body {
+  font-size: 12px; color: var(--text2); line-height: 1.7;
+}
+
+/* 称呼 —— 唯一用装饰字体的地方 */
+.salutation { padding: 12px 0 8px; }
+.salutation-text {
+  font-family: 'ZCOOL XiaoWei', serif;
+  font-size: 20px; color: var(--text); letter-spacing: 1px;
+}
+.salutation-sub {
+  font-size: 12px; color: var(--text3); margin-top: 4px;
+}
+
+/* 情绪确认卡 —— 轻量便签风 */
+.affirmation {
+  background: var(--paper); border-radius: 16px; padding: 18px 16px;
+  margin: 16px 0; position: relative;
+  box-shadow: 0 2px 8px rgba(92,79,61,0.06);
+  border: 1px solid #F0E8DD;
+}
+.affirmation::before {
+  content: '✦'; position: absolute; top: -8px; left: 24px;
+  width: 24px; height: 24px; background: var(--card);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--amber); border: 2px solid var(--warm2);
+  box-shadow: 0 1px 4px rgba(92,79,61,0.08);
+}
+.affirmation-text {
+  font-size: 14px; color: var(--text); line-height: 1.9; text-align: left;
+  padding-top: 2px;
+}
+.affirmation-text .highlight { color: var(--pink2); font-weight: 600; }
+.affirmation-sign {
+  font-size: 11px; color: var(--text3); text-align: right; margin-top: 8px; font-style: italic;
+}
+
+/* 段落标签 */
+.section { margin: 22px 0 16px; }
+.section-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; letter-spacing: 1.5px;
+  color: var(--text3); background: var(--warm); padding: 3px 10px;
+  border-radius: 10px; margin-bottom: 10px;
+}
+.section-title {
+  font-size: 15px; font-weight: 600; color: var(--text);
+  margin-bottom: 12px; line-height: 1.5;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title .hand {
+  font-family: 'ZCOOL XiaoWei', serif; font-size: 16px;
+}
+.section-title .section-emoji {
+  font-size: 16px; opacity: 0.7;
+}
+
+/* 变化卡片 */
+.change-list { display: flex; flex-direction: column; gap: 12px; }
+.change-card {
+  background: var(--card); border-radius: 14px; padding: 16px 14px;
+  position: relative;
+  border: 1px solid var(--warm2);
+}
+.change-sticker { position: absolute; top: 10px; right: 10px; font-size: 16px; opacity: 0.5; }
+.change-label { font-size: 11px; color: var(--text3); margin-bottom: 4px; letter-spacing: 0.5px; }
+.change-text {
+  font-size: 14px; color: var(--text); line-height: 1.7;
+}
+/* 统一数字样式 —— 不用装饰字体，用weight和color区分 */
+.change-text .num {
+  font-size: 16px; font-weight: 700; color: var(--pink2);
+}
+.change-text .num-green { font-size: 16px; font-weight: 700; color: var(--green2); }
+.change-text .num-blue { font-size: 16px; font-weight: 700; color: var(--blue2); }
+.change-detail { font-size: 12.5px; color: var(--text2); margin-top: 6px; line-height: 1.6; }
+.change-compare { font-size: 11px; color: var(--text3); margin-top: 3px; font-style: italic; }
+
+/* 分隔 */
+.divider { text-align: center; padding: 4px 0; }
+.divider-dots { font-size: 7px; color: var(--text3); letter-spacing: 5px; }
+
+/* 小知识卡片 */
+.knowledge-section { margin: 18px 0; }
+.knowledge-title {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+}
+.knowledge-title .section-emoji { font-size: 15px; opacity: 0.7; }
+.knowledge-list { display: flex; flex-direction: column; gap: 8px; }
+.knowledge-card {
+  background: var(--card); border-radius: 12px; padding: 12px 14px;
+  position: relative;
+  border: 1px solid var(--warm2);
+}
+.knowledge-card-header {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
+}
+.knowledge-card-icon {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+.knowledge-card-icon.k-pink { background: #FCE4EC; }
+.knowledge-card-icon.k-blue { background: #E3F2FD; }
+.knowledge-card-icon.k-green { background: #E8F5E9; }
+.knowledge-card-icon.k-lavender { background: #F3E5F5; }
+.knowledge-card-topic {
+  font-size: 12px; font-weight: 600; color: var(--text);
+}
+.knowledge-card-body {
+  font-size: 12px; color: var(--text2); line-height: 1.7;
+}
+.knowledge-card-body strong {
+  color: var(--text); font-weight: 600;
+}
+.knowledge-card-stats {
+  margin-top: 6px; font-size: 11px; color: var(--amber);
+  font-weight: 500; font-style: italic;
+}
+
+/* 医生卡片 */
+.doctor-section { margin: 16px 0; }
+.doctor-note {
+  background: var(--card);
+  border-radius: 14px; padding: 16px 14px;
+  border: 1px solid var(--warm2);
+}
+.doctor-from { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.doctor-avatar {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 12px; font-weight: 600;
+}
+.doctor-info .d-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.doctor-info .d-role { font-size: 11px; color: var(--text3); }
+.doctor-words { font-size: 13.5px; color: var(--text); line-height: 1.9; }
+
+/* 建议列表 */
+.advice-section { margin-top: 14px; }
+.advice-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px; padding-bottom: 8px;
+  border-bottom: 1px dashed var(--warm2);
+}
+.advice-header-icon { font-size: 16px; }
+.advice-header-text { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; }
+.advice-header-count {
+  font-size: 10px; color: #fff; background: var(--pink2);
+  padding: 2px 8px; border-radius: 10px;
+}
+.advice-intro { font-size: 12.5px; color: var(--text2); margin-bottom: 10px; line-height: 1.7; }
+.advice-more {
+  text-align: center; font-size: 11px; color: var(--text3); padding: 8px;
+  cursor: pointer; border-radius: 8px; background: var(--warm);
+  transition: background 0.2s;
+}
+.advice-more:hover { background: var(--warm2); }
+
+/* ===== 排版方式A：横向卡片（默认） ===== */
+.advice-list { display: flex; flex-direction: column; gap: 8px; }
+.advice-card {
+  background: var(--card); border-radius: 12px; padding: 12px;
+  position: relative; overflow: hidden;
+  border: 1px solid var(--warm2);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.advice-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; }
+.advice-card.a-green::after { background: var(--green); }
+.advice-card.a-pink::after { background: var(--pink2); }
+.advice-card.a-blue::after { background: var(--blue2); }
+.advice-card.a-lavender::after { background: var(--lavender); }
+.advice-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; margin-top: 2px;
+}
+.advice-icon.i-green { background: #E8F5E9; }
+.advice-icon.i-pink { background: #FCE4EC; }
+.advice-icon.i-blue { background: #E3F2FD; }
+.advice-icon.i-lavender { background: #F3E5F5; }
+.advice-body { flex: 1; min-width: 0; }
+.advice-why { font-size: 11.5px; color: var(--text2); line-height: 1.5; margin-bottom: 3px; }
+.advice-what { font-size: 13.5px; font-weight: 600; color: var(--text); }
+.advice-effect { font-size: 11.5px; color: var(--text2); margin-top: 2px; }
+.advice-price { font-size: 10.5px; color: var(--text3); margin-top: 4px; }
+.advice-source { font-size: 9px; color: var(--text3); background: var(--warm); padding: 1px 5px; border-radius: 4px; display: inline-block; margin-top: 3px; }
+
+/* ===== 排版方式B：竖向便签（紧凑版） ===== */
+.letter.layout-b .advice-list { display: flex; flex-direction: column; gap: 6px; }
+.letter.layout-b .advice-card {
+  display: block;
+  padding: 10px 12px;
+  border-left: 3px solid transparent;
+  border-radius: 10px;
+}
+.letter.layout-b .advice-card.a-green { border-left-color: var(--green); }
+.letter.layout-b .advice-card.a-pink { border-left-color: var(--pink2); }
+.letter.layout-b .advice-card.a-blue { border-left-color: var(--blue2); }
+.letter.layout-b .advice-card.a-lavender { border-left-color: var(--lavender); }
+.letter.layout-b .advice-card::after { display: none; }
+.letter.layout-b .advice-icon {
+  display: inline-flex;
+  width: 22px; height: 22px;
+  font-size: 11px;
+  vertical-align: middle;
+  margin: 0 4px 0 0;
+}
+.letter.layout-b .advice-body { display: inline; }
+.letter.layout-b .advice-why,
+.letter.layout-b .advice-effect,
+.letter.layout-b .advice-source { display: none; }
+.letter.layout-b .advice-what {
+  display: inline;
+  font-size: 13px;
+  font-weight: 600;
+}
+.letter.layout-b .advice-price {
+  display: inline;
+  font-size: 11px;
+  margin-left: 6px;
+}
+.letter.layout-b .advice-price::before { content: ' · '; color: var(--text3); font-weight: 400; }
+
+/* ===== 排版方式C：两列网格 ===== */
+.letter.layout-c .advice-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.letter.layout-c .advice-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 14px 10px;
+  gap: 6px;
+}
+.letter.layout-c .advice-icon {
+  width: 40px; height: 40px;
+  font-size: 18px;
+  margin: 0;
+}
+.letter.layout-c .advice-body { width: 100%; }
+.letter.layout-c .advice-why { font-size: 10px; line-height: 1.4; }
+.letter.layout-c .advice-what { font-size: 12px; }
+.letter.layout-c .advice-effect { font-size: 10px; }
+.letter.layout-c .advice-price { font-size: 10px; margin-top: 2px; }
+.letter.layout-c .advice-source { display: none; }
+
+/* 待办事项 */
+.todo-section { margin: 16px 0; }
+.todo-list { display: flex; flex-direction: column; gap: 0; }
+.todo-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 0; border-bottom: 1px dashed var(--warm2);
+}
+.todo-item:last-child { border-bottom: none; }
+.todo-num {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #fff; flex-shrink: 0; margin-top: 1px;
+}
+.todo-num.n1 { background: var(--pink2); }
+.todo-num.n2 { background: var(--green2); }
+.todo-num.n3 { background: var(--blue2); }
+.todo-action { font-size: 13.5px; color: var(--text); font-weight: 500; line-height: 1.5; }
+.todo-desc { font-size: 12px; color: var(--text2); margin-top: 1px; line-height: 1.5; }
+
+/* 产康师手记 */
+.personal-note-section { margin: 16px 0; }
+.personal-note-card {
+  background: var(--card);
+  border-radius: 14px; padding: 14px 12px;
+  border: 1px dashed var(--amber);
+  position: relative;
+}
+.personal-note-card::before {
+  content: '✎'; position: absolute; top: -8px; left: 20px;
+  width: 24px; height: 24px; background: var(--card);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--amber); border: 2px solid var(--warm2);
+  box-shadow: 0 1px 4px rgba(92,79,61,0.08);
+}
+.personal-note-title { font-size: 12.5px; color: var(--amber); margin-bottom: 8px; padding-top: 2px; }
+.personal-note-body { font-size: 13.5px; color: var(--text); line-height: 1.9; }
+
+/* 联系卡片 */
+.contact-section { margin: 20px 0 0; }
+.contact-card {
+  background: var(--card); border-radius: 14px; padding: 14px 12px;
+  border: 1px solid var(--warm2); position: relative; overflow: hidden;
+}
+.contact-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2.5px;
+  background: linear-gradient(90deg, var(--pink2), var(--green2), var(--blue2));
+}
+.contact-title { font-size: 12.5px; color: var(--text); font-weight: 600; margin-bottom: 10px; text-align: center; }
+.contact-consultant { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.contact-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink2), var(--rose));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 14px; font-weight: 600; flex-shrink: 0;
+}
+.contact-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.contact-role { font-size: 11px; color: var(--text3); }
+.contact-methods { display: flex; flex-direction: column; gap: 6px; }
+.contact-method {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--warm); border-radius: 8px; padding: 8px 10px;
+}
+.contact-label { font-size: 10px; color: var(--text3); }
+.contact-value { font-size: 12px; color: var(--text); font-weight: 500; }
+.contact-hint { font-size: 10.5px; color: var(--text3); text-align: center; margin-top: 8px; font-style: italic; }
+
+/* 信尾 */
+.sign-off { margin: 18px 0 6px; text-align: right; padding-right: 4px; }
+.sign-words { font-family: 'ZCOOL XiaoWei', serif; font-size: 14px; color: var(--text); line-height: 1.6; }
+.sign-brand { font-size: 11px; color: var(--text2); margin-top: 1px; }
+.sign-slogan { font-size: 10px; color: var(--text3); margin-top: 0; font-style: italic; }
+
+/* 底部 */
+.footer { text-align: left; padding: 10px 0 4px; }
+.footer-line { width: 100%; height: 0.5px; background: var(--warm2); margin: 0 0 8px; }
+.footer-note { font-size: 9.5px; color: var(--text3); line-height: 1.6; }
+
+/* ===== 截图模式：隐藏编辑面板 ===== */
+body.screenshot-mode .editor-panel { display: none; }
+body.screenshot-mode .preview-panel {
+  padding: 0;
+  justify-content: center;
+  align-items: flex-start;
+  background: var(--card);
+}
+body.screenshot-mode .letter {
+  max-width: 420px;
+  min-height: 100vh;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ===== 悬浮返回按钮（截图/全屏模式可见） ===== */
+.back-to-edit-btn {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 9999;
+  background: rgba(92, 79, 61, 0.6);
+  color: #FFF;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.25s;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0.3;
+  transform: scale(0.85);
+  transform-origin: left center;
+}
+.back-to-edit-btn:hover {
+  background: rgba(92, 79, 61, 0.9);
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+}
+body.screenshot-mode .back-to-edit-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+}
+
+/* ===== 移动端适配 ===== */
+@media (max-width: 768px) {
+  .app-layout { flex-direction: column; }
+  .editor-panel {
+    width: 100%;
+    min-width: 100%;
+    height: 50vh;
+  }
+  .form-scroll-container {
+    max-height: 45vh;
+  }
+  .client-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== 推荐方案调整区 ===== */
+.rec-summary {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  margin-top: 4px;
+}
+.rec-tag {
+  font-size: 10px; padding: 2px 8px; border-radius: 10px;
+  background: var(--warm); color: var(--text2);
+}
+.rec-tag.auto { background: #E8F5E9; color: var(--green2); }
+.rec-tag.manual { background: #FFF3E0; color: #E6A817; }
+.rec-add-row {
+  display: flex; gap: 6px; align-items: center;
+}
+.rec-add-row .form-input { flex: 1; }
+.btn-add-rec {
+  padding: 8px 14px; border: none; border-radius: 8px;
+  background: var(--amber); color: #fff; font-size: 12px;
+  cursor: pointer; font-family: inherit; font-weight: 500;
+  white-space: nowrap; transition: background 0.2s;
+}
+.btn-add-rec:hover { background: #B8963D; }
+.rec-manual-list { display: flex; flex-direction: column; gap: 4px; }
+.rec-manual-item {
+  display: flex; align-items: center; gap: 8px;
+  background: #FFF8EE; border: 1px dashed var(--amber);
+  border-radius: 8px; padding: 6px 10px; font-size: 12px;
+}
+.rec-manual-item .rm-name { flex: 1; color: var(--text); font-weight: 500; }
+.rec-manual-item .rm-price { color: var(--text3); font-size: 11px; }
+.rec-manual-item .rm-del {
+  cursor: pointer; color: var(--pink2); font-size: 14px; line-height: 1;
+  border: none; background: none; padding: 0 4px;
+}
+.rec-manual-item .rm-del:hover { color: var(--rose); }
+
+/* 可勾选的自动推荐标签 */
+.rec-selectable {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rec-selectable .rec-tag {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+  position: relative;
+  padding-left: 22px;
+}
+.rec-selectable .rec-tag::before {
+  content: '✓';
+  position: absolute;
+  left: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-weight: 700;
+}
+.rec-selectable .rec-tag.unchecked {
+  background: var(--warm2);
+  color: var(--text3);
+  opacity: 0.6;
+}
+.rec-selectable .rec-tag.unchecked::before {
+  content: '○';
+  font-size: 9px;
+  opacity: 0.5;
+}
+.rec-selectable .rec-tag:hover {
+  transform: translateY(-1px);
+}
+.rec-selectable .rec-tag.unchecked:hover {
+  opacity: 0.9;
+}
+
+/* 排版切换按钮 */
+.layout-toggle {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.layout-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--warm2);
+  border-radius: 10px;
+  background: var(--card);
+  font-size: 12px;
+  color: var(--text2);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.layout-btn:hover {
+  border-color: var(--pink2);
+  color: var(--pink2);
+}
+.layout-btn.active {
+  background: var(--pink2);
+  color: #fff;
+  border-color: var(--pink2);
+}
+
+/* 手记话术模板 */
+.note-templates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.note-tpl-btn {
+  padding: 5px 10px;
+  border: 1px solid var(--warm2);
+  border-radius: 12px;
+  background: var(--card);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--text2);
+  transition: all 0.15s;
+}
+.note-tpl-btn:hover {
+  border-color: var(--pink2);
+  color: var(--pink2);
+  background: #FFF8F6;
+}
+.note-tpl-btn:active {
+  background: var(--pink2);
+  color: #fff;
+}
+</style>
+</head>
+<body>
+
+<!-- 悬浮返回按钮（截图/全屏模式可见） -->
+<button class="back-to-edit-btn" onclick="backToEdit()">← 返回编辑</button>
+
+<div class="app-layout">
+
+<!-- ═══════════════ 左侧编辑面板 ═══════════════ -->
+<div class="editor-panel" id="editorPanel">
+  <!-- 表单导航 -->
+  <div class="form-nav">
+    <button onclick="scrollToSection('client-info')">👤 客户信息</button>
+    <button onclick="scrollToSection('assessment')">📊 本周评估</button>
+    <button onclick="scrollToSection('recommendations')">🎯 推荐方案</button>
+    <button onclick="scrollToSection('consultant')">👩⚕️ 顾问信息</button>
+  </div>
+  
+  <div class="form-scroll-container">
+    <div class="editor-header-old">
+      <div class="editor-title">📋 产康师填写区</div>
+      <div class="editor-subtitle">填完右侧自动更新，截图即可发给客户</div>
+      <div class="editor-actions">
+        <button class="btn-preview" onclick="togglePreview()">📱 全屏预览</button>
+        <button class="btn-screenshot" onclick="doScreenshot()">📸 截图模式</button>
+        <button class="btn-download" onclick="downloadScreenshot()">💾 一键截图</button>
+      </div>
+    </div>
+    <div class="template-section">
+      <div class="template-label">
+        🧩 症状组合器
+        <span class="template-status active" id="templateStatus">✅ 常见型</span>
+        <span class="reset-template-btn" id="resetBtn" onclick="resetTemplate()" style="display:none">↺ 重置</span>
+      </div>
+
+      <!-- 常用一键模板 -->
+      <div class="quick-templates">
+        <button class="quick-tpl-btn" onclick="applyTemplate('mild')">🌿 轻度</button>
+        <button class="quick-tpl-btn" onclick="applyTemplate('moderate')">🎀 常见</button>
+        <button class="quick-tpl-btn" onclick="applyTemplate('severe')">🩺 重度</button>
+        <button class="quick-tpl-btn" onclick="applyTemplate('all_clear')">✨ 恢复良好</button>
+      </div>
+
+      <!-- 自由组合 -->
+      <div class="symptom-builder">
+        <div class="symptom-row">
+          <div class="symptom-label">腹直肌分离</div>
+          <div class="symptom-options" id="sDiastasis">
+            <button class="symptom-pill" data-val="1.5" onclick="selectSymptom(this, 'diastasis')">≤2指正常</button>
+            <button class="symptom-pill selected" data-val="2.5" onclick="selectSymptom(this, 'diastasis')">2-3指轻度</button>
+            <button class="symptom-pill" data-val="3.5" onclick="selectSymptom(this, 'diastasis')">3-4指中度</button>
+            <button class="symptom-pill" data-val="4.5" onclick="selectSymptom(this, 'diastasis')">≥4指重度</button>
+          </div>
+        </div>
+        <div class="symptom-row">
+          <div class="symptom-label">盆底肌力</div>
+          <div class="symptom-options" id="sPelvic">
+            <button class="symptom-pill" data-val="3" onclick="selectSymptom(this, 'pelvic')">≥Ⅲ级达标</button>
+            <button class="symptom-pill selected" data-val="2" onclick="selectSymptom(this, 'pelvic')">Ⅱ级轻度</button>
+            <button class="symptom-pill" data-val="1" onclick="selectSymptom(this, 'pelvic')">Ⅰ级中度</button>
+            <button class="symptom-pill" data-val="0" onclick="selectSymptom(this, 'pelvic')">0级重度</button>
+          </div>
+        </div>
+        <div class="symptom-row">
+          <div class="symptom-label">子宫状态</div>
+          <div class="symptom-options" id="sUterus">
+            <button class="symptom-pill" data-val="已入盆" onclick="selectSymptom(this, 'uterus')">已入盆</button>
+            <button class="symptom-pill selected" data-val="未入盆" onclick="selectSymptom(this, 'uterus')">未入盆</button>
+          </div>
+        </div>
+        <div class="symptom-row">
+          <div class="symptom-label">会阴状态</div>
+          <div class="symptom-options" id="sPerineal">
+            <button class="symptom-pill" data-val="已闭合" onclick="selectSymptom(this, 'perineal')">已闭合</button>
+            <button class="symptom-pill selected" data-val="未完全闭合" onclick="selectSymptom(this, 'perineal')">未完全闭合</button>
+            <button class="symptom-pill" data-val="未闭合" onclick="selectSymptom(this, 'perineal')">未闭合</button>
+          </div>
+        </div>
+        <div class="symptom-row">
+          <div class="symptom-label">乳腺状态</div>
+          <div class="symptom-options" id="sBreast">
+            <button class="symptom-pill selected" data-val="正常" onclick="selectSymptom(this, 'breast')">正常</button>
+            <button class="symptom-pill" data-val="不通" onclick="selectSymptom(this, 'breast')">不通需疏通</button>
+          </div>
+        </div>
+        <button class="btn-generate" onclick="generateFromSymptoms()">🎲 按症状生成模板</button>
+      </div>
+    </div>
+
+    <!-- 客户信息 -->
+    <div class="form-section" id="client-info">
+      <div class="form-section-title"><span class="emoji">👤</span> 客户信息</div>
+      <div class="client-info-grid">
+        <div class="form-row compact">
+          <label class="form-label">姓名</label>
+          <input class="form-input" id="inputName" value="梦梅" placeholder="客户名">
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">分娩方式</label>
+          <select class="form-select" id="inputDelivery">
+            <option value="顺产" selected>顺产</option>
+            <option value="剖宫产">剖宫产</option>
+          </select>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">分娩日期</label>
+          <input class="form-input" id="inputBirthDate" type="date" value="2026-05-20">
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">入住日期</label>
+          <input class="form-input" id="inputCheckInDate" type="date" value="2026-05-21">
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">离所日期</label>
+          <input class="form-input" id="inputCheckOutDate" type="date" value="2026-06-19">
+          <div class="form-hint" id="stayHint">28天套餐</div>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">当前周次（自动）</label>
+          <input class="form-input" id="inputWeek" type="number" value="3" style="background:#f8f4ee" readonly>
+        </div>
+        <div class="form-row compact" style="display:none">
+          <label class="form-label">产后天数（自动）</label>
+          <input class="form-input" id="inputDays" type="number" value="21">
+        </div>
+      </div>
+      <div class="form-hint" id="dateCalcHint" style="margin-top:4px;font-size:12px;color:var(--amber)">产后第21天 · 在所第20天 / 共28天</div>
+    </div>
+
+    <!-- 本周评估 -->
+    <div class="form-section" id="assessment">
+      <div class="form-section-title"><span class="emoji">📊</span> 本周评估数据</div>
+      <div class="client-info-grid">
+        <div class="form-row compact">
+          <label class="form-label">腹直肌分离（指宽）</label>
+          <input class="form-input" id="inputDiastasisF" type="number" step="0.5" value="3" placeholder="如 3">
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">腹直肌（厘米）</label>
+          <input class="form-input" id="inputDiastasisCm" type="number" step="0.1" value="2.5" placeholder="如 2.5">
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">子宫状态</label>
+          <select class="form-select" id="inputUterus">
+            <option value="已入盆">已入盆</option>
+            <option value="未入盆" selected>未入盆</option>
+          </select>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">盆底肌力（0-5级）</label>
+          <select class="form-select" id="inputPelvic">
+            <option value="0">0级</option>
+            <option value="1">Ⅰ级</option>
+            <option value="2" selected>Ⅱ级</option>
+            <option value="3">Ⅲ级</option>
+            <option value="4">Ⅳ级</option>
+            <option value="5">Ⅴ级</option>
+          </select>
+        </div>
+        <div class="form-row compact" style="grid-column: 1 / -1">
+          <label class="form-label">会阴状态</label>
+          <select class="form-select" id="inputPerineal">
+            <option value="已闭合">已闭合</option>
+            <option value="未完全闭合" selected>未完全闭合</option>
+            <option value="未闭合">未闭合</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 上周对比 -->
+    <div class="form-section">
+      <div class="form-section-title"><span class="emoji">📉</span> 上周数据（用于对比）</div>
+      <div class="client-info-grid">
+        <div class="form-row compact">
+          <label class="form-label">上周腹直肌</label>
+          <input class="form-input" id="inputLastD" type="number" step="0.5" value="4" placeholder="无对比可不填">
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">上周盆底肌</label>
+          <select class="form-select" id="inputLastP">
+            <option value="">无</option>
+            <option value="0">0级</option>
+            <option value="1" selected>Ⅰ级</option>
+            <option value="2">Ⅱ级</option>
+            <option value="3">Ⅲ级</option>
+          </select>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">上周子宫</label>
+          <select class="form-select" id="inputLastU">
+            <option value="已入盆">已入盆</option>
+            <option value="未入盆" selected>未入盆</option>
+          </select>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">上周会阴</label>
+          <select class="form-select" id="inputLastPerineal">
+            <option value="已闭合">已闭合</option>
+            <option value="未完全闭合">未完全闭合</option>
+            <option value="未闭合" selected>未闭合</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 医生建议 -->
+    <div class="form-section">
+      <div class="form-section-title"><span class="emoji">🩺</span> 医生建议</div>
+      <div class="form-row">
+        <label class="form-label">医生姓名</label>
+        <input class="form-input" id="inputDoctorName" value="黄医生" placeholder="如 黄医生">
+      </div>
+      <div class="form-row">
+        <label class="form-label">查房建议（原文）</label>
+        <textarea class="form-textarea" id="inputDoctorAdvice" placeholder="建议关注盆底肌训练...">建议关注盆底肌训练，产后42天内是黄金恢复期。腹直肌恢复进展良好，子宫复旧需要加强。</textarea>
+        <div class="form-hint">系统会自动转述为闺蜜口吻</div>
+      </div>
+    </div>
+
+    <!-- 推荐方案手动调整 -->
+    <div class="form-section" id="recommendations">
+      <div class="form-section-title"><span class="emoji">🎯</span> 推荐方案调整（可手动增删）</div>
+      <div class="form-row">
+        <label class="form-label">信件中推荐方案的排版方式</label>
+        <div class="layout-toggle">
+          <button class="layout-btn active" data-layout="a" onclick="setLetterLayout('a')">📋 横向卡片</button>
+          <button class="layout-btn" data-layout="b" onclick="setLetterLayout('b')">📝 竖向便签</button>
+          <button class="layout-btn" data-layout="c" onclick="setLetterLayout('c')">🔲 两列网格</button>
+        </div>
+        <div class="form-hint" style="margin-top:4px">横向卡片=信息完整；竖向便签=极简紧凑；两列网格=视觉丰富</div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">自动推荐（基于症状联动生成）— 点击取消勾选</label>
+        <div class="rec-summary rec-selectable" id="recSummary"></div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">手动添加推荐项目</label>
+        <div class="rec-add-row">
+          <input class="form-input" id="manualRecName" placeholder="项目名称，如：盆底肌磁刺激">
+          <input class="form-input" id="manualRecPrice" placeholder="价格" style="width:80px">
+          <button class="btn-add-rec" onclick="addManualRec()">+ 添加</button>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="rec-manual-list" id="recManualList"></div>
+      </div>
+      <div class="form-hint" id="recHint">点击上方标签可取消勾选，取消后信件中不再显示该项目</div>
+    </div>
+
+    <!-- 产康师信息 -->
+    <div class="form-section" id="consultant">
+      <div class="form-section-title"><span class="emoji">👩‍⚕️</span> 产康顾问信息（默认值会记住）</div>
+      <div class="client-info-grid">
+        <div class="form-row compact">
+          <label class="form-label">顾问姓名</label>
+          <input class="form-input" id="inputConsultantName" value="小林" placeholder="顾问姓名">
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">联系电话</label>
+          <input class="form-input" id="inputConsultantPhone" value="138-0000-0000" placeholder="138-0000-0000">
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">微信号</label>
+          <input class="form-input" id="inputConsultantWechat" value="jumi_xiaolin" placeholder="微信号">
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">在线时间</label>
+          <input class="form-input" id="inputConsultantHours" value="8:00-20:00" placeholder="如 8:00-20:00">
+        </div>
+      </div>
+    </div>
+
+    <!-- 个性化手记 -->
+    <div class="form-section">
+      <div class="form-section-title"><span class="emoji">💌</span> 产康师手记（选填）</div>
+      <div class="form-row">
+        <label class="form-label">常用话术（点击快速填入）</label>
+        <div class="note-templates">
+          <button class="note-tpl-btn" onclick="setNoteTpl('encourage')">💪 鼓励型</button>
+          <button class="note-tpl-btn" onclick="setNoteTpl('gentle')">🌸 温柔型</button>
+          <button class="note-tpl-btn" onclick="setNoteTpl('remind')">📌 提醒型</button>
+          <button class="note-tpl-btn" onclick="setNoteTpl('breast')">🍼 乳腺</button>
+          <button class="note-tpl-btn" onclick="setNoteTpl('sleep')">😴 睡眠</button>
+          <button class="note-tpl-btn" onclick="setNoteTpl('mood')">💙 情绪</button>
+          <button class="note-tpl-btn" onclick="setNoteTpl('pain')">🩹 疼痛</button>
+          <button class="note-tpl-btn" onclick="setNoteTpl('diet')">🥗 饮食</button>
+          <button class="note-tpl-btn" onclick="setNoteTpl('partner')">👨‍👩‍👧 家属</button>
+          <button class="note-tpl-btn" onclick="setNoteTpl('clear')">🧹 清空</button>
+        </div>
+      </div>
+      <div class="form-row">
+        <textarea class="form-textarea" id="inputPersonalNote" placeholder="写点想对这位妈妈说的话...（留空则不显示）">梦梅妈妈，这周你每次做凯格尔都很认真，真的很棒！下周我们会加一组腹直肌训练，不疼的，放心~</textarea>
+        <div class="form-hint">个性化留言会让妈妈感受到被关注</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ 右侧预览面板 ═══════════════ -->
+<div class="preview-panel" id="previewPanel">
+  <div class="letter" id="letter"></div>
+</div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  数据引擎
+// ═══════════════════════════════════════════════════════════
+
+const AFFIRMATIONS = [
+  { text: "刚生完宝宝的这几天，你的身体经历了世界上最了不起的事情。现在它需要时间，你也需要。{name}，你辛苦了。", sign: "——来自橘米的一封手写信" },
+  { text: "产后身体还在恢复初期，可能还是会有各种不舒服，但每一天你的身体都在悄悄修复。{name}，允许自己慢慢来。", sign: "——橘米想对你说" },
+  { text: "恢复到了中间阶段，你会疼、会怕、会怀疑自己恢复得够不够好。但你<span class='highlight'>已经做得很好了</span>，{name}。", sign: "——橘米在你身边" },
+  { text: "最难的日子已经过去了。你的身体比你想的更坚强，{name}。给自己一个拥抱吧。", sign: "——橘米想对你说" },
+  { text: "你的身体在一点一点变好，{name}，每一点进步都值得被看见。", sign: "——橘米为你记录" },
+  { text: "从入院到现在，你走了这么远。<span class='highlight'>你比自己以为的更勇敢</span>，{name}。", sign: "——橘米永远在你身后" },
+];
+
+const PRODUCT_MAP = {
+  diastasis_moderate: { why: "腹直肌分离{fingers}指在产后很常见，很多妈妈通过专业训练都能恢复", what: "腹部小蛮腰", effect: "2-3周分离有望降到2指以内", price: 2980, color: "a-pink" },
+  diastasis_severe: { why: "腹直肌分离{fingers}指，别担心，系统修复方案可以帮你更快恢复", what: "腹部小蛮腰运动版", effect: "4-6周分离有望降到2指以内", price: 3980, color: "a-pink" },
+  pelvic_electro: { why: "盆底肌{grade}级是很多产后妈妈都会经历的，电刺激训练可以帮助提升", what: "盆底肌电刺激", effect: "10次疗程肌力有望提升1-2级", price: 1880, color: "a-green" },
+  pelvic_magnetic: { why: "盆底肌{grade}级，磁刺激可以更深层地激活你的盆底肌群", what: "盆底肌磁刺激", effect: "8-10次疗程肌力有望提升1-2级", price: 1880, color: "a-green" },
+  pelvic_manual: { why: "盆底肌{grade}级，手法+仪器搭配，很多妈妈反馈效果更好", what: "盆底肌筋膜手法", effect: "5-8次疗程深层松弛+肌力提升", price: 3160, color: "a-green" },
+  perineal_rf: { why: "会阴没完全闭合是产后正常的，射频可以帮组织更快修复", what: "外阴射频修复", effect: "5次疗程闭合度有望明显改善", price: 5980, color: "a-lavender" },
+  perineal_inner_rf: { why: "会阴松弛很多妈妈都有，内外阴同时修复效果更明显", what: "内阴+外阴射频修复", effect: "5次疗程松弛度明显改善", price: 6980, color: "a-lavender" },
+  uterus_ultrasound: { why: "产后{days}天子宫还没入盆，有些妈妈就是慢一点，超声波可以帮助促进", what: "超声波子宫复旧", effect: "5-7次治疗子宫有望入盆", price: 1876, color: "a-blue" },
+  uterus_low_freq: { why: "子宫复旧偏慢在产后挺常见的，低频电刺激可以帮它快一点收缩", what: "低频子宫复旧", effect: "3-5次治疗促进子宫收缩", price: 1680, color: "a-blue" },
+ 安心卡: { why: "几项指标都需要关注，安心卡可以一次性覆盖子宫+腹直肌+盆底全套修复", what: "安心卡（含乳腺）", effect: "月子期内全方位修复", price: 5980, color: "a-pink" },
+};
+
+// 读取表单数据
+function getFormData() {
+  const postpartumDays = parseInt(document.getElementById('inputDays').value) || 1;
+  const currentWeek = parseInt(document.getElementById('inputWeek').value) || 1;
+
+  // 计算在所天数
+  const checkInDateStr = document.getElementById('inputCheckInDate').value;
+  const checkOutDateStr = document.getElementById('inputCheckOutDate').value;
+  const today = new Date();
+  let stayDays = 0, totalStayDays = 0;
+  if (checkInDateStr) {
+    const checkIn = new Date(checkInDateStr);
+    stayDays = Math.max(1, Math.floor((today - checkIn) / (1000 * 60 * 60 * 24)) + 1);
+    if (checkOutDateStr) {
+      const checkOut = new Date(checkOutDateStr);
+      totalStayDays = Math.max(stayDays, Math.floor((checkOut - checkIn) / (1000 * 60 * 60 * 24)) + 1);
+    } else {
+      totalStayDays = stayDays;
+    }
+  }
+
+  // 是否快出所（离所前7天内）
+  const nearCheckout = totalStayDays > 0 && stayDays >= totalStayDays - 3;
+
+  // 在所进度百分比
+  const stayProgress = totalStayDays > 0 ? Math.min(100, Math.round(stayDays / totalStayDays * 100)) : 0;
+
+  return {
+    name: document.getElementById('inputName').value.trim() || '妈妈',
+    deliveryType: document.getElementById('inputDelivery').value,
+    currentWeek,
+    postpartumDays,
+    stayDays,
+    totalStayDays,
+    nearCheckout,
+    stayProgress,
+    assessment: {
+      diastasisFingers: parseFloat(document.getElementById('inputDiastasisF').value) || 0,
+      diastasisCm: parseFloat(document.getElementById('inputDiastasisCm').value) || 0,
+      uterusPosition: document.getElementById('inputUterus').value,
+      pelvicFloorGrade: parseFloat(document.getElementById('inputPelvic').value) || 0,
+      perinealClosure: document.getElementById('inputPerineal').value,
+    },
+    lastWeek: {
+      diastasisFingers: document.getElementById('inputLastD').value ? parseFloat(document.getElementById('inputLastD').value) : null,
+      pelvicFloorGrade: document.getElementById('inputLastP').value ? parseFloat(document.getElementById('inputLastP').value) : null,
+      uterusPosition: document.getElementById('inputLastU').value || null,
+      perinealClosure: document.getElementById('inputLastPerineal').value || null,
+    },
+    doctorName: document.getElementById('inputDoctorName').value.trim() || '医生',
+    doctorAdvice: document.getElementById('inputDoctorAdvice').value.trim() || '',
+    consultant: {
+      name: document.getElementById('inputConsultantName').value.trim() || '',
+      phone: document.getElementById('inputConsultantPhone').value.trim() || '',
+      wechat: document.getElementById('inputConsultantWechat').value.trim() || '',
+      workingHours: document.getElementById('inputConsultantHours').value.trim() || '',
+    },
+    personalNote: document.getElementById('inputPersonalNote').value.trim() || '',
+  };
+}
+
+function toRoman(num) {
+  const map = ['0','Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ'];
+  return map[Math.round(num)] || String(num);
+}
+
+function translateDoctorAdvice(advice) {
+  let text = advice;
+  text = text.replace(/建议关注/g, '我们可以一起关注');
+  text = text.replace(/建议配合/g, '可以试试配合');
+  text = text.replace(/建议/g, '可以试试');
+  text = text.replace(/需加强/g, '可以再努力一下');
+  text = text.replace(/需注意/g, '记得留意一下');
+  text = text.replace(/进展良好/g, '恢复得不错呢');
+  text = text.replace(/黄金恢复期/g, '最关键的恢复时间');
+  text = text.replace(/黄金期/g, '最重要的时间');
+  return text;
+}
+
+function describeChanges(asmt, last, cfg) {
+  const changes = [];
+  const d = asmt.diastasisFingers, p = asmt.pelvicFloorGrade;
+  const u = asmt.uterusPosition, pc = asmt.perinealClosure;
+
+  // 腹直肌
+  if (last && last.diastasisFingers) {
+    const diff = last.diastasisFingers - d;
+    if (diff > 0) {
+      changes.push({ color: 'c-pink', sticker: '🎀', label: '腹直肌', text: `你的小肚肚从${last.diastasisFingers}指收到<span class="num">${d}</span>指啦！`, detail: `比上周窄了${diff}指，腹直肌正在努力往中间靠拢呢。再坚持${d <= 3 ? '1-2' : '2-3'}周，就能回到2指的标准线~`, compare: d <= 3 ? '这个恢复速度已经超过很多妈妈了' : '' });
+    } else if (diff === 0) {
+      changes.push({ color: 'c-pink', sticker: '💗', label: '腹直肌', text: `你的腹直肌这周保持在<span class="num">${d}</span>指，没有再变宽。`, detail: '稳定也是一种进步。你的身体在积蓄力量，下周可能就会收拢啦。', compare: '' });
+    } else {
+      changes.push({ color: 'c-pink', sticker: '🌱', label: '腹直肌', text: `你的腹直肌这周是<span class="num">${d}</span>指。`, detail: '每个人的恢复节奏不同，不用和别人比。你的身体正在按照自己的速度来。', compare: '' });
+    }
+  } else {
+    if (d <= 2) changes.push({ color: 'c-pink', sticker: '✨', label: '腹直肌', text: `你的腹直肌<span class="num">${d}</span>指，已经达标啦！`, detail: '腹直肌分离已经恢复到2指以内的标准范围，很棒！', compare: '超过大部分同龄妈妈' });
+    else changes.push({ color: 'c-pink', sticker: '🎀', label: '腹直肌', text: `你的腹直肌现在是<span class="num">${d}</span>指。`, detail: '标准线是2指以内，你离目标还有一点点距离，但产后6周内是恢复黄金期，现在努力正当时~', compare: '' });
+  }
+
+  // 子宫
+  if (u === '已入盆') {
+    changes.push({ color: 'c-blue', sticker: '☁️', label: '子宫复旧', text: `你的子宫<span class="num-blue">已入盆</span>啦！`, detail: '子宫回到了它该在的位置，复旧进展顺利。这是恢复路上的重要一步。', compare: '' });
+  } else {
+    const limit = cfg.deliveryType === '顺产' ? 14 : 21;
+    if (cfg.postpartumDays > limit) {
+      changes.push({ color: 'c-blue', sticker: '🏠', label: '子宫复旧', text: `你的子宫还在回家的路上，<span class="num-blue">尚未入盆</span>。`, detail: `产后${cfg.postpartumDays}天了，子宫还在恢复途中。别担心，有些妈妈就是慢一点点，可以做一些促进复旧的小训练。`, compare: '' });
+    } else {
+      changes.push({ color: 'c-blue', sticker: '☁️', label: '子宫复旧', text: `你的子宫<span class="num-blue">还在回家路上</span>。`, detail: `这很正常！${cfg.deliveryType === '顺产' ? '顺产' : '剖宫产'}后${limit}天内入盆都算正常范围。给它一点时间~`, compare: '' });
+    }
+  }
+
+  // 盆底肌
+  if (p >= 3) {
+    changes.push({ color: 'c-green', sticker: '🌟', label: '盆底肌', text: `你的盆底肌力<span class="num-green">${toRoman(p)}级</span>，达标啦！`, detail: '盆底肌力已经恢复到Ⅲ级以上，你的骨盆底很健康！继续保持。', compare: '超过同龄妈妈的78%' });
+  } else {
+    const desc = p >= 2 ? '有点力气了' : '还有点虚弱';
+    if (last && last.pelvicFloorGrade !== null && last.pelvicFloorGrade < p) {
+      changes.push({ color: 'c-green', sticker: '💪', label: '盆底肌', text: `你的盆底肌比上周更有力气了！现在是<span class="num-green">${toRoman(p)}级</span>。`, detail: `从${toRoman(last.pelvicFloorGrade)}级到${toRoman(p)}级，你的盆底肌正在变强！3个月内都是黄金训练期~`, compare: '' });
+    } else {
+      changes.push({ color: 'c-green', sticker: '🌱', label: '盆底肌', text: `你的盆底肌现在<span class="num-green">${toRoman(p)}级</span>，${desc}。`, detail: `标准是Ⅲ级，你正在往那个方向走。产后3个月内是盆底肌恢复的黄金窗口期，越早训练效果越好~`, compare: '' });
+    }
+  }
+
+  // 会阴
+  if (pc === '已闭合') {
+    changes.push({ color: 'c-lavender', sticker: '🌸', label: '会阴', text: `会阴伤口<span style="color:var(--lavender);font-weight:600">已经闭合</span>啦！`, detail: '伤口完全愈合，这一关你闯过去了！', compare: '' });
+  } else if (pc === '未完全闭合') {
+    changes.push({ color: 'c-lavender', sticker: '🌷', label: '会阴', text: `会阴伤口<span style="color:var(--lavender);font-weight:600">在愈合中</span>，比之前好一些了。`, detail: '伤口正在慢慢长好，没有红肿就是好消息。再给它一点时间~', compare: '' });
+  } else {
+    changes.push({ color: 'c-lavender', sticker: '🌺', label: '会阴', text: `会阴还<span style="color:var(--lavender);font-weight:600">没有完全闭合</span>。`, detail: '这需要时间，每个人的愈合速度不同。注意保持清洁，别着急~', compare: '' });
+  }
+
+  return changes;
+}
+
+function autoRecommend(asmt, days) {
+  const recs = [];
+  const { diastasisFingers, uterusPosition, pelvicFloorGrade, perinealClosure } = asmt;
+  let abnormalCount = 0;
+
+  if (diastasisFingers >= 4) { recs.push({...PRODUCT_MAP.diastasis_severe, fingers: diastasisFingers, _key: 'diastasis'}); abnormalCount++; }
+  else if (diastasisFingers > 2) { recs.push({...PRODUCT_MAP.diastasis_moderate, fingers: diastasisFingers, _key: 'diastasis'}); abnormalCount++; }
+
+  if (pelvicFloorGrade < 3) {
+    recs.push({...PRODUCT_MAP.pelvic_electro, grade: toRoman(pelvicFloorGrade), _key: 'pelvic'});
+    if (pelvicFloorGrade <= 1) recs.push({...PRODUCT_MAP.pelvic_manual, grade: toRoman(pelvicFloorGrade), _key: 'pelvic_extra'});
+    abnormalCount++;
+  }
+
+  if (perinealClosure !== '已闭合') {
+    recs.push({... (perinealClosure === '未闭合' ? PRODUCT_MAP.perineal_inner_rf : PRODUCT_MAP.perineal_rf), _key: 'perineal'});
+    abnormalCount++;
+  }
+
+  if (uterusPosition === '未入盆') { recs.push({...PRODUCT_MAP.uterus_ultrasound, days, _key: 'uterus'}); abnormalCount++; }
+
+  // 3项以上异常 → 推荐安心卡（套餐）
+  if (abnormalCount >= 3) recs.push({...PRODUCT_MAP['安心卡'], _key: 'package'});
+
+  return recs.map(r => ({
+    ...r,
+    why: r.why ? r.why.replace('{fingers}', asmt.diastasisFingers).replace('{grade}', toRoman(asmt.pelvicFloorGrade)).replace('{days}', days) : '',
+    source: '系统推荐',
+  }));
+}
+
+// ═══════════════════════════════════════════════════════════
+//  症状科普知识库
+// ═══════════════════════════════════════════════════════════
+
+const KNOWLEDGE_MAP = {
+  diastasis: {
+    icon: '🎀', color: 'k-pink', topic: '关于腹直肌分离',
+    body: '腹直肌就是肚子正中间的两块肌肉，怀孕时会被宝宝撑开。<strong>产后分离2指以内是正常的</strong>，超过2指可以通过训练恢复。它在产后6周内恢复最快，但即使过了6周，坚持训练也有效~',
+    stats: '这周有8位妈妈和你一样在做腹直肌修复'
+  },
+  pelvic: {
+    icon: '🌱', color: 'k-green', topic: '关于盆底肌',
+    body: '盆底肌就像一张"吊床"，托住你的子宫、膀胱和直肠。怀孕和分娩会让它变松弛，<strong>大部分妈妈产后盆底肌都会变弱</strong>，这是正常的。通过训练（凯格尔）和仪器辅助，3个月内是恢复黄金期~',
+    stats: '所里12位妈妈正在做盆底肌训练，大家都在努力'
+  },
+  uterus: {
+    icon: '☁️', color: 'k-blue', topic: '关于子宫复旧',
+    body: '产后子宫会慢慢缩小、回到骨盆里，这个过程叫"复旧"。<strong>顺产后14天、剖宫产后21天内入盆都算正常</strong>。有些妈妈会慢一点，和体质、分娩方式都有关系，不用太焦虑~',
+    stats: '大部分妈妈在产后3周内子宫都能顺利入盆'
+  },
+  perineal: {
+    icon: '🌸', color: 'k-lavender', topic: '关于会阴恢复',
+    body: '会阴伤口愈合需要时间，<strong>大部分妈妈2-3周内会基本闭合</strong>。期间保持清洁、避免久坐就好。如果愈合较慢，也有一些修复手段可以帮忙，不用太担心~',
+    stats: '所里5位妈妈通过修复辅助，会阴恢复速度明显加快'
+  },
+  breast: {
+    icon: '🍼', color: 'k-pink', topic: '关于乳腺疏通',
+    body: '乳腺堵塞在哺乳期很常见，<strong>不要自己硬揉</strong>，可能会越揉越肿。专业的疏通手法很轻柔，配合热敷和正确的哺乳姿势，很快就能缓解~',
+    stats: '所里每天都有妈妈做乳腺疏通，是很常规的护理'
+  }
+};
+
+function getKnowledgeItems(asmt) {
+  const items = [];
+  const { diastasisFingers, uterusPosition, pelvicFloorGrade, perinealClosure } = asmt;
+
+  // 只对异常指标显示科普
+  if (diastasisFingers > 2) {
+    items.push({ ...KNOWLEDGE_MAP.diastasis, _key: 'diastasis' });
+  }
+  if (pelvicFloorGrade < 3) {
+    items.push({ ...KNOWLEDGE_MAP.pelvic, _key: 'pelvic' });
+  }
+  if (uterusPosition === '未入盆') {
+    items.push({ ...KNOWLEDGE_MAP.uterus, _key: 'uterus' });
+  }
+  if (perinealClosure !== '已闭合') {
+    items.push({ ...KNOWLEDGE_MAP.perineal, _key: 'perineal' });
+  }
+
+  return items;
+}
+
+function autoTodos(asmt) {
+  const todos = [];
+  const { diastasisFingers, uterusPosition, pelvicFloorGrade, perinealClosure } = asmt;
+
+  if (uterusPosition === '未入盆') todos.push({ action: '做子宫复旧按摩', desc: '每天顺时针揉肚子5分钟，帮助子宫回到它该在的位置' });
+  if (pelvicFloorGrade < 3) todos.push({ action: '练习凯格尔运动', desc: '每天3组，每组10次收缩，坐着躺着都能做，悄悄变强~' });
+  if (diastasisFingers > 2) todos.push({ action: '练习腹式呼吸', desc: '吸气鼓肚子、呼气收肚子，每次5分钟，帮助腹直肌往中间靠' });
+  if (perinealClosure !== '已闭合') todos.push({ action: '注意会阴清洁与休息', desc: '勤换卫生巾，避免久坐，给伤口一个安静愈合的环境' });
+
+  if (todos.length === 0) todos.push({ action: '继续保持好心情', desc: '你的各项指标都恢复得不错，休息好、吃好就是最好的恢复' });
+  return todos.slice(0, 3);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  模板预设
+// ═══════════════════════════════════════════════════════════
+
+const TEMPLATES = {
+  mild: {
+    name: '梦梅', deliveryType: '顺产', week: 3, days: 21,
+    stayDays: 20, totalStayDays: 28,
+    assessment: { diastasisFingers: 2.5, diastasisCm: 2.0, uterusPosition: '已入盆', pelvicFloorGrade: 2, perinealClosure: '已闭合' },
+    lastWeek: { diastasisFingers: 3, pelvicFloorGrade: 1, uterusPosition: '未入盆', perinealClosure: '未完全闭合' },
+    doctorAdvice: '这周进步很明显！腹直肌从3指收到2.5指，继续做腹式呼吸。盆底肌到Ⅱ级了，凯格尔别停~',
+    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
+    personalNote: '梦梅妈妈，这周你每次做凯格尔都很认真，真的很棒！下周我们会加一组腹直肌训练，不疼的，放心~'
+  },
+  moderate: {
+    name: '梦梅', deliveryType: '顺产', week: 3, days: 21,
+    stayDays: 20, totalStayDays: 28,
+    assessment: { diastasisFingers: 3, diastasisCm: 2.5, uterusPosition: '未入盆', pelvicFloorGrade: 2, perinealClosure: '未完全闭合' },
+    lastWeek: { diastasisFingers: 4, pelvicFloorGrade: 1, uterusPosition: '未入盆', perinealClosure: '未完全闭合' },
+    doctorAdvice: '盆底肌这周有进步但还没达标，凯格尔要坚持每天做。子宫还没入盆，每天顺时针揉5分钟帮帮它~',
+    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
+    personalNote: '梦梅妈妈，这周你每次做凯格尔都很认真，真的很棒！下周我们会加一组腹直肌训练，不疼的，放心~'
+  },
+  severe: {
+    name: '梦梅', deliveryType: '顺产', week: 2, days: 14,
+    stayDays: 13, totalStayDays: 42,
+    assessment: { diastasisFingers: 4, diastasisCm: 3.5, uterusPosition: '未入盆', pelvicFloorGrade: 0, perinealClosure: '未闭合' },
+    lastWeek: { diastasisFingers: 5, pelvicFloorGrade: 0, uterusPosition: '未入盆', perinealClosure: '未闭合' },
+    doctorAdvice: '腹直肌5指收到4指了，方向对的！盆底肌还在0级别急，我们这周开始电刺激。会阴保持清洁，别坐太久~',
+    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
+    personalNote: '梦梅妈妈，看到你的评估数据别担心，很多人产后第一周都是这样的。我们从现在开始慢慢调整，身体会给你惊喜的~'
+  },
+  pelvic_only: {
+    name: '梦梅', deliveryType: '顺产', week: 4, days: 28,
+    stayDays: 27, totalStayDays: 28,
+    assessment: { diastasisFingers: 1.5, diastasisCm: 1.0, uterusPosition: '已入盆', pelvicFloorGrade: 1, perinealClosure: '已闭合' },
+    lastWeek: { diastasisFingers: 2, pelvicFloorGrade: 1, uterusPosition: '已入盆', perinealClosure: '未完全闭合' },
+    doctorAdvice: '腹直肌恢复不错，重点放在盆底肌上——这周开始做凯格尔+电刺激，坚持2周会有明显提升。',
+    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
+    personalNote: '梦梅妈妈，你的腹直肌恢复得真快！现在重点关注盆底肌，多做凯格尔，有空也可以来了解下我们的盆底修复项目哦~'
+  },
+  post_cesarean: {
+    name: '梦梅', deliveryType: '剖宫产', week: 3, days: 21,
+    stayDays: 20, totalStayDays: 42,
+    assessment: { diastasisFingers: 3.5, diastasisCm: 3.0, uterusPosition: '未入盆', pelvicFloorGrade: 2, perinealClosure: '已闭合' },
+    lastWeek: { diastasisFingers: 4.5, pelvicFloorGrade: 1, uterusPosition: '未入盆', perinealClosure: '已闭合' },
+    doctorAdvice: '刀口愈合很好不用担心。子宫还在恢复中，每天揉肚子5分钟。腹直肌3指，手法修复+腹式呼吸配合做~',
+    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
+    personalNote: '梦梅妈妈，剖宫产恢复需要更多耐心，你的刀口长得很好！腹直肌和子宫复旧是我们这周的重点~'
+  },
+  all_clear: {
+    name: '梦梅', deliveryType: '顺产', week: 5, days: 35,
+    stayDays: 34, totalStayDays: 42,
+    assessment: { diastasisFingers: 1.5, diastasisCm: 1.0, uterusPosition: '已入盆', pelvicFloorGrade: 3, perinealClosure: '已闭合' },
+    lastWeek: { diastasisFingers: 2, pelvicFloorGrade: 2, uterusPosition: '已入盆', perinealClosure: '已闭合' },
+    doctorAdvice: '各项都达标了，继续保持！回家前记得做一次全面评估，把在家也能做的训练学会~',
+    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
+    personalNote: '梦梅妈妈，你恢复得太好了！还有一周就要出所了，记得回家也要坚持做凯格尔和腹式呼吸哦~'
+  },
+  perineal_only: {
+    name: '梦梅', deliveryType: '顺产', week: 2, days: 14,
+    stayDays: 13, totalStayDays: 28,
+    assessment: { diastasisFingers: 1.5, diastasisCm: 1.0, uterusPosition: '已入盆', pelvicFloorGrade: 3, perinealClosure: '未完全闭合' },
+    lastWeek: { diastasisFingers: 2, pelvicFloorGrade: 2, uterusPosition: '未入盆', perinealClosure: '未闭合' },
+    doctorAdvice: '腹直肌和盆底肌都恢复得不错！会阴伤口愈合偏慢，保持清洁别久坐，我帮你看看要不要加修复~',
+    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
+    personalNote: '梦梅妈妈，你其他方面都恢复得很好！会阴再给它一点时间，我们也可以用一些修复手段帮它快一点~'
+  },
+  breast_only: {
+    name: '梦梅', deliveryType: '顺产', week: 2, days: 14,
+    stayDays: 13, totalStayDays: 30,
+    assessment: { diastasisFingers: 2, diastasisCm: 1.5, uterusPosition: '已入盆', pelvicFloorGrade: 3, perinealClosure: '已闭合' },
+    lastWeek: { diastasisFingers: 2.5, pelvicFloorGrade: 2, uterusPosition: '未入盆', perinealClosure: '未完全闭合' },
+    doctorAdvice: '乳腺有堵塞，别自己揉，我来帮你疏通。喂奶后排空，热敷5分钟再喂会好很多~',
+    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
+    personalNote: '梦梅妈妈，乳腺堵塞不要自己硬揉哦，我们专业的乳腺疏通手法很轻柔的，放心~'
+  },
+  breast_pelvic: {
+    name: '梦梅', deliveryType: '顺产', week: 2, days: 14,
+    stayDays: 13, totalStayDays: 28,
+    assessment: { diastasisFingers: 2, diastasisCm: 1.5, uterusPosition: '已入盆', pelvicFloorGrade: 1, perinealClosure: '已闭合' },
+    lastWeek: { diastasisFingers: 3, pelvicFloorGrade: 1, uterusPosition: '未入盆', perinealClosure: '未完全闭合' },
+    doctorAdvice: '乳腺堵了，别硬揉，我来帮你通。盆底肌偏弱，凯格尔先练起来，坐躺都能做~',
+    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
+    personalNote: '梦梅妈妈，乳腺和盆底是我们这周的两个重点，我们一起慢慢来，别着急~'
+  },
+};
+
+// 模板状态管理
+let currentTemplateKey = 'moderate';
+let isModified = false;
+let manualRecs = []; // 手动添加的推荐项
+let disabledAutoRecs = new Set(); // 用户取消勾选的自动推荐key
+let currentLetterLayout = 'a'; // 信件排版方式：a=横向卡片, b=竖向便签, c=两列网格
+
+const TEMPLATE_NAMES = {
+  mild: '轻度型', moderate: '常见型', severe: '重度型',
+  pelvic_only: '盆底型', perineal_only: '会阴型', breast_only: '乳腺型',
+  breast_pelvic: '乳腺+盆底型', post_cesarean: '剖宫产型', all_clear: '恢复良好型',
+  custom: '自定义组合'
+};
+
+function applyTemplate(key) {
+  const t = TEMPLATES[key];
+  if (!t) return;
+  currentTemplateKey = key;
+  isModified = false;
+  manualRecs = [];
+  disabledAutoRecs.clear();
+
+  document.getElementById('inputName').value = t.name;
+  document.getElementById('inputDelivery').value = t.deliveryType;
+  document.getElementById('inputWeek').value = t.week;
+  document.getElementById('inputDays').value = t.days;
+  document.getElementById('inputDiastasisF').value = t.assessment.diastasisFingers;
+  document.getElementById('inputDiastasisCm').value = t.assessment.diastasisCm;
+  document.getElementById('inputUterus').value = t.assessment.uterusPosition;
+  document.getElementById('inputPelvic').value = t.assessment.pelvicFloorGrade;
+  document.getElementById('inputPerineal').value = t.assessment.perinealClosure;
+
+  if (t.lastWeek.diastasisFingers) document.getElementById('inputLastD').value = t.lastWeek.diastasisFingers;
+  if (t.lastWeek.pelvicFloorGrade !== null) document.getElementById('inputLastP').value = t.lastWeek.pelvicFloorGrade;
+  if (t.lastWeek.uterusPosition) document.getElementById('inputLastU').value = t.lastWeek.uterusPosition;
+  if (t.lastWeek.perinealClosure) document.getElementById('inputLastPerineal').value = t.lastWeek.perinealClosure;
+
+  document.getElementById('inputDoctorName').value = localStorage.getItem('jumi_doctorName') || '黄医生';
+  document.getElementById('inputDoctorAdvice').value = t.doctorAdvice;
+
+  // 产康师信息从localStorage读取默认值
+  document.getElementById('inputConsultantName').value = localStorage.getItem('jumi_consultantName') || t.consultant.name;
+  document.getElementById('inputConsultantPhone').value = localStorage.getItem('jumi_consultantPhone') || t.consultant.phone;
+  document.getElementById('inputConsultantWechat').value = localStorage.getItem('jumi_consultantWechat') || t.consultant.wechat;
+  document.getElementById('inputConsultantHours').value = localStorage.getItem('jumi_consultantHours') || t.consultant.workingHours;
+  document.getElementById('inputPersonalNote').value = t.personalNote;
+
+  // 设置分娩日期（根据天数反推）
+  const days = t.days;
+  const birthDate = new Date();
+  birthDate.setDate(birthDate.getDate() - days);
+  document.getElementById('inputBirthDate').value = birthDate.toISOString().split('T')[0];
+
+  // 设置入住日期（分娩日期+1天）
+  const checkInDate = new Date(birthDate);
+  checkInDate.setDate(checkInDate.getDate() + 1);
+  document.getElementById('inputCheckInDate').value = checkInDate.toISOString().split('T')[0];
+
+  // 设置离所日期（入住日期+总天数）
+  if (t.totalStayDays) {
+    const checkOutDate = new Date(checkInDate);
+    checkOutDate.setDate(checkOutDate.getDate() + t.totalStayDays - 1);
+    document.getElementById('inputCheckOutDate').value = checkOutDate.toISOString().split('T')[0];
+  }
+
+  updateTemplateStatus();
+  updateRecSummary();
+  calcDaysFromDate(); // 触发日期联动计算
+}
+
+function resetTemplate() {
+  disabledAutoRecs.clear();
+  applyTemplate(currentTemplateKey);
+}
+
+function updateTemplateStatus() {
+  const status = document.getElementById('templateStatus');
+  const resetBtn = document.getElementById('resetBtn');
+  if (isModified) {
+    status.className = 'template-status modified';
+    status.textContent = '✏️ 已修改';
+    resetBtn.style.display = 'inline';
+  } else {
+    status.className = 'template-status active';
+    status.textContent = '✅ ' + (TEMPLATE_NAMES[currentTemplateKey] || '');
+    resetBtn.style.display = 'none';
+  }
+}
+
+function markModified() {
+  if (!isModified) {
+    isModified = true;
+    updateTemplateStatus();
+  }
+}
+
+// 日期自动计算：产后天数、在所天数、周次
+function calcDaysFromDate() {
+  const birthDateStr = document.getElementById('inputBirthDate').value;
+  const checkInDateStr = document.getElementById('inputCheckInDate').value;
+  const checkOutDateStr = document.getElementById('inputCheckOutDate').value;
+
+  const today = new Date();
+
+  // 产后天数
+  let postpartumDays = 1, currentWeek = 1;
+  if (birthDateStr) {
+    const birthDate = new Date(birthDateStr);
+    postpartumDays = Math.max(1, Math.floor((today - birthDate) / (1000 * 60 * 60 * 24)));
+    currentWeek = Math.min(6, Math.max(1, Math.ceil(postpartumDays / 7)));
+  }
+  document.getElementById('inputDays').value = postpartumDays;
+  document.getElementById('inputWeek').value = currentWeek;
+
+  // 在所天数
+  let stayDays = 0, totalStayDays = 0;
+  if (checkInDateStr) {
+    const checkIn = new Date(checkInDateStr);
+    stayDays = Math.max(1, Math.floor((today - checkIn) / (1000 * 60 * 60 * 24)) + 1);
+    if (checkOutDateStr) {
+      const checkOut = new Date(checkOutDateStr);
+      totalStayDays = Math.max(stayDays, Math.floor((checkOut - checkIn) / (1000 * 60 * 60 * 24)) + 1);
+    }
+  }
+
+  // 套餐天数提示
+  const stayHint = document.getElementById('stayHint');
+  if (totalStayDays > 0) {
+    const pkgName = totalStayDays <= 28 ? '28天套餐' : totalStayDays <= 30 ? '30天套餐' : totalStayDays <= 42 ? '42天套餐' : `${totalStayDays}天`;
+    stayHint.textContent = pkgName;
+  }
+
+  // 日期计算提示
+  const dateCalcHint = document.getElementById('dateCalcHint');
+  let hint = `产后第${postpartumDays}天 · 第${currentWeek}周`;
+  if (stayDays > 0 && totalStayDays > 0) {
+    hint = `产后第${postpartumDays}天 · 在所第${stayDays}天 / 共${totalStayDays}天`;
+  } else if (stayDays > 0) {
+    hint = `产后第${postpartumDays}天 · 在所第${stayDays}天`;
+  }
+  dateCalcHint.textContent = hint;
+
+  markModified();
+  updateRecSummary();
+  renderLetter();
+}
+
+// 手动添加推荐项目
+function addManualRec() {
+  const nameEl = document.getElementById('manualRecName');
+  const priceEl = document.getElementById('manualRecPrice');
+  const name = nameEl.value.trim();
+  const price = parseInt(priceEl.value) || 0;
+  if (!name) return;
+
+  manualRecs.push({ name, price, why: '产康师手动推荐', what: name, effect: '', color: 'a-pink', source: '产康师推荐' });
+  nameEl.value = '';
+  priceEl.value = '';
+  markModified();
+  updateRecSummary();
+  renderLetter();
+}
+
+function removeManualRec(index) {
+  manualRecs.splice(index, 1);
+  markModified();
+  updateRecSummary();
+  renderLetter();
+}
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    // 临时高亮
+    el.style.boxShadow = '0 0 0 2px var(--amber)';
+    setTimeout(() => {
+      el.style.boxShadow = 'none';
+    }, 1000);
+  }
+}
+
+// 为表单区域添加ID
+function addSectionIds() {
+  document.querySelector('#client-info').id = 'client-info';
+  document.querySelector('#assessment').id = 'assessment';
+  document.querySelector('#recommendations').id = 'recommendations';
+  document.querySelector('#consultant').id = 'consultant';
+}
+
+// ═══════════════════════════════════════════════════════════
+//  症状组合器
+// ═══════════════════════════════════════════════════════════
+
+function selectSymptom(btn, type) {
+  const container = btn.parentElement;
+  container.querySelectorAll('.symptom-pill').forEach(p => p.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function generateFromSymptoms() {
+  const diastasisVal = document.querySelector('#sDiastasis .symptom-pill.selected')?.dataset.val || '2.5';
+  const pelvicVal = document.querySelector('#sPelvic .symptom-pill.selected')?.dataset.val || '2';
+  const uterusVal = document.querySelector('#sUterus .symptom-pill.selected')?.dataset.val || '未入盆';
+  const perinealVal = document.querySelector('#sPerineal .symptom-pill.selected')?.dataset.val || '未完全闭合';
+  const breastVal = document.querySelector('#sBreast .symptom-pill.selected')?.dataset.val || '正常';
+
+  const d = parseFloat(diastasisVal);
+  const p = parseFloat(pelvicVal);
+
+  // 构建医生建议文本
+  let adviceParts = [];
+  if (d > 2) adviceParts.push(`腹直肌分离${d}指，${d >= 4 ? '建议尽快开始系统修复' : '建议继续观察并配合训练'}`);
+  if (p < 3) adviceParts.push(`盆底肌力${toRoman(p)}级，${p <= 1 ? '需加强治疗' : '建议关注训练'}`);
+  if (uterusVal === '未入盆') adviceParts.push('子宫复旧偏慢，注意促进收缩');
+  if (perinealVal !== '已闭合') adviceParts.push('会阴伤口愈合中，注意清洁');
+  if (breastVal === '不通') adviceParts.push('乳腺有堵塞，建议做疏通');
+
+  const doctorAdvice = adviceParts.length > 0
+    ? adviceParts.join('。') + '。'
+    : '各项指标恢复良好，继续保持当前康复节奏即可。';
+
+  // 构建手记
+  // 根据症状自动选手记类型
+  let noteType = 'encourage';
+  if (breastVal === '不通') noteType = 'breast';
+  else if (d <= 2 && p >= 3 && uterusVal === '已入盆' && perinealVal === '已闭合') noteType = 'remind';
+  else if (document.getElementById('inputDelivery').value === '剖宫产') noteType = 'cesarean';
+  else if (p < 3 && d <= 2) noteType = 'pelvic';
+  else if (perinealVal !== '已闭合' && d <= 2 && p >= 3) noteType = 'perineal';
+
+  const name = document.getElementById('inputName').value.trim() || '梦梅';
+  const personalNote = NOTE_TEMPLATES[noteType](name);
+
+  // 填充数据
+  document.getElementById('inputDiastasisF').value = d;
+  document.getElementById('inputDiastasisCm').value = Math.round(d * 0.8 * 10) / 10;
+  document.getElementById('inputPelvic').value = p;
+  document.getElementById('inputUterus').value = uterusVal;
+  document.getElementById('inputPerineal').value = perinealVal;
+  document.getElementById('inputDoctorAdvice').value = doctorAdvice;
+  document.getElementById('inputPersonalNote').value = personalNote;
+
+  // 设置上周对比（默认比本周差一点）
+  document.getElementById('inputLastD').value = Math.min(d + 1, 5.5);
+  document.getElementById('inputLastP').value = Math.max(0, p - 1);
+  document.getElementById('inputLastU').value = uterusVal === '已入盆' ? '未入盆' : '未入盆';
+  document.getElementById('inputLastPerineal').value = perinealVal === '已闭合' ? '未完全闭合' : '未闭合';
+
+  currentTemplateKey = 'custom';
+  isModified = false;
+  manualRecs = [];
+  disabledAutoRecs.clear();
+  updateTemplateStatus();
+  updateRecSummary();
+  renderLetter();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  产康师手记模板
+// ═══════════════════════════════════════════════════════════
+
+const NOTE_TEMPLATES = {
+  encourage: (name) => `${name}妈妈，这周你每次做康复训练都很认真，真的很棒！坚持就是胜利，下周我们会看到更好的变化~`,
+  gentle: (name) => `${name}妈妈，身体恢复有自己的节奏，不用着急。你已经做得很好了，给自己多一点温柔和耐心~`,
+  remind: (name) => `${name}妈妈，记得每天坚持做凯格尔和腹式呼吸哦，小动作大效果，回家也要继续保持~`,
+  breast: (name) => `${name}妈妈，乳腺堵塞不要自己硬揉哦，我们专业的疏通手法很轻柔的，放心交给我们~`,
+  sleep: (name) => `${name}妈妈，晚上是不是又被宝宝折腾得没睡好？白天宝宝睡的时候你也跟着眯一会儿，休息好了恢复才快~`,
+  mood: (name) => `${name}妈妈，产后情绪波动很正常，想哭就哭，不用憋着。如果心里堵得慌，随时来找我聊聊，我都在~`,
+  pain: (name) => `${name}妈妈，腰还疼吗？抱宝宝的时候记得用枕头垫一下腰，别硬撑。热敷15分钟能缓解不少，试试~`,
+  diet: (name) => `${name}妈妈，这周汤水喝得怎么样？别太油腻，清淡点奶水反而更通畅。想吃什么跟我说，我帮你跟厨房打招呼~`,
+  partner: (name) => `${name}妈妈，爸爸这周表现怎么样？让他多参与换尿布、拍嗝，你多休息。两个人的默契，从带娃开始培养~`,
+  clear: () => '',
+};
+
+function setNoteTpl(type) {
+  const name = document.getElementById('inputName').value.trim() || '梦梅';
+  const tpl = NOTE_TEMPLATES[type];
+  if (tpl) {
+    document.getElementById('inputPersonalNote').value = tpl(name);
+    markModified();
+    renderLetter();
+  }
+}
+
+function updateRecSummary() {
+  const cfg = getFormData();
+  const autoRecs = autoRecommend(cfg.assessment, cfg.postpartumDays);
+  const summary = document.getElementById('recSummary');
+  const manualList = document.getElementById('recManualList');
+
+  // 自动推荐摘要（可勾选）
+  let tags = autoRecs.map((r, idx) => {
+    const isDisabled = disabledAutoRecs.has(r._key);
+    return `<span class="rec-tag auto ${isDisabled ? 'unchecked' : ''}" onclick="toggleAutoRec('${r._key}')" title="点击${isDisabled ? '启用' : '取消'}该项目">${r.what}</span>`;
+  }).join('');
+  tags += manualRecs.map(r => `<span class="rec-tag manual">${r.name}</span>`).join('');
+  summary.innerHTML = tags || '<span class="rec-tag">暂无推荐</span>';
+
+  // 手动推荐列表
+  manualList.innerHTML = manualRecs.map((r, i) => `
+    <div class="rec-manual-item">
+      <span class="rm-name">${r.name}</span>
+      <span class="rm-price">${r.price ? '¥' + r.price.toLocaleString() : ''}</span>
+      <button class="rm-del" onclick="removeManualRec(${i})">×</button>
+    </div>
+  `).join('');
+}
+
+function toggleAutoRec(key) {
+  if (disabledAutoRecs.has(key)) {
+    disabledAutoRecs.delete(key);
+  } else {
+    disabledAutoRecs.add(key);
+  }
+  markModified();
+  updateRecSummary();
+  renderLetter();
+}
+
+// 保存产康师和医生信息到localStorage
+function saveDefaults() {
+  localStorage.setItem('jumi_doctorName', document.getElementById('inputDoctorName').value);
+  localStorage.setItem('jumi_consultantName', document.getElementById('inputConsultantName').value);
+  localStorage.setItem('jumi_consultantPhone', document.getElementById('inputConsultantPhone').value);
+  localStorage.setItem('jumi_consultantWechat', document.getElementById('inputConsultantWechat').value);
+  localStorage.setItem('jumi_consultantHours', document.getElementById('inputConsultantHours').value);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  渲染引擎
+// ═══════════════════════════════════════════════════════════
+
+function setLetterLayout(layout) {
+  currentLetterLayout = layout;
+  document.querySelectorAll('.layout-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.layout === layout);
+  });
+  renderLetter();
+}
+
+function renderLetter() {
+  const cfg = getFormData();
+  const asmt = cfg.assessment;
+  const last = cfg.lastWeek;
+  const changes = describeChanges(asmt, last, cfg);
+  
+  // 情绪确认语：基于在所进度选择，而非硬绑定周数
+  let affIdx;
+  if (cfg.stayProgress <= 20) affIdx = 0;
+  else if (cfg.stayProgress <= 40) affIdx = 1;
+  else if (cfg.stayProgress <= 60) affIdx = 2;
+  else if (cfg.stayProgress <= 80) affIdx = 3;
+  else if (cfg.stayProgress < 100) affIdx = 4;
+  else affIdx = 5;
+  const aff = AFFIRMATIONS[affIdx] || AFFIRMATIONS[2];
+
+  const docAdvice = translateDoctorAdvice(cfg.doctorAdvice);
+  const allAutoRecs = autoRecommend(asmt, cfg.postpartumDays);
+  const recs = [...allAutoRecs.filter(r => !disabledAutoRecs.has(r._key)), ...manualRecs];
+  const todos = autoTodos(asmt);
+  const knowledgeItems = getKnowledgeItems(asmt);
+  const c = cfg.consultant;
+
+  // 双时间线文案
+  const postpartumText = `产后第${cfg.postpartumDays}天 · 第${cfg.currentWeek}周`;
+  const stayText = '陪你慢慢恢复 ✦';
+
+  let html = `
+  <div class="letter-inner layout-${currentLetterLayout}">
+  <div class="envelope">
+    <div class="envelope-header">
+      <div class="envelope-seal">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="#fff" opacity="0.9"/>
+        </svg>
+      </div>
+      <div class="envelope-lady">
+        <img src="lady-curve-dark.jpg" alt="女士曲线">
+      </div>
+    </div>
+    <div class="envelope-brand">橘 米 康 复 中 心</div>
+    <div class="envelope-line"></div>
+    <div class="envelope-date">${postpartumText}</div>
+    <div class="envelope-sub">${stayText}</div>
+  </div>
+
+  ${cfg.nearCheckout ? `
+  <div class="checkout-reminder">
+    <div class="checkout-reminder-title">
+      <span class="checkout-reminder-icon">🏠</span>
+      走之前，我们还能一起做这些
+    </div>
+    <div class="checkout-reminder-body">
+      ${cfg.name}妈妈，${cfg.totalStayDays - cfg.stayDays === 0 ? '今天就要回家了！' : `还有${cfg.totalStayDays - cfg.stayDays}天就要回家了！`}回家前记得：做一次全面评估、确认出院康复方案、带上在家也能做的训练计划。回家不是结束，是新的开始~
+    </div>
+  </div>` : ''}
+
+  <div class="salutation">
+    <div class="salutation-text">亲爱的${cfg.name}妈妈：</div>
+    <div class="salutation-sub">展信安 ✿ 这是你在橘米的第${cfg.stayDays || cfg.postpartumDays}天${cfg.totalStayDays > 0 ? `，还有${cfg.totalStayDays - cfg.stayDays}天就要回家啦` : ''}</div>
+  </div>
+
+  <div class="affirmation">
+    <div class="affirmation-text">${aff.text.replace('{name}', cfg.name)}</div>
+    <div class="affirmation-sign">${aff.sign}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-tag">WEEK ${cfg.currentWeek} · 产后第${cfg.postpartumDays}天</div>
+    <div class="section-title"><span class="section-emoji">🌿</span><span class="hand">这周，你的身体悄悄发生了这些变化</span></div>
+    <div class="change-list">
+      ${changes.map(c => `
+      <div class="change-card ${c.color}">
+        <div class="change-sticker">${c.sticker}</div>
+        <div class="change-label">${c.label}</div>
+        <div class="change-text">${c.text}</div>
+        <div class="change-detail">${c.detail}</div>
+        ${c.compare ? `<div class="change-compare">${c.compare}</div>` : ''}
+      </div>`).join('')}
+    </div>
+  </div>
+
+  ${knowledgeItems.length > 0 ? `
+  <div class="divider"><div class="divider-dots">· · ·</div></div>
+
+  <div class="knowledge-section">
+    <div class="knowledge-title"><span class="section-emoji">💡</span><span class="hand">你关心的小知识</span></div>
+    <div class="knowledge-list">
+      ${knowledgeItems.map(k => `
+      <div class="knowledge-card">
+        <div class="knowledge-card-header">
+          <div class="knowledge-card-icon ${k.color}">${k.icon}</div>
+          <div class="knowledge-card-topic">${k.topic}</div>
+        </div>
+        <div class="knowledge-card-body">${k.body}</div>
+        ${k.stats ? `<div class="knowledge-card-stats">✦ ${k.stats}</div>` : ''}
+      </div>`).join('')}
+    </div>
+  </div>` : ''}
+
+  <div class="divider"><div class="divider-dots">· · ·</div></div>
+
+  <div class="doctor-section">
+    <div class="section-title"><span class="section-emoji">💬</span><span class="hand">${cfg.doctorName}想对你说</span></div>
+    <div class="doctor-note">
+      <div class="doctor-from">
+        <div class="doctor-avatar">${cfg.doctorName.charAt(0)}</div>
+        <div class="doctor-info">
+          <div class="d-name">${cfg.doctorName}</div>
+          <div class="d-role">产后第${cfg.postpartumDays}天查房</div>
+        </div>
+      </div>
+      <div class="doctor-words">${docAdvice}</div>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-dots">· · ·</div></div>
+
+  <div class="todo-section">
+    <div class="section-title"><span class="section-emoji">✨</span><span class="hand">下周，你可以做的3件小事</span></div>
+    <div class="todo-list">
+      ${todos.map((t, i) => `
+      <div class="todo-item">
+        <div class="todo-num n${i+1}">${i+1}</div>
+        <div class="todo-text">
+          <div class="todo-action">${t.action}</div>
+          <div class="todo-desc">${t.desc}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+
+  ${recs.length > 0 ? `
+  <div class="divider"><div class="divider-dots">· · ·</div></div>
+
+  <div class="advice-section">
+    <div class="advice-header">
+      <span class="advice-header-icon">🌿</span>
+      <span class="advice-header-text">有些妈妈会选择这些来辅助恢复</span>
+      ${recs.length > 2 ? `<span class="advice-header-count">${recs.length}项</span>` : ''}
+    </div>
+    <div class="advice-intro">了解一下，合适再做~</div>
+    <div class="advice-list">
+      ${recs.slice(0, 2).map(r => `
+      <div class="advice-card ${r.color}">
+        <div class="advice-icon i-${r.color.replace('a-', '')}">${r.color === 'a-green' ? '🌿' : r.color === 'a-pink' ? '🎀' : r.color === 'a-blue' ? '💧' : '🌸'}</div>
+        <div class="advice-body">
+          <div class="advice-why">${r.why}</div>
+          <div class="advice-what">${r.what}</div>
+          <div class="advice-effect">${r.effect} · 约¥${r.price.toLocaleString()}</div>
+        </div>
+      </div>`).join('')}
+      ${recs.length > 2 ? `
+      <div class="advice-more" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">还有${recs.length - 2}项推荐，点击查看 ↓</div>
+      <div class="advice-list-extra" style="display:none">
+        ${recs.slice(2).map(r => `
+        <div class="advice-card ${r.color}">
+          <div class="advice-icon i-${r.color.replace('a-', '')}">${r.color === 'a-green' ? '🌿' : r.color === 'a-pink' ? '🎀' : r.color === 'a-blue' ? '💧' : '🌸'}</div>
+          <div class="advice-body">
+            <div class="advice-why">${r.why}</div>
+            <div class="advice-what">${r.what}</div>
+            <div class="advice-effect">${r.effect} · 约¥${r.price.toLocaleString()}</div>
+          </div>
+        </div>`).join('')}
+      </div>` : ''}
+    </div>
+  </div>` : ''}
+  `;
+
+  // 产康师手记
+  if (cfg.personalNote) {
+    html += `
+    <div class="personal-note-section">
+      <div class="personal-note-card">
+        <div class="personal-note-title">📝 来自${c.name || '产康师'}的悄悄话</div>
+        <div class="personal-note-body">${cfg.personalNote}</div>
+      </div>
+    </div>`;
+  }
+
+  // 联系顾问
+  if (c.name) {
+    html += `
+    <div class="contact-section">
+      <div class="contact-card">
+        <div class="contact-title">想约训练或了解方案？找我聊聊 🌿</div>
+        <div class="contact-consultant">
+          <div class="contact-avatar">${c.name.charAt(0)}</div>
+          <div class="contact-info">
+            <div class="contact-name">${c.name}</div>
+            <div class="contact-role">你的专属产康顾问</div>
+          </div>
+        </div>
+        <div class="contact-methods">
+          ${c.phone ? `<div class="contact-method"><div class="contact-label">📞 电话</div><div class="contact-value">${c.phone}</div></div>` : ''}
+          ${c.wechat ? `<div class="contact-method"><div class="contact-label">💬 微信</div><div class="contact-value">${c.wechat}</div></div>` : ''}
+          ${c.workingHours ? `<div class="contact-method"><div class="contact-label">🕐 在线</div><div class="contact-value">${c.workingHours}</div></div>` : ''}
+        </div>
+        <div class="contact-hint">想约训练、了解恢复方案，随时跟我说～</div>
+      </div>
+    </div>`;
+  }
+
+  html += `
+  <div class="sign-off">
+    <div class="sign-words">你比自己以为的更勇敢</div>
+    <div class="sign-brand">${c.name ? `你的产康顾问 ${c.name}` : `橘米康复中心`}</div>
+    <div class="sign-slogan">用温柔守护每一位妈妈的恢复之旅 · 橘米</div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-line"></div>
+    <div class="footer-note">
+      内线前台：6305 · 本信基于产后第${cfg.postpartumDays}天评估数据生成<br>
+      具体康复方案请遵医嘱，结合个人实际情况制定
+    </div>
+  </div>
+  </div><!-- /.letter-inner -->
+  `;
+
+  document.getElementById('letter').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  事件绑定 & 初始化
+// ═══════════════════════════════════════════════════════════
+
+// 所有输入字段变化时实时更新
+const inputs = document.querySelectorAll('.form-input, .form-select, .form-textarea');
+inputs.forEach(el => {
+  el.addEventListener('input', () => { markModified(); updateRecSummary(); renderLetter(); });
+  el.addEventListener('change', () => { markModified(); updateRecSummary(); renderLetter(); });
+});
+
+// 分娩日期监听
+document.getElementById('inputBirthDate').addEventListener('change', calcDaysFromDate);
+// 入住/离所日期监听
+document.getElementById('inputCheckInDate').addEventListener('change', calcDaysFromDate);
+document.getElementById('inputCheckOutDate').addEventListener('change', calcDaysFromDate);
+
+// 产康师信息变更时保存
+['inputDoctorName', 'inputConsultantName', 'inputConsultantPhone', 'inputConsultantWechat', 'inputConsultantHours'].forEach(id => {
+  document.getElementById(id).addEventListener('change', saveDefaults);
+});
+
+// 截图模式：隐藏编辑面板
+function doScreenshot() {
+  document.body.classList.add('screenshot-mode');
+  // 不再用alert打断，让用户自己截图
+}
+
+// 一键截图下载
+async function downloadScreenshot() {
+  const letter = document.querySelector('.letter');
+  if (!letter) return alert('请先生成周报');
+  
+  // 显示加载提示
+  const btn = document.querySelector('.btn-download');
+  const origText = btn.textContent;
+  btn.textContent = '⏳ 生成中...';
+  btn.disabled = true;
+  
+  try {
+    // 先进入截图模式确保干净画面
+    const wasScreenshot = document.body.classList.contains('screenshot-mode');
+    if (!wasScreenshot) document.body.classList.add('screenshot-mode');
+    
+    // 等待一帧让样式生效
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    
+    const canvas = await html2canvas(letter, {
+      scale: 2, // 2x高清
+      useCORS: true,
+      backgroundColor: null,
+      logging: false,
+      // 精确裁剪信件内容
+      width: letter.scrollWidth,
+      height: letter.scrollHeight,
+    });
+    
+    // 恢复模式
+    if (!wasScreenshot) document.body.classList.remove('screenshot-mode');
+    
+    // 生成文件名
+    const nameInput = document.getElementById('inputName');
+    const name = nameInput ? nameInput.value || '妈妈' : '妈妈';
+    const date = new Date().toLocaleDateString('zh-CN', {month:'numeric', day:'numeric'});
+    const filename = `橘米周报_${name}_${date}.png`;
+    
+    // 触发下载
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    
+    btn.textContent = '✅ 已保存';
+    setTimeout(() => { btn.textContent = origText; }, 2000);
+  } catch (err) {
+    console.error('截图失败:', err);
+    alert('截图生成失败，请尝试手动截图（按PrintScreen或Win+Shift+S）');
+    btn.textContent = origText;
+  }
+  btn.disabled = false;
+}
+
+// 全屏预览：隐藏编辑面板
+function togglePreview() {
+  document.body.classList.toggle('screenshot-mode');
+}
+
+// 返回编辑模式
+function backToEdit() {
+  document.body.classList.remove('screenshot-mode');
+}
+
+// ESC键恢复编辑界面
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.body.classList.remove('screenshot-mode');
+  }
+});
+
+// 初始化渲染
+updateTemplateStatus();
+updateRecSummary();
+
+// 初始化日期计算
+calcDaysFromDate();
+
+renderLetter();
+</script>
+
+</body>
+</html>

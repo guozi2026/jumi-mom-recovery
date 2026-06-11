@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>妈妈的恢复周报 - 橘米康复中心</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+  
+  :root {
+    --bg-warm: #FBF7F2;
+    --bg-card: #FFFFFF;
+    --bg-section: #F7F0E8;
+    --primary: #C4A882;
+    --primary-light: #E8D8C4;
+    --primary-dark: #9E7E56;
+    --accent-rose: #D4A5A5;
+    --accent-rose-light: #F0D8D8;
+    --accent-sage: #A8B5A0;
+    --accent-sage-light: #D5DED0;
+    --accent-lavender: #B8A9C9;
+    --accent-lavender-light: #E0D8E8;
+    --accent-honey: #D4B896;
+    --accent-honey-light: #F0E4D0;
+    --text-dark: #4A3F35;
+    --text-mid: #7A6E62;
+    --text-light: #A89888;
+    --text-white: #FFFFFF;
+    --shadow-soft: 0 2px 12px rgba(156,130,100,0.08);
+    --shadow-card: 0 4px 20px rgba(156,130,100,0.1);
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+    --radius-xl: 24px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-warm);
+    color: var(--text-dark);
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 90px;
+  }
+
+  /* ========== Header ========== */
+  .header {
+    padding: 20px 24px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .header-logo {
+    width: 32px; height: 32px;
+    background: var(--primary);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .header-logo svg { width: 18px; height: 18px; }
+  .header-name { font-size: 15px; font-weight: 500; color: var(--text-mid); }
+  .header-greeting { font-size: 13px; color: var(--text-light); }
+
+  /* ========== Week Hero ========== */
+  .week-hero {
+    padding: 12px 24px 16px;
+    text-align: center;
+  }
+  .week-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary-light);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--primary-dark);
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .week-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+  .week-subtitle { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+
+  /* ========== Score Ring ========== */
+  .score-section {
+    padding: 0 24px 16px;
+    display: flex;
+    justify-content: center;
+  }
+  .score-container { position: relative; width: 170px; height: 170px; }
+  .score-ring { width: 170px; height: 170px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: var(--primary-light); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none; stroke: var(--primary); stroke-width: 10;
+    stroke-linecap: round; stroke-dasharray: 452; stroke-dashoffset: 452;
+    transition: stroke-dashoffset 1.5s ease;
+  }
+  .score-ring-fill.animated { stroke-dashoffset: 127; }
+  .score-center {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); text-align: center;
+  }
+  .score-number { font-size: 46px; font-weight: 700; color: var(--primary-dark); line-height: 1; }
+  .score-unit { font-size: 14px; color: var(--text-light); margin-top: 2px; }
+  .score-label { font-size: 12px; color: var(--text-mid); margin-top: 4px; }
+
+  /* ========== Week Picker ========== */
+  .week-picker {
+    display: flex; gap: 6px;
+    padding: 0 24px; margin-bottom: 16px;
+    overflow-x: auto;
+    -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .week-picker::-webkit-scrollbar { display: none; }
+  .week-pill {
+    flex-shrink: 0; padding: 8px 16px; border-radius: 20px;
+    border: 1.5px solid var(--primary-light); background: white;
+    font-size: 13px; color: var(--text-mid); cursor: pointer;
+    font-family: inherit; font-weight: 500; transition: all 0.3s;
+  }
+  .week-pill.active { background: var(--primary); border-color: var(--primary); color: white; }
+  .week-pill.has-data { border-color: var(--primary); }
+
+  /* ========== Tab Navigation ========== */
+  .tab-nav {
+    display: flex; gap: 0; padding: 0 24px; margin-bottom: 16px;
+    position: sticky; top: 0; z-index: 50; background: var(--bg-warm);
+  }
+  .tab-btn {
+    flex: 1; padding: 10px 0; border: none; background: transparent;
+    font-size: 14px; font-weight: 500; color: var(--text-light);
+    cursor: pointer; position: relative; transition: color 0.3s;
+    font-family: inherit;
+  }
+  .tab-btn.active { color: var(--primary-dark); }
+  .tab-btn.active::after {
+    content: ''; position: absolute; bottom: 0; left: 50%;
+    transform: translateX(-50%); width: 24px; height: 3px;
+    background: var(--primary); border-radius: 3px;
+  }
+
+  /* ========== Tab Content ========== */
+  .tab-content { display: none; padding: 0 24px; }
+  .tab-content.active { display: block; }
+
+  /* ========== Metric Cards ========== */
+  .metric-card {
+    background: var(--bg-card); border-radius: var(--radius-lg);
+    padding: 20px; margin-bottom: 14px; box-shadow: var(--shadow-soft);
+    position: relative; overflow: hidden;
+  }
+  .metric-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .metric-icon-wrap {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .metric-icon {
+    width: 38px; height: 38px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+  .metric-name { font-size: 15px; font-weight: 500; color: var(--text-dark); }
+  .metric-tag {
+    font-size: 11px; padding: 3px 10px; border-radius: 10px; font-weight: 500;
+  }
+  .tag-improving { background: var(--accent-sage-light); color: #6B7D62; }
+  .tag-stable { background: var(--accent-honey-light); color: #8A7040; }
+  .tag-attention { background: var(--accent-rose-light); color: #A06060; }
+
+  .metric-values { display: flex; align-items: flex-end; gap: 20px; margin-bottom: 12px; }
+  .metric-current { text-align: left; }
+  .metric-val { font-size: 34px; font-weight: 700; line-height: 1; color: var(--text-dark); }
+  .metric-val-unit { font-size: 14px; font-weight: 400; color: var(--text-light); margin-left: 2px; }
+  .metric-change {
+    font-size: 12px; margin-top: 4px; display: flex; align-items: center; gap: 3px;
+  }
+  .change-good { color: var(--accent-sage); }
+  .change-warn { color: var(--accent-rose); }
+  .metric-vs-standard {
+    font-size: 12px; color: var(--text-light); text-align: left;
+    margin-top: 2px; line-height: 1.5;
+  }
+  .metric-vs-standard strong { color: var(--primary-dark); }
+
+  /* Progress Bar */
+  .progress-bar {
+    width: 100%; height: 8px; background: var(--bg-section);
+    border-radius: 4px; overflow: hidden; position: relative;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 4px; transition: width 1.2s ease;
+  }
+  .progress-marker { position: absolute; top: -4px; height: 16px; width: 2px; background: var(--text-light); opacity: 0.4; border-radius: 1px; }
+  .progress-labels { display: flex; justify-content: space-between; margin-top: 6px; }
+  .progress-label { font-size: 10px; color: var(--text-light); }
+  .progress-label.standard { color: var(--primary-dark); font-weight: 500; }
+
+  /* ========== Gentle Suggestion (Embedded in metric) ========== */
+  .metric-suggestion {
+    margin-top: 16px; padding-top: 16px;
+    border-top: 1px dashed var(--primary-light);
+  }
+  .suggestion-trigger {
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer; transition: opacity 0.2s;
+  }
+  .suggestion-trigger:active { opacity: 0.7; }
+  .suggestion-icon {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: var(--primary-light); display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .suggestion-text-main { flex: 1; }
+  .suggestion-label {
+    font-size: 11px; color: var(--text-light); margin-bottom: 2px;
+  }
+  .suggestion-title {
+    font-size: 13px; font-weight: 500; color: var(--text-dark);
+  }
+  .suggestion-arrow {
+    font-size: 18px; color: var(--text-light);
+    transition: transform 0.3s;
+  }
+  .suggestion-trigger.expanded .suggestion-arrow { transform: rotate(90deg); }
+
+  .suggestion-detail {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+  }
+  .suggestion-detail.open {
+    max-height: 300px; padding-top: 12px;
+  }
+  .suggestion-desc {
+    font-size: 12px; line-height: 1.7; color: var(--text-mid); margin-bottom: 10px;
+  }
+  .suggestion-products {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .product-chip {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; background: var(--bg-section);
+    border-radius: var(--radius-sm); cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .product-chip:active { transform: scale(0.98); }
+  .product-chip:hover { background: var(--primary-light); }
+  .product-chip-dot {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+  .product-chip-info { flex: 1; }
+  .product-chip-name { font-size: 13px; font-weight: 500; color: var(--text-dark); }
+  .product-chip-meta { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+  .product-chip-arrow { font-size: 14px; color: var(--text-light); }
+
+  /* ========== Doctor Suggestion Card ========== */
+  .doctor-card {
+    background: linear-gradient(135deg, #FDF8F0 0%, #F5EDE0 100%);
+    border-radius: var(--radius-lg); padding: 20px;
+    margin-bottom: 14px; border: 1px solid rgba(196,168,130,0.15);
+  }
+  .doctor-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+  }
+  .doctor-avatar {
+    width: 42px; height: 42px; border-radius: 14px;
+    background: var(--primary-light); display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .doctor-info { flex: 1; }
+  .doctor-name { font-size: 14px; font-weight: 500; color: var(--text-dark); }
+  .doctor-time { font-size: 12px; color: var(--text-light); }
+  .doctor-badge {
+    font-size: 11px; padding: 3px 10px; border-radius: 10px;
+    background: var(--primary); color: white; font-weight: 500;
+  }
+  .doctor-text {
+    font-size: 14px; line-height: 1.7; color: var(--text-mid); margin-bottom: 14px;
+  }
+  .doctor-text strong { color: var(--text-dark); font-weight: 600; }
+  .doctor-suggestions {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .suggestion-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; background: rgba(255,255,255,0.7);
+    border-radius: var(--radius-sm);
+  }
+  .suggestion-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+  }
+  .suggestion-text { font-size: 13px; color: var(--text-dark); line-height: 1.6; }
+  .suggestion-text strong { font-weight: 600; }
+
+  /* ========== Compare Cards ========== */
+  .compare-card {
+    background: var(--bg-card); border-radius: var(--radius-lg);
+    padding: 20px; margin-bottom: 14px; box-shadow: var(--shadow-soft);
+  }
+  .compare-title {
+    font-size: 15px; font-weight: 500; color: var(--text-dark);
+    margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .compare-chart {
+    display: flex; align-items: flex-end; gap: 10px;
+    height: 110px; padding: 0 4px; margin-bottom: 10px;
+  }
+  .compare-bar-wrap {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    height: 100%; justify-content: flex-end;
+  }
+  .compare-bar {
+    width: 100%; border-radius: 8px 8px 4px 4px;
+    transition: height 1s ease; min-height: 8px;
+  }
+  .compare-bar.me { background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%); }
+  .compare-bar.standard { background: transparent; border: 2px dashed var(--primary-light); }
+  .compare-bar-label { font-size: 10px; color: var(--text-light); margin-top: 6px; text-align: center; }
+  .compare-bar-value { font-size: 11px; font-weight: 600; color: var(--text-mid); margin-bottom: 4px; }
+  .compare-note { font-size: 13px; color: var(--text-mid); line-height: 1.7; padding: 0 4px; }
+  .compare-note strong { color: var(--primary-dark); }
+
+  /* ========== Timeline ========== */
+  .timeline-title {
+    font-size: 15px; font-weight: 500; color: var(--text-dark);
+    margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .timeline-item {
+    display: flex; gap: 14px; margin-bottom: 18px; position: relative;
+  }
+  .timeline-item:not(:last-child)::before {
+    content: ''; position: absolute; left: 17px; top: 40px;
+    width: 2px; height: calc(100% - 24px); background: var(--primary-light);
+  }
+  .timeline-dot-wrap { display: flex; flex-direction: column; align-items: center; padding-top: 4px; }
+  .timeline-dot {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--primary-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0; font-weight: 600; color: var(--primary-dark);
+  }
+  .timeline-dot.current { background: var(--primary); color: white; box-shadow: 0 2px 8px rgba(196,168,130,0.3); }
+  .timeline-dot.future { background: var(--bg-section); color: var(--text-light); }
+  .timeline-content {
+    flex: 1; background: var(--bg-card); border-radius: var(--radius-md);
+    padding: 14px 16px; box-shadow: var(--shadow-soft);
+  }
+  .timeline-week { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+  .timeline-event { font-size: 14px; font-weight: 500; color: var(--text-dark); margin-bottom: 6px; }
+  .timeline-detail { font-size: 12px; color: var(--text-mid); line-height: 1.6; }
+  .timeline-detail .good { color: var(--accent-sage); font-weight: 500; }
+  .timeline-detail .warn { color: var(--accent-rose); font-weight: 500; }
+  .timeline-content.future-card { opacity: 0.55; }
+
+  /* ========== Knowledge ========== */
+  .knowledge-card {
+    background: var(--bg-card); border-radius: var(--radius-lg);
+    padding: 20px; margin-bottom: 14px; box-shadow: var(--shadow-soft);
+  }
+  .knowledge-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .knowledge-icon { font-size: 22px; }
+  .knowledge-title { font-size: 15px; font-weight: 500; color: var(--text-dark); }
+  .knowledge-body { font-size: 13px; line-height: 1.8; color: var(--text-mid); }
+  .knowledge-body em { font-style: normal; color: var(--primary-dark); font-weight: 500; }
+  .knowledge-highlight {
+    background: var(--accent-honey-light); border-radius: var(--radius-sm);
+    padding: 12px 14px; margin-top: 12px;
+    font-size: 13px; color: var(--primary-dark); line-height: 1.6; font-weight: 500;
+  }
+
+  /* ========== Product Detail Modal ========== */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(74,63,53,0.4); z-index: 200;
+    display: none; align-items: flex-end; justify-content: center;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .modal-overlay.show { display: flex; opacity: 1; }
+  .modal-sheet {
+    width: 100%; max-width: 430px; max-height: 85vh;
+    background: var(--bg-card); border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    overflow-y: auto; padding-bottom: 24px;
+  }
+  .modal-overlay.show .modal-sheet { transform: translateY(0); }
+  .modal-header {
+    position: sticky; top: 0; background: var(--bg-card); z-index: 10;
+    padding: 16px 24px 12px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--bg-section);
+  }
+  .modal-title { font-size: 17px; font-weight: 600; color: var(--text-dark); }
+  .modal-close {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: none; background: var(--bg-section); cursor: pointer;
+    font-size: 16px; color: var(--text-mid); display: flex; align-items: center; justify-content: center;
+  }
+  .modal-body { padding: 20px 24px; }
+  .modal-section { margin-bottom: 24px; }
+  .modal-section-title {
+    font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 10px;
+  }
+  .modal-section-desc { font-size: 13px; line-height: 1.7; color: var(--text-mid); }
+  .modal-price-row {
+    display: flex; align-items: baseline; gap: 8px; margin: 12px 0;
+  }
+  .modal-price {
+    font-size: 28px; font-weight: 700; color: var(--primary-dark);
+  }
+  .modal-price-unit { font-size: 14px; color: var(--text-light); }
+  .modal-price-original {
+    font-size: 13px; color: var(--text-light); text-decoration: line-through;
+  }
+  .modal-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .modal-tag {
+    font-size: 11px; padding: 4px 10px; border-radius: 12px;
+    background: var(--primary-light); color: var(--primary-dark); font-weight: 500;
+  }
+  .modal-list { list-style: none; }
+  .modal-list li {
+    font-size: 13px; color: var(--text-mid); padding: 6px 0;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .modal-list li::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--primary); margin-top: 7px; flex-shrink: 0;
+  }
+  .modal-cta {
+    position: sticky; bottom: 0; background: var(--bg-card);
+    padding: 12px 24px; border-top: 1px solid var(--bg-section);
+  }
+  .modal-cta-btn {
+    width: 100%; padding: 15px; border: none; border-radius: var(--radius-md);
+    background: var(--primary); color: white; font-size: 15px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    box-shadow: 0 4px 16px rgba(196,168,130,0.3);
+  }
+
+  /* ========== Bottom CTA ========== */
+  .bottom-cta {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    padding: 14px 24px;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom, 20px));
+    background: linear-gradient(0deg, var(--bg-warm) 75%, transparent 100%);
+    z-index: 100;
+  }
+  .cta-btn {
+    width: 100%; padding: 15px; border: none; border-radius: var(--radius-md);
+    background: var(--primary); color: white; font-size: 15px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    box-shadow: 0 4px 16px rgba(196,168,130,0.3);
+    transition: transform 0.2s, background 0.3s;
+  }
+  .cta-btn:active { transform: scale(0.98); }
+
+  /* ========== Section Divider ========== */
+  .section-divider {
+    display: flex; align-items: center; gap: 10px; margin: 20px 0 14px;
+  }
+  .section-divider-line { flex: 1; height: 1px; background: var(--primary-light); }
+  .section-divider-text { font-size: 12px; color: var(--text-light); white-space: nowrap; }
+
+  /* ========== Animations ========== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim { animation: fadeInUp 0.5s ease forwards; opacity: 0; }
+  .d1 { animation-delay: 0.08s; }
+  .d2 { animation-delay: 0.16s; }
+  .d3 { animation-delay: 0.24s; }
+  .d4 { animation-delay: 0.32s; }
+  .d5 { animation-delay: 0.40s; }
+  .d6 { animation-delay: 0.48s; }
+  .d7 { animation-delay: 0.56s; }
+  .d8 { animation-delay: 0.64s; }
+</style>
+</head>
+<body>
+
+<!-- ==================== Header ==================== -->
+<div class="header anim d1">
+  <div class="header-brand">
+    <div class="header-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </div>
+    <span class="header-name">橘米康复中心</span>
+  </div>
+  <div class="header-greeting">你好，梦梅妈妈 👋</div>
+</div>
+
+<!-- ==================== Week Hero ==================== -->
+<div class="week-hero anim d2">
+  <div class="week-badge">📅 产后第3周</div>
+  <div class="week-title">妈妈的恢复周报</div>
+  <div class="week-subtitle">产后第21天 · 顺产</div>
+</div>
+
+<!-- ==================== Score Ring ==================== -->
+<div class="score-section anim d3">
+  <div class="score-container">
+    <svg class="score-ring" viewBox="0 0 160 160">
+      <circle class="score-ring-bg" cx="80" cy="80" r="65"/>
+      <circle class="score-ring-fill" cx="80" cy="80" r="65" id="scoreArc"/>
+    </svg>
+    <div class="score-center">
+      <div class="score-number">72</div>
+      <div class="score-unit">分</div>
+      <div class="score-label">综合恢复指数</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Week Picker ==================== -->
+<div class="week-picker anim d3">
+  <button class="week-pill has-data" onclick="switchWeek(1)">第1周</button>
+  <button class="week-pill has-data" onclick="switchWeek(2)">第2周</button>
+  <button class="week-pill active" onclick="switchWeek(3)">第3周</button>
+  <button class="week-pill" onclick="switchWeek(4)">第4周</button>
+  <button class="week-pill" onclick="switchWeek(5)">第5周</button>
+  <button class="week-pill" onclick="switchWeek(6)">第6周</button>
+</div>
+
+<!-- ==================== Tab Nav ==================== -->
+<div class="tab-nav anim d3">
+  <button class="tab-btn active" data-tab="recovery" onclick="switchTab('recovery')">恢复报告</button>
+  <button class="tab-btn" data-tab="compare" onclick="switchTab('compare')">同龄对比</button>
+  <button class="tab-btn" data-tab="timeline" onclick="switchTab('timeline')">恢复历程</button>
+</div>
+
+<!-- ==================== TAB 1: 恢复报告 ==================== -->
+<div class="tab-content active" id="tab-recovery">
+
+  <!-- 腹直肌分离 -->
+  <div class="metric-card anim d4">
+    <div class="metric-header">
+      <div class="metric-icon-wrap">
+        <div class="metric-icon" style="background: var(--accent-honey-light);">💪</div>
+        <div class="metric-name">腹直肌分离</div>
+      </div>
+      <span class="metric-tag tag-improving">持续改善 ↓</span>
+    </div>
+    <div class="metric-values">
+      <div class="metric-current">
+        <div class="metric-val">2.5<span class="metric-val-unit">指</span></div>
+        <div class="metric-change change-good">
+          <svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 2v8M3 5l3-3 3 3" stroke="#6B7D62" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+          较上周减少0.5指
+        </div>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 62%; background: linear-gradient(90deg, var(--accent-honey) 0%, var(--primary) 100%);"></div>
+      <div class="progress-marker" style="left: 25%;"></div>
+    </div>
+    <div class="progress-labels">
+      <span class="progress-label">4指 (入院)</span>
+      <span class="progress-label standard">2指 (标准值)</span>
+      <span class="progress-label">0指 (恢复)</span>
+    </div>
+    <div class="metric-vs-standard" style="margin-top:8px;">
+      📊 顺产妈妈产后3周平均 <strong>2.8指</strong> · 你已超过 <strong style="color:var(--accent-sage);">68%</strong> 同龄妈妈
+    </div>
+
+    <!-- 温和建议：腹直肌 -->
+    <div class="metric-suggestion">
+      <div class="suggestion-trigger" onclick="toggleSuggestion(this)">
+        <div class="suggestion-icon">💡</div>
+        <div class="suggestion-text-main">
+          <div class="suggestion-label">恢复小贴士</div>
+          <div class="suggestion-title">继续电刺激+手法，预计2周降至标准</div>
+        </div>
+        <div class="suggestion-arrow">›</div>
+      </div>
+      <div class="suggestion-detail">
+        <div class="suggestion-desc">
+          您目前腹直肌分离2.5指，处于中度分离。电刺激可以帮助肌肉被动收缩，手法可以辅助闭合。以下产康方案可能对您有帮助：
+        </div>
+        <div class="suggestion-products">
+          <div class="product-chip" onclick="openProduct('abdomen_package')">
+            <div class="product-chip-dot" style="background: var(--accent-honey);"></div>
+            <div class="product-chip-info">
+              <div class="product-chip-name">腹部小蛮腰套餐</div>
+              <div class="product-chip-meta">电刺激10次 + 手法10次 · ¥2,980</div>
+            </div>
+            <div class="product-chip-arrow">›</div>
+          </div>
+          <div class="product-chip" onclick="openProduct('abdomen_sport')">
+            <div class="product-chip-dot" style="background: var(--accent-sage);"></div>
+            <div class="product-chip-info">
+              <div class="product-chip-name">腹部小蛮腰运动版</div>
+              <div class="product-chip-meta">电刺激10次 + 1对1运动8次 · ¥3,980</div>
+            </div>
+            <div class="product-chip-arrow">›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 子宫复旧 -->
+  <div class="metric-card anim d5">
+    <div class="metric-header">
+      <div class="metric-icon-wrap">
+        <div class="metric-icon" style="background: var(--accent-rose-light);">🫧</div>
+        <div class="metric-name">子宫复旧</div>
+      </div>
+      <span class="metric-tag tag-stable">恢复正常</span>
+    </div>
+    <div class="metric-values">
+      <div class="metric-current">
+        <div class="metric-val">入盆<span class="metric-val-unit"></span></div>
+        <div class="metric-change change-good">
+          <svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 2v8M3 5l3-3 3 3" stroke="#6B7D62" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+          产后15天已入盆
+        </div>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 85%; background: linear-gradient(90deg, var(--accent-rose) 0%, var(--accent-sage) 100%);"></div>
+    </div>
+    <div class="progress-labels">
+      <span class="progress-label">未入盆</span>
+      <span class="progress-label standard">入盆 (标准值)</span>
+      <span class="progress-label">完全复旧</span>
+    </div>
+    <div class="metric-vs-standard" style="margin-top:8px;">
+      📊 顺产妈妈产后3周入盆率 <strong>92%</strong> · 你已达标 ✓
+    </div>
+
+    <!-- 温和建议：子宫 -->
+    <div class="metric-suggestion">
+      <div class="suggestion-trigger" onclick="toggleSuggestion(this)">
+        <div class="suggestion-icon">✅</div>
+        <div class="suggestion-text-main">
+          <div class="suggestion-label">恢复状态</div>
+          <div class="suggestion-title">子宫复旧进展良好，继续观察</div>
+        </div>
+        <div class="suggestion-arrow">›</div>
+      </div>
+      <div class="suggestion-detail">
+        <div class="suggestion-desc">
+          您的子宫已正常入盆，复旧进展顺利。继续保持良好的休息和哺乳，子宫会继续自然恢复至孕前大小。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 盆底肌 -->
+  <div class="metric-card anim d5">
+    <div class="metric-header">
+      <div class="metric-icon-wrap">
+        <div class="metric-icon" style="background: var(--accent-lavender-light);">🦋</div>
+        <div class="metric-name">盆底肌力</div>
+      </div>
+      <span class="metric-tag tag-attention">需关注</span>
+    </div>
+    <div class="metric-values">
+      <div class="metric-current">
+        <div class="metric-val">Ⅱ级<span class="metric-val-unit"></span></div>
+        <div class="metric-change change-warn">
+          <svg width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="4" stroke="#A06060" stroke-width="1.5" fill="none"/></svg>
+          尚未达正常水平
+        </div>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 40%; background: linear-gradient(90deg, var(--accent-lavender) 0%, var(--accent-rose) 100%);"></div>
+    </div>
+    <div class="progress-labels">
+      <span class="progress-label">0级</span>
+      <span class="progress-label standard">Ⅲ级 (标准值)</span>
+      <span class="progress-label">Ⅴ级 (正常)</span>
+    </div>
+    <div class="metric-vs-standard" style="margin-top:8px;">
+      📊 顺产妈妈产后3周平均 <strong>Ⅱ~Ⅲ级</strong> · 盆底肌力恢复是产后<strong>关键指标</strong>
+    </div>
+
+    <!-- 温和建议：盆底肌 -->
+    <div class="metric-suggestion">
+      <div class="suggestion-trigger" onclick="toggleSuggestion(this)">
+        <div class="suggestion-icon">🦋</div>
+        <div class="suggestion-text-main">
+          <div class="suggestion-label">恢复建议</div>
+          <div class="suggestion-title">盆底肌力需加强，42天内是黄金期</div>
+        </div>
+        <div class="suggestion-arrow">›</div>
+      </div>
+      <div class="suggestion-detail">
+        <div class="suggestion-desc">
+          您目前盆底肌力Ⅱ级，低于正常水平（Ⅲ级）。盆底肌就像一张"吊床"，托着子宫、膀胱和直肠。产后42天内是恢复黄金期，及时训练可有效预防远期漏尿、脱垂等问题。
+        </div>
+        <div class="suggestion-products">
+          <div class="product-chip" onclick="openProduct('pelvic_electric')">
+            <div class="product-chip-dot" style="background: var(--accent-lavender);"></div>
+            <div class="product-chip-info">
+              <div class="product-chip-name">盆底肌电刺激</div>
+              <div class="product-chip-meta">10次 · ¥1,880（补探头¥330）</div>
+            </div>
+            <div class="product-chip-arrow">›</div>
+          </div>
+          <div class="product-chip" onclick="openProduct('pelvic_magnetic')">
+            <div class="product-chip-dot" style="background: var(--accent-rose);"></div>
+            <div class="product-chip-info">
+              <div class="product-chip-name">盆底肌磁刺激</div>
+              <div class="product-chip-meta">10次 · ¥1,880</div>
+            </div>
+            <div class="product-chip-arrow">›</div>
+          </div>
+          <div class="product-chip" onclick="openProduct('pelvic_fascia')">
+            <div class="product-chip-dot" style="background: var(--primary);"></div>
+            <div class="product-chip-info">
+              <div class="product-chip-name">盆底肌筋膜手法调理</div>
+              <div class="product-chip-meta">10次 · ¥3,160</div>
+            </div>
+            <div class="product-chip-arrow">›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 会阴恢复 -->
+  <div class="metric-card anim d6">
+    <div class="metric-header">
+      <div class="metric-icon-wrap">
+        <div class="metric-icon" style="background: var(--accent-sage-light);">🌿</div>
+        <div class="metric-name">会阴恢复</div>
+      </div>
+      <span class="metric-tag tag-stable">愈合良好</span>
+    </div>
+    <div class="metric-values">
+      <div class="metric-current">
+        <div class="metric-val">良好<span class="metric-val-unit"></span></div>
+        <div class="metric-change change-good">
+          <svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 2v8M3 5l3-3 3 3" stroke="#6B7D62" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+          伤口已愈合
+        </div>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 78%; background: linear-gradient(90deg, var(--accent-sage) 0%, var(--primary) 100%);"></div>
+    </div>
+    <div class="progress-labels">
+      <span class="progress-label">术后</span>
+      <span class="progress-label standard">愈合 (标准值)</span>
+      <span class="progress-label">完全恢复</span>
+    </div>
+
+    <!-- 温和建议：会阴 -->
+    <div class="metric-suggestion">
+      <div class="suggestion-trigger" onclick="toggleSuggestion(this)">
+        <div class="suggestion-icon">🌿</div>
+        <div class="suggestion-text-main">
+          <div class="suggestion-label">恢复建议</div>
+          <div class="suggestion-title">会阴伤口愈合良好，注意闭合观察</div>
+        </div>
+        <div class="suggestion-arrow">›</div>
+      </div>
+      <div class="suggestion-detail">
+        <div class="suggestion-desc">
+          您的会阴伤口已愈合，但目前阴道口闭合度需关注。产后会阴松弛是常见问题，私密射频可以帮助促进胶原蛋白再生，改善闭合度。
+        </div>
+        <div class="suggestion-products">
+          <div class="product-chip" onclick="openProduct('private_inner')">
+            <div class="product-chip-dot" style="background: var(--accent-rose);"></div>
+            <div class="product-chip-info">
+              <div class="product-chip-name">内阴射频全段</div>
+              <div class="product-chip-meta">5次（含探头）· ¥6,980</div>
+            </div>
+            <div class="product-chip-arrow">›</div>
+          </div>
+          <div class="product-chip" onclick="openProduct('private_outer')">
+            <div class="product-chip-dot" style="background: var(--accent-lavender);"></div>
+            <div class="product-chip-info">
+              <div class="product-chip-name">外阴射频</div>
+              <div class="product-chip-meta">5次（含探头）· ¥5,980</div>
+            </div>
+            <div class="product-chip-arrow">›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section Divider -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-text">👩‍⚕️ 医生查房建议</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <!-- 医生建议 -->
+  <div class="doctor-card anim d6">
+    <div class="doctor-header">
+      <div class="doctor-avatar">👩‍⚕️</div>
+      <div class="doctor-info">
+        <div class="doctor-name">黄医生查房建议</div>
+        <div class="doctor-time">6月9日 · 第3周查房</div>
+      </div>
+      <div class="doctor-badge">新建议</div>
+    </div>
+    <div class="doctor-text">
+      梦梅妈妈，您本周<strong>整体进展不错</strong>，腹直肌分离从4指降到2.5指，子宫已入盆。
+    </div>
+    <div class="doctor-suggestions">
+      <div class="suggestion-item">
+        <div class="suggestion-dot" style="background: var(--accent-lavender);"></div>
+        <div class="suggestion-text"><strong>盆底肌力</strong>目前Ⅱ级，建议关注盆底肌训练方案，帮助恢复到正常水平</div>
+      </div>
+      <div class="suggestion-item">
+        <div class="suggestion-dot" style="background: var(--accent-honey);"></div>
+        <div class="suggestion-text"><strong>腹直肌</strong>持续改善中，继续电刺激+手法配合，预计2-3周可降至2指</div>
+      </div>
+      <div class="suggestion-item">
+        <div class="suggestion-dot" style="background: var(--accent-sage);"></div>
+        <div class="suggestion-text"><strong>会阴闭合</strong>情况待观察，下次查房重点关注</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 产康知识 -->
+  <div class="knowledge-card anim d7">
+    <div class="knowledge-header">
+      <span class="knowledge-icon">📖</span>
+      <span class="knowledge-title">本周产康知识</span>
+    </div>
+    <div class="knowledge-body">
+      <em>盆底肌</em>就像一张"吊床"，托着子宫、膀胱和直肠。顺产时这张吊床会被撑开，产后需要时间恢复。研究表明，<em>产后42天内</em>是盆底肌恢复的黄金期，及时训练可有效预防远期漏尿、脱垂等问题。
+    </div>
+    <div class="knowledge-highlight">
+      💡 凯格尔运动：每次收缩5秒→放松5秒，每天3组×10次，坚持2周就能感受到变化！
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB 2: 同龄对比 ==================== -->
+<div class="tab-content" id="tab-compare">
+
+  <div class="compare-card anim d3">
+    <div class="compare-title">💪 腹直肌分离 · 同龄对比</div>
+    <div class="compare-chart">
+      <div class="compare-bar-wrap">
+        <div class="compare-bar-value">2.5指</div>
+        <div class="compare-bar me" style="height: 55%;"></div>
+        <div class="compare-bar-label">你</div>
+      </div>
+      <div class="compare-bar-wrap">
+        <div class="compare-bar-value">2.8指</div>
+        <div class="compare-bar standard" style="height: 62%;"></div>
+        <div class="compare-bar-label">顺产均值</div>
+      </div>
+      <div class="compare-bar-wrap">
+        <div class="compare-bar-value">2.2指</div>
+        <div class="compare-bar standard" style="height: 48%;"></div>
+        <div class="compare-bar-label">剖宫产均值</div>
+      </div>
+      <div class="compare-bar-wrap">
+        <div class="compare-bar-value">2指</div>
+        <div class="compare-bar standard" style="height: 44%;"></div>
+        <div class="compare-bar-label">产后标准</div>
+      </div>
+    </div>
+    <div class="compare-note">
+      🎉 腹直肌恢复速度<strong>超过68%的顺产妈妈</strong>！按目前速度，预计1-2周可降至2指标准值。
+    </div>
+  </div>
+
+  <div class="compare-card anim d4">
+    <div class="compare-title">🦋 盆底肌力 · 同龄对比</div>
+    <div class="compare-chart">
+      <div class="compare-bar-wrap">
+        <div class="compare-bar-value">Ⅱ级</div>
+        <div class="compare-bar me" style="height: 40%;"></div>
+        <div class="compare-bar-label">你</div>
+      </div>
+      <div class="compare-bar-wrap">
+        <div class="compare-bar-value">Ⅱ~Ⅲ级</div>
+        <div class="compare-bar standard" style="height: 55%;"></div>
+        <div class="compare-bar-label">顺产均值</div>
+      </div>
+      <div class="compare-bar-wrap">
+        <div class="compare-bar-value">Ⅲ级</div>
+        <div class="compare-bar standard" style="height: 60%;"></div>
+        <div class="compare-bar-label">产后标准</div>
+      </div>
+      <div class="compare-bar-wrap">
+        <div class="compare-bar-value">Ⅴ级</div>
+        <div class="compare-bar standard" style="height: 100%;"></div>
+        <div class="compare-bar-label">正常值</div>
+      </div>
+    </div>
+    <div class="compare-note">
+      ⚠️ 盆底肌力略低于同龄妈妈平均水平。<strong>产后42天内是黄金期</strong>，建议关注盆底肌训练。
+    </div>
+  </div>
+
+  <div class="compare-card anim d5">
+    <div class="compare-title">🫧 子宫复旧 · 同龄对比</div>
+    <div class="compare-chart">
+      <div class="compare-bar-wrap">
+        <div class="compare-bar-value">入盆</div>
+        <div class="compare-bar me" style="height: 85%;"></div>
+        <div class="compare-bar-label">你</div>
+      </div>
+      <div class="compare-bar-wrap">
+        <div class="compare-bar-value">入盆</div>
+        <div class="compare-bar standard" style="height: 92%;"></div>
+        <div class="compare-bar-label">顺产均值</div>
+      </div>
+    </div>
+    <div class="compare-note">
+      ✅ 子宫复旧进展正常，已达到产后3周标准水平，继续观察即可。
+    </div>
+  </div>
+
+  <div class="knowledge-card anim d6">
+    <div class="knowledge-header">
+      <span class="knowledge-icon">📝</span>
+      <span class="knowledge-title">数据说明</span>
+    </div>
+    <div class="knowledge-body">
+      以上对比数据来源于<strong style="color:var(--primary-dark);">中国产后康复行业标准</strong>及临床研究文献，均为产后同周龄妈妈的平均参考值。每个人的恢复速度受体质、分娩方式、产后护理等多重因素影响，数据仅供参考，不作为医学诊断依据。
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB 3: 恢复历程 ==================== -->
+<div class="tab-content" id="tab-timeline">
+
+  <div class="timeline-title anim d3">🕐 恢复历程</div>
+
+  <div class="timeline-item anim d3">
+    <div class="timeline-dot-wrap">
+      <div class="timeline-dot current">1</div>
+    </div>
+    <div class="timeline-content">
+      <div class="timeline-week">第1周 · 6月1日</div>
+      <div class="timeline-event">入院评估</div>
+      <div class="timeline-detail">
+        腹直肌分离4指（开放型）<br>
+        子宫未入盆 · 盆底肌力0级<br>
+        顺产侧切伤口恢复中
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-item anim d4">
+    <div class="timeline-dot-wrap">
+      <div class="timeline-dot current">2</div>
+    </div>
+    <div class="timeline-content">
+      <div class="timeline-week">第2周 · 6月5日</div>
+      <div class="timeline-event">黄医生查房</div>
+      <div class="timeline-detail">
+        腹直肌分离3指 → <span class="good">减少1指 ✓</span><br>
+        子宫入盆 · 盆底肌力Ⅰ级<br>
+        建议：继续腹直肌仪器+手法
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-item anim d5">
+    <div class="timeline-dot-wrap">
+      <div class="timeline-dot current">3</div>
+    </div>
+    <div class="timeline-content">
+      <div class="timeline-week">第3周 · 6月9日</div>
+      <div class="timeline-event">黄医生查房 + 私密评估</div>
+      <div class="timeline-detail">
+        腹直肌分离2.5指 → <span class="good">持续改善 ✓</span><br>
+        盆底肌力Ⅱ级 · <span class="warn">会阴闭合待观察</span><br>
+        建议：了解盆底肌训练，关注会阴恢复
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-item anim d6">
+    <div class="timeline-dot-wrap">
+      <div class="timeline-dot future">4</div>
+    </div>
+    <div class="timeline-content future-card">
+      <div class="timeline-week">第4周 · 待查房</div>
+      <div class="timeline-event">下次查房预约</div>
+      <div class="timeline-detail">
+        预计6月14日 · 重点关注：<br>
+        盆底肌力是否达Ⅲ级<br>
+        腹直肌是否降至2指<br>
+        会阴闭合情况
+      </div>
+    </div>
+  </div>
+
+  <!-- 趋势图 -->
+  <div class="compare-card anim d7">
+    <div class="compare-title">📈 腹直肌分离趋势</div>
+    <canvas id="trendChart" style="width:100%; height:180px;"></canvas>
+  </div>
+
+  <div class="compare-card anim d7">
+    <div class="compare-title">🦋 盆底肌力趋势</div>
+    <canvas id="trendChart2" style="width:100%; height:180px;"></canvas>
+  </div>
+
+</div>
+
+<!-- ==================== Product Detail Modal ==================== -->
+<div class="modal-overlay" id="productModal" onclick="closeModal(event)">
+  <div class="modal-sheet" id="modalSheet">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">产品名称</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Dynamic content -->
+    </div>
+    <div class="modal-cta">
+      <button class="modal-cta-btn" onclick="handleModalConsult()">💬 咨询产康顾问了解详情</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Bottom CTA ==================== -->
+<div class="bottom-cta">
+  <button class="cta-btn" id="ctaBtn" onclick="handleConsult()">💬 和产康顾问聊聊</button>
+</div>
+
+<script>
+// ============================================
+// DATA: 诊断 → 产品映射表
+// ============================================
+const PRODUCT_MAP = {
+  abdomen_package: {
+    name: "腹部小蛮腰套餐",
+    subtitle: "适合腹直肌分离2-3指的宝妈",
+    price: 2980,
+    originalPrice: 3980,
+    unit: "10次电刺激 + 10次手法",
+    tags: ["腹直肌修复", "电刺激", "手法闭合"],
+    desc: "专为产后腹直肌分离设计，通过低频电刺激促进肌肉被动收缩，配合专业手法辅助腹直肌闭合。适合腹直肌分离2-3指的宝妈。",
+    includes: [
+      "腹直肌电刺激10次（每次30分钟）",
+      "腹直肌闭合手法10次（含呼吸训练指导）",
+      "免费赠送1次子宫低频或腰骶疼痛低频仪器",
+      "专业产康师1对1跟踪服务"
+    ],
+    effect: "一般2-4周可见明显改善，腹直肌分离可减少1-2指",
+    note: "如有疝气或其他腹部手术史，请提前告知产康师"
+  },
+  abdomen_sport: {
+    name: "腹部小蛮腰运动版",
+    subtitle: "适合腹直肌分离较严重或希望运动恢复的宝妈",
+    price: 3980,
+    originalPrice: 4980,
+    unit: "10次电刺激 + 8次1对1运动",
+    tags: ["腹直肌修复", "运动康复", "1对1私教"],
+    desc: "电刺激+专业运动康复结合方案，由资深运动康复师1对1指导，通过科学的呼吸训练和核心肌群激活，帮助腹直肌自然闭合。",
+    includes: [
+      "腹直肌电刺激10次",
+      "1对1腹直肌运动康复8次（每次45分钟）",
+      "个性化运动方案定制",
+      "免费赠送1-2次腹直肌闭合手法或子宫仪器"
+    ],
+    effect: "4-6周可显著改善，适合分离>3指或开放型的宝妈",
+    note: "需排除疝气等禁忌症"
+  },
+  pelvic_electric: {
+    name: "盆底肌电刺激",
+    subtitle: "适合盆底肌力0-Ⅱ级的宝妈",
+    price: 1880,
+    originalPrice: 2380,
+    unit: "10次",
+    tags: ["盆底肌修复", "电刺激", "预防漏尿"],
+    desc: "通过生物反馈电刺激，帮助唤醒和强化盆底肌肉。电刺激可以精准定位盆底肌群，帮助宝妈找到正确的发力感觉。",
+    includes: [
+      "盆底肌电刺激10次（每次20-30分钟）",
+      "专业探头1个（如需补购¥330）",
+      "盆底肌力评估1次",
+      "居家凯格尔运动指导"
+    ],
+    effect: "一般4-6周盆底肌力可提升1-2级，有效预防远期漏尿和脱垂",
+    note: "如有阴道炎症需先治疗后再做"
+  },
+  pelvic_magnetic: {
+    name: "盆底肌磁刺激",
+    subtitle: "无创磁刺激，坐着就能做",
+    price: 1880,
+    originalPrice: 2380,
+    unit: "10次",
+    tags: ["盆底肌修复", "磁刺激", "无创"],
+    desc: "采用高能磁脉冲技术，穿透衣物直达盆底肌，无需脱衣、无创无痛。特别适合产后早期或对传统电刺激不适的宝妈。",
+    includes: [
+      "盆底肌磁刺激10次（每次20分钟）",
+      "无需脱衣，无创无痛",
+      "可同时改善盆底肌高张或低张",
+      "居家运动方案指导"
+    ],
+    effect: "磁刺激可同时作用于深层和浅层肌肉，适合各类盆底肌问题",
+    note: "体内有金属植入物者禁用"
+  },
+  pelvic_fascia: {
+    name: "盆底肌筋膜手法调理",
+    subtitle: "针对盆底肌高张或疼痛的宝妈",
+    price: 3160,
+    originalPrice: 3980,
+    unit: "10次",
+    tags: ["盆底肌修复", "筋膜手法", "疼痛缓解"],
+    desc: "通过专业筋膜松解手法，缓解盆底肌紧张、疼痛，改善肌筋膜粘连。特别适合有慢性盆底痛或盆底肌高张的宝妈。",
+    includes: [
+      "盆底肌筋膜手法调理10次",
+      "盆底肌张力评估",
+      "肌筋膜松解+触发点处理",
+      "居家放松训练指导"
+    ],
+    effect: "有效缓解盆底疼痛，改善肌肉弹性，提升性生活质量",
+    note: "急性炎症期暂缓"
+  },
+  private_inner: {
+    name: "内阴射频全段",
+    subtitle: "改善阴道松弛、促进黏膜修复",
+    price: 6980,
+    originalPrice: 9900,
+    unit: "5次（含探头¥1200）",
+    tags: ["私密修复", "射频", "阴道松弛"],
+    desc: "AI温控射频技术，精准作用于阴道黏膜深层，促进胶原蛋白和弹性纤维再生，改善阴道松弛、干涩问题。",
+    includes: [
+      "AI温控射频内阴全段5次",
+      "一次性探头1个（价值¥1200）",
+      "私密评估1次",
+      "治疗后护理指导"
+    ],
+    effect: "5次疗程后可明显感觉紧致度提升，黏膜湿润度改善",
+    note: "月经期内、阴道炎症期禁做"
+  },
+  private_outer: {
+    name: "外阴射频",
+    subtitle: "改善外阴松弛、色素沉着",
+    price: 5980,
+    originalPrice: 7180,
+    unit: "5次（含探头¥1200）",
+    tags: ["私密修复", "射频", "外阴紧致"],
+    desc: "射频能量作用于外阴组织，促进胶原再生，改善外阴松弛、形态不美观等问题，提升私密部位整体年轻态。",
+    includes: [
+      "AI温控射频外阴5次",
+      "一次性探头1个（价值¥1200）",
+      "私密评估1次",
+      "术后护理指导"
+    ],
+    effect: "外阴紧致度提升，形态改善，色素沉着减轻",
+    note: "月经期内、外阴炎症期禁做"
+  }
+};
+
+// ============================================
+// UI: Score Ring Animation
+// ============================================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('scoreArc').classList.add('animated');
+  }, 600);
+});
+
+// ============================================
+// UI: Tab Switching
+// ============================================
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tabName).classList.add('active');
+  document.querySelector('.tab-btn[data-tab="' + tabName + '"]').classList.add('active');
+  
+  const tab = document.getElementById('tab-' + tabName);
+  tab.querySelectorAll('.anim').forEach(el => {
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = '';
+  });
+
+  if (tabName === 'timeline') {
+    setTimeout(() => {
+      drawTrendChart('trendChart', trendData1);
+      drawTrendChart('trendChart2', trendData2);
+    }, 300);
+  }
+}
+
+// ============================================
+// UI: Week Switching
+// ============================================
+function switchWeek(week) {
+  document.querySelectorAll('.week-pill').forEach(el => el.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ============================================
+// UI: Toggle Suggestion Detail
+// ============================================
+function toggleSuggestion(trigger) {
+  const detail = trigger.nextElementSibling;
+  const isOpen = detail.classList.contains('open');
+  
+  // Close all others
+  document.querySelectorAll('.suggestion-detail.open').forEach(el => {
+    el.classList.remove('open');
+    el.previousElementSibling.classList.remove('expanded');
+  });
+  
+  if (!isOpen) {
+    detail.classList.add('open');
+    trigger.classList.add('expanded');
+  }
+}
+
+// ============================================
+// UI: Product Modal
+// ============================================
+function openProduct(productId) {
+  const product = PRODUCT_MAP[productId];
+  if (!product) return;
+  
+  document.getElementById('modalTitle').textContent = product.name;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-section">
+      <div style="font-size:13px;color:var(--text-light);margin-bottom:4px;">${product.subtitle}</div>
+      <div class="modal-price-row">
+        <span class="modal-price">¥${product.price.toLocaleString()}</span>
+        <span class="modal-price-unit">${product.unit}</span>
+        <span class="modal-price-original">¥${product.originalPrice.toLocaleString()}</span>
+      </div>
+      <div class="modal-tags">
+        ${product.tags.map(t => `<span class="modal-tag">${t}</span>`).join('')}
+      </div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">项目介绍</div>
+      <div class="modal-section-desc">${product.desc}</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">包含内容</div>
+      <ul class="modal-list">
+        ${product.includes.map(i => `<li>${i}</li>`).join('')}
+      </ul>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">预期效果</div>
+      <div class="modal-section-desc">${product.effect}</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">注意事项</div>
+      <div class="modal-section-desc" style="color:var(--accent-rose);">${product.note}</div>
+    </div>
+  `;
+  
+  const overlay = document.getElementById('productModal');
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(event) {
+  if (event && event.target !== event.currentTarget) return;
+  document.getElementById('productModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function handleModalConsult() {
+  closeModal();
+  handleConsult();
+}
+
+// ============================================
+// UI: Trend Chart
+// ============================================
+const trendData1 = {
+  label: '腹直肌分离（指）', standard: 2, maxVal: 5, unit: '指',
+  points: [
+    { week: '入院', value: 4 },
+    { week: '第1周', value: 3.5 },
+    { week: '第2周', value: 3 },
+    { week: '第3周', value: 2.5 },
+    { week: '第4周', value: null },
+  ],
+  predicted: { week: '第4周', value: 2.0 }
+};
+
+const trendData2 = {
+  label: '盆底肌力（级）', standard: 3, maxVal: 5, unit: '级',
+  points: [
+    { week: '入院', value: 0 },
+    { week: '第1周', value: 1 },
+    { week: '第2周', value: 1 },
+    { week: '第3周', value: 2 },
+    { week: '第4周', value: null },
+  ],
+  predicted: { week: '第4周', value: 3 }
+};
+
+function drawTrendChart(canvasId, data) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = 180 * dpr;
+  ctx.scale(dpr, dpr);
+  
+  const w = canvas.offsetWidth;
+  const h = 180;
+  const pad = { top: 20, right: 20, bottom: 30, left: 36 };
+  const cw = w - pad.left - pad.right;
+  const ch = h - pad.top - pad.bottom;
+
+  function yPos(val) { return pad.top + ch - (val / data.maxVal * ch); }
+
+  // Grid
+  ctx.strokeStyle = '#F0E4D0'; ctx.lineWidth = 1;
+  for (let i = 0; i <= data.maxVal; i++) {
+    const y = yPos(i);
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(w - pad.right, y); ctx.stroke();
+  }
+
+  // Standard line
+  ctx.strokeStyle = '#C4A882'; ctx.lineWidth = 1.5;
+  ctx.setLineDash([6, 4]);
+  const sy = yPos(data.standard);
+  ctx.beginPath(); ctx.moveTo(pad.left, sy); ctx.lineTo(w - pad.right, sy); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#9E7E56'; ctx.font = '11px "Noto Sans SC"'; ctx.textAlign = 'right';
+  ctx.fillText('标准 ' + data.standard + data.unit, w - pad.right, sy - 6);
+
+  // Data line
+  const validPoints = data.points.filter(d => d.value !== null);
+  ctx.strokeStyle = '#C4A882'; ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  ctx.beginPath();
+  validPoints.forEach((d, i) => {
+    const x = pad.left + (data.points.indexOf(d) / (data.points.length - 1)) * cw;
+    const y = yPos(d.value);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Gradient fill
+  const gradient = ctx.createLinearGradient(0, pad.top, 0, h - pad.bottom);
+  gradient.addColorStop(0, 'rgba(196,168,130,0.15)');
+  gradient.addColorStop(1, 'rgba(196,168,130,0)');
+  ctx.fillStyle = gradient;
+  ctx.beginPath();
+  validPoints.forEach((d, i) => {
+    const x = pad.left + (data.points.indexOf(d) / (data.points.length - 1)) * cw;
+    const y = yPos(d.value);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  const lastValidIdx = data.points.indexOf(validPoints[validPoints.length - 1]);
+  const lastX = pad.left + (lastValidIdx / (data.points.length - 1)) * cw;
+  ctx.lineTo(lastX, h - pad.bottom); ctx.lineTo(pad.left, h - pad.bottom);
+  ctx.closePath(); ctx.fill();
+
+  // Points
+  validPoints.forEach((d) => {
+    const x = pad.left + (data.points.indexOf(d) / (data.points.length - 1)) * cw;
+    const y = yPos(d.value);
+    ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#C4A882'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = '#4A3F35'; ctx.font = '500 12px "Noto Sans SC"'; ctx.textAlign = 'center';
+    ctx.fillText(d.value + data.unit, x, y - 12);
+  });
+
+  // Week labels
+  ctx.fillStyle = '#A89888'; ctx.font = '11px "Noto Sans SC"'; ctx.textAlign = 'center';
+  data.points.forEach((d, i) => {
+    const x = pad.left + (i / (data.points.length - 1)) * cw;
+    ctx.fillText(d.week, x, h - 8);
+  });
+
+  // Predicted line
+  if (data.predicted && data.predicted.value !== null) {
+    const prevPoint = validPoints[validPoints.length - 1];
+    const prevIdx = data.points.indexOf(prevPoint);
+    const x1 = pad.left + (prevIdx / (data.points.length - 1)) * cw;
+    const y1 = yPos(prevPoint.value);
+    const x2 = pad.left + ((data.points.length - 1) / (data.points.length - 1)) * cw;
+    const y2 = yPos(data.predicted.value);
+    ctx.strokeStyle = '#C4A882'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#F5EDE0'; ctx.beginPath(); ctx.arc(x2, y2, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#C4A882'; ctx.lineWidth = 2; ctx.setLineDash([3, 3]); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#9E7E56'; ctx.font = '12px "Noto Sans SC"'; ctx.textAlign = 'center';
+    ctx.fillText('预计' + data.predicted.value + data.unit, x2, y2 - 12);
+  }
+}
+
+// ============================================
+// UI: Consult Button
+// ============================================
+function handleConsult() {
+  const btn = document.getElementById('ctaBtn');
+  const original = btn.textContent;
+  btn.textContent = '✓ 已通知产康顾问，稍后联系您';
+  btn.style.background = 'var(--accent-sage)';
+  setTimeout(() => {
+    btn.textContent = original;
+    btn.style.background = 'var(--primary)';
+  }, 3000);
+}
+</script>
+
+</body>
+</html>
