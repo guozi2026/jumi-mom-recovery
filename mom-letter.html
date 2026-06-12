@@ -972,6 +972,19 @@ body.screenshot-mode .back-to-edit-btn {
             <option value="3">3拳</option><option value="4">4拳</option><option value="5">5拳</option>
           </select>
         </div>
+        <div class="form-row compact" style="grid-column: 1 / -1; margin-top: 4px;">
+          <label class="form-label" style="font-weight: 600; color: var(--text);">腹直肌对比照片（可选）</label>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">产后初期</label>
+          <input type="file" class="form-file" id="inputPhotoBefore" accept="image/*" onchange="handlePhotoUpload('before')">
+          <div class="photo-preview" id="photoPreviewBefore"></div>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">当前（本周）</label>
+          <input type="file" class="form-file" id="inputPhotoAfter" accept="image/*" onchange="handlePhotoUpload('after')">
+          <div class="photo-preview" id="photoPreviewAfter"></div>
+        </div>
         <div class="form-row compact" style="grid-column: 1 / -1">
           <label class="form-label">会阴状态</label>
           <select class="form-select" id="inputPerineal">
@@ -1047,9 +1060,9 @@ body.screenshot-mode .back-to-edit-btn {
       <div class="form-row">
         <label class="form-label">信件中推荐方案的排版方式</label>
         <div class="layout-toggle">
-          <button class="layout-btn active" data-layout="a" onclick="setLetterLayout('a')">📋 横向卡片</button>
+          <button class="layout-btn" data-layout="a" onclick="setLetterLayout('a')">📋 横向卡片</button>
           <button class="layout-btn" data-layout="b" onclick="setLetterLayout('b')">📝 竖向便签</button>
-          <button class="layout-btn" data-layout="c" onclick="setLetterLayout('c')">🔲 两列网格</button>
+          <button class="layout-btn active" data-layout="c" onclick="setLetterLayout('c')">🔲 两列网格</button>
         </div>
         <div class="form-hint" style="margin-top:4px">横向卡片=信息完整；竖向便签=极简紧凑；两列网格=视觉丰富</div>
       </div>
@@ -1442,7 +1455,7 @@ let currentTemplateKey = 'moderate';
 let isModified = false;
 let manualRecs = []; // 手动添加的推荐项
 let disabledAutoRecs = new Set(); // 用户取消勾选的自动推荐key
-let currentLetterLayout = 'a'; // 信件排版方式：a=横向卡片, b=竖向便签, c=两列网格
+let currentLetterLayout = 'c'; // 信件排版方式：a=横向卡片, b=竖向便签, c=两列网格
 
 const TEMPLATE_NAMES = {
   mild: '轻度型', moderate: '常见型', severe: '重度型',
@@ -1836,7 +1849,7 @@ function renderLetter() {
     </div>
     <div class="advice-intro">了解一下，合适再做~</div>
     <div class="advice-list">
-      ${recs.slice(0, 2).map(r => `
+      ${recs.map(r => `
       <div class="advice-card ${r.color}">
         <div class="advice-icon i-${r.color.replace('a-', '')}">${r.color === 'a-green' ? '🌿' : r.color === 'a-pink' ? '🎀' : r.color === 'a-blue' ? '💧' : '🌸'}</div>
         <div class="advice-body">
@@ -1845,19 +1858,6 @@ function renderLetter() {
           <div class="advice-effect">${r.effect} · 约¥${r.price.toLocaleString()}</div>
         </div>
       </div>`).join('')}
-      ${recs.length > 2 ? `
-      <div class="advice-more" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">还有${recs.length - 2}项推荐，点击查看 ↓</div>
-      <div class="advice-list-extra" style="display:none">
-        ${recs.slice(2).map(r => `
-        <div class="advice-card ${r.color}">
-          <div class="advice-icon i-${r.color.replace('a-', '')}">${r.color === 'a-green' ? '🌿' : r.color === 'a-pink' ? '🎀' : r.color === 'a-blue' ? '💧' : '🌸'}</div>
-          <div class="advice-body">
-            <div class="advice-why">${r.why}</div>
-            <div class="advice-what">${r.what}</div>
-            <div class="advice-effect">${r.effect} · 约¥${r.price.toLocaleString()}</div>
-          </div>
-        </div>`).join('')}
-      </div>` : ''}
     </div>
   </div>` : ''}
   `;
