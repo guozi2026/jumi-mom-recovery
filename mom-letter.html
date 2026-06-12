@@ -244,30 +244,6 @@ body {
 .btn-generate:hover { opacity: 0.9; }
 
 /* 快速模板按钮（保留常用） */
-.quick-templates {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 10px;
-}
-
-.quick-tpl-btn {
-  padding: 5px 10px;
-  border: 1px dashed var(--warm2);
-  border-radius: 8px;
-  background: transparent;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 11px;
-  color: var(--text3);
-  transition: all 0.15s;
-}
-
-.quick-tpl-btn:hover {
-  border-color: var(--amber);
-  color: var(--text);
-  background: #FFFDF8;
-}
 
 .btn-preview {
   background: var(--green2);
@@ -1000,16 +976,7 @@ body.screenshot-mode .back-to-edit-btn {
     <div class="template-section">
       <div class="template-label">
         🧩 症状组合器
-        <span class="template-status active" id="templateStatus">✅ 常见型</span>
         <span class="reset-template-btn" id="resetBtn" onclick="resetTemplate()" style="display:none">↺ 重置</span>
-      </div>
-
-      <!-- 常用一键模板 -->
-      <div class="quick-templates">
-        <button class="quick-tpl-btn" onclick="applyTemplate('mild')">🌿 轻度</button>
-        <button class="quick-tpl-btn" onclick="applyTemplate('moderate')">🎀 常见</button>
-        <button class="quick-tpl-btn" onclick="applyTemplate('severe')">🩺 重度</button>
-        <button class="quick-tpl-btn" onclick="applyTemplate('all_clear')">✨ 恢复良好</button>
       </div>
 
       <!-- 自由组合 -->
