@@ -141,108 +141,6 @@ body {
 }
 
 /* 模板选择器 */
-.template-section {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--warm2);
-}
-
-.template-label {
-  font-size: 12px;
-  color: var(--text3);
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.template-status {
-  font-size: 10px;
-  padding: 1px 8px;
-  border-radius: 10px;
-  font-weight: 500;
-}
-.template-status.active { background: #E8F5E9; color: var(--green2); }
-.template-status.modified { background: #FFF3E0; color: #E6A817; }
-.reset-template-btn {
-  font-size: 10px;
-  color: var(--pink2);
-  cursor: pointer;
-  text-decoration: underline;
-  margin-left: auto;
-}
-.reset-template-btn:hover { color: var(--rose); }
-
-/* 症状组合器 */
-.symptom-builder {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.symptom-row {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.symptom-label {
-  font-size: 11px;
-  color: var(--text2);
-  font-weight: 500;
-}
-
-.symptom-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.symptom-pill {
-  padding: 5px 10px;
-  border: 1px solid var(--warm2);
-  border-radius: 14px;
-  background: var(--card);
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 11px;
-  color: var(--text2);
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-
-.symptom-pill:hover {
-  border-color: var(--amber);
-  background: #FFFDF8;
-}
-
-.symptom-pill.selected {
-  background: var(--amber);
-  color: #fff;
-  border-color: var(--amber);
-  font-weight: 500;
-}
-
-.symptom-pill.selected:hover {
-  background: #B8963D;
-}
-
-.btn-generate {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--green), var(--green2));
-  color: #fff;
-  font-size: 13px;
-  font-family: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 6px;
-  transition: opacity 0.2s;
-}
-
-.btn-generate:hover { opacity: 0.9; }
-
 /* 快速模板按钮（保留常用） */
 
 .btn-preview {
@@ -973,58 +871,6 @@ body.screenshot-mode .back-to-edit-btn {
         <button class="btn-download" onclick="downloadScreenshot()">💾 一键截图</button>
       </div>
     </div>
-    <div class="template-section">
-      <div class="template-label">
-        🧩 症状组合器
-        <span class="reset-template-btn" id="resetBtn" onclick="resetTemplate()" style="display:none">↺ 重置</span>
-      </div>
-
-      <!-- 自由组合 -->
-      <div class="symptom-builder">
-        <div class="symptom-row">
-          <div class="symptom-label">腹直肌分离</div>
-          <div class="symptom-options" id="sDiastasis">
-            <button class="symptom-pill" data-val="1.5" onclick="selectSymptom(this, 'diastasis')">≤2指正常</button>
-            <button class="symptom-pill selected" data-val="2.5" onclick="selectSymptom(this, 'diastasis')">2-3指轻度</button>
-            <button class="symptom-pill" data-val="3.5" onclick="selectSymptom(this, 'diastasis')">3-4指中度</button>
-            <button class="symptom-pill" data-val="4.5" onclick="selectSymptom(this, 'diastasis')">≥4指重度</button>
-          </div>
-        </div>
-        <div class="symptom-row">
-          <div class="symptom-label">盆底肌力</div>
-          <div class="symptom-options" id="sPelvic">
-            <button class="symptom-pill" data-val="3" onclick="selectSymptom(this, 'pelvic')">≥Ⅲ级达标</button>
-            <button class="symptom-pill selected" data-val="2" onclick="selectSymptom(this, 'pelvic')">Ⅱ级轻度</button>
-            <button class="symptom-pill" data-val="1" onclick="selectSymptom(this, 'pelvic')">Ⅰ级中度</button>
-            <button class="symptom-pill" data-val="0" onclick="selectSymptom(this, 'pelvic')">0级重度</button>
-          </div>
-        </div>
-        <div class="symptom-row">
-          <div class="symptom-label">子宫状态</div>
-          <div class="symptom-options" id="sUterus">
-            <button class="symptom-pill" data-val="已入盆" onclick="selectSymptom(this, 'uterus')">已入盆</button>
-            <button class="symptom-pill selected" data-val="未入盆" onclick="selectSymptom(this, 'uterus')">未入盆</button>
-          </div>
-        </div>
-        <div class="symptom-row">
-          <div class="symptom-label">会阴状态</div>
-          <div class="symptom-options" id="sPerineal">
-            <button class="symptom-pill" data-val="已闭合" onclick="selectSymptom(this, 'perineal')">已闭合</button>
-            <button class="symptom-pill selected" data-val="未完全闭合" onclick="selectSymptom(this, 'perineal')">未完全闭合</button>
-            <button class="symptom-pill" data-val="未闭合" onclick="selectSymptom(this, 'perineal')">未闭合</button>
-          </div>
-        </div>
-        <div class="symptom-row">
-          <div class="symptom-label">乳腺状态</div>
-          <div class="symptom-options" id="sBreast">
-            <button class="symptom-pill selected" data-val="正常" onclick="selectSymptom(this, 'breast')">正常</button>
-            <button class="symptom-pill" data-val="不通" onclick="selectSymptom(this, 'breast')">不通需疏通</button>
-          </div>
-        </div>
-        <button class="btn-generate" onclick="generateFromSymptoms()">🎲 按症状生成模板</button>
-      </div>
-    </div>
-
     <!-- 客户信息 -->
     <div class="form-section" id="client-info">
       <div class="form-section-title"><span class="emoji">👤</span> 客户信息</div>
@@ -1655,34 +1501,13 @@ function applyTemplate(key) {
     document.getElementById('inputCheckOutDate').value = checkOutDate.toISOString().split('T')[0];
   }
 
-  updateTemplateStatus();
   updateRecSummary();
   calcDaysFromDate(); // 触发日期联动计算
-}
-
-function resetTemplate() {
-  disabledAutoRecs.clear();
-  applyTemplate(currentTemplateKey);
-}
-
-function updateTemplateStatus() {
-  const status = document.getElementById('templateStatus');
-  const resetBtn = document.getElementById('resetBtn');
-  if (isModified) {
-    status.className = 'template-status modified';
-    status.textContent = '✏️ 已修改';
-    resetBtn.style.display = 'inline';
-  } else {
-    status.className = 'template-status active';
-    status.textContent = '✅ ' + (TEMPLATE_NAMES[currentTemplateKey] || '');
-    resetBtn.style.display = 'none';
-  }
 }
 
 function markModified() {
   if (!isModified) {
     isModified = true;
-    updateTemplateStatus();
   }
 }
 
@@ -1779,74 +1604,6 @@ function addSectionIds() {
   document.querySelector('#assessment').id = 'assessment';
   document.querySelector('#recommendations').id = 'recommendations';
   document.querySelector('#consultant').id = 'consultant';
-}
-
-// ═══════════════════════════════════════════════════════════
-//  症状组合器
-// ═══════════════════════════════════════════════════════════
-
-function selectSymptom(btn, type) {
-  const container = btn.parentElement;
-  container.querySelectorAll('.symptom-pill').forEach(p => p.classList.remove('selected'));
-  btn.classList.add('selected');
-}
-
-function generateFromSymptoms() {
-  const diastasisVal = document.querySelector('#sDiastasis .symptom-pill.selected')?.dataset.val || '2.5';
-  const pelvicVal = document.querySelector('#sPelvic .symptom-pill.selected')?.dataset.val || '2';
-  const uterusVal = document.querySelector('#sUterus .symptom-pill.selected')?.dataset.val || '未入盆';
-  const perinealVal = document.querySelector('#sPerineal .symptom-pill.selected')?.dataset.val || '未完全闭合';
-  const breastVal = document.querySelector('#sBreast .symptom-pill.selected')?.dataset.val || '正常';
-
-  const d = parseFloat(diastasisVal);
-  const p = parseFloat(pelvicVal);
-
-  // 构建医生建议文本
-  let adviceParts = [];
-  if (d > 2) adviceParts.push(`腹直肌分离${d}指，${d >= 4 ? '建议尽快开始系统修复' : '建议继续观察并配合训练'}`);
-  if (p < 3) adviceParts.push(`盆底肌力${toRoman(p)}级，${p <= 1 ? '需加强治疗' : '建议关注训练'}`);
-  if (uterusVal === '未入盆') adviceParts.push('子宫复旧偏慢，注意促进收缩');
-  if (perinealVal !== '已闭合') adviceParts.push('会阴伤口愈合中，注意清洁');
-  if (breastVal === '不通') adviceParts.push('乳腺有堵塞，建议做疏通');
-
-  const doctorAdvice = adviceParts.length > 0
-    ? adviceParts.join('。') + '。'
-    : '各项指标恢复良好，继续保持当前康复节奏即可。';
-
-  // 构建手记
-  // 根据症状自动选手记类型
-  let noteType = 'encourage';
-  if (breastVal === '不通') noteType = 'breast';
-  else if (d <= 2 && p >= 3 && uterusVal === '已入盆' && perinealVal === '已闭合') noteType = 'remind';
-  else if (document.getElementById('inputDelivery').value === '剖宫产') noteType = 'cesarean';
-  else if (p < 3 && d <= 2) noteType = 'pelvic';
-  else if (perinealVal !== '已闭合' && d <= 2 && p >= 3) noteType = 'perineal';
-
-  const name = document.getElementById('inputName').value.trim() || '梦梅';
-  const personalNote = NOTE_TEMPLATES[noteType](name);
-
-  // 填充数据
-  document.getElementById('inputDiastasisF').value = d;
-  document.getElementById('inputDiastasisCm').value = Math.round(d * 0.8 * 10) / 10;
-  document.getElementById('inputPelvic').value = p;
-  document.getElementById('inputUterus').value = uterusVal;
-  document.getElementById('inputPerineal').value = perinealVal;
-  document.getElementById('inputDoctorAdvice').value = doctorAdvice;
-  document.getElementById('inputPersonalNote').value = personalNote;
-
-  // 设置上周对比（默认比本周差一点）
-  document.getElementById('inputLastD').value = Math.min(d + 1, 5.5);
-  document.getElementById('inputLastP').value = Math.max(0, p - 1);
-  document.getElementById('inputLastU').value = uterusVal === '已入盆' ? '未入盆' : '未入盆';
-  document.getElementById('inputLastPerineal').value = perinealVal === '已闭合' ? '未完全闭合' : '未闭合';
-
-  currentTemplateKey = 'custom';
-  isModified = false;
-  manualRecs = [];
-  disabledAutoRecs.clear();
-  updateTemplateStatus();
-  updateRecSummary();
-  renderLetter();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -2255,7 +2012,6 @@ document.addEventListener('keydown', (e) => {
 });
 
 // 初始化渲染
-updateTemplateStatus();
 updateRecSummary();
 
 // 初始化日期计算
