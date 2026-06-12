@@ -509,48 +509,48 @@ body {
 .advice-source { font-size: 9px; color: var(--text3); background: var(--warm); padding: 1px 5px; border-radius: 4px; display: inline-block; margin-top: 3px; }
 
 /* ===== 排版方式B：竖向便签（紧凑版） ===== */
-.letter.layout-b .advice-list { display: flex; flex-direction: column; gap: 6px; }
-.letter.layout-b .advice-card {
+.letter[data-layout="b"] .advice-list { display: flex; flex-direction: column; gap: 6px; }
+.letter[data-layout="b"] .advice-card {
   display: block;
   padding: 10px 12px;
   border-left: 3px solid transparent;
   border-radius: 10px;
 }
-.letter.layout-b .advice-card.a-green { border-left-color: var(--green); }
-.letter.layout-b .advice-card.a-pink { border-left-color: var(--pink2); }
-.letter.layout-b .advice-card.a-blue { border-left-color: var(--blue2); }
-.letter.layout-b .advice-card.a-lavender { border-left-color: var(--lavender); }
-.letter.layout-b .advice-card::after { display: none; }
-.letter.layout-b .advice-icon {
+.letter[data-layout="b"] .advice-card.a-green { border-left-color: var(--green); }
+.letter[data-layout="b"] .advice-card.a-pink { border-left-color: var(--pink2); }
+.letter[data-layout="b"] .advice-card.a-blue { border-left-color: var(--blue2); }
+.letter[data-layout="b"] .advice-card.a-lavender { border-left-color: var(--lavender); }
+.letter[data-layout="b"] .advice-card::after { display: none; }
+.letter[data-layout="b"] .advice-icon {
   display: inline-flex;
   width: 22px; height: 22px;
   font-size: 11px;
   vertical-align: middle;
   margin: 0 4px 0 0;
 }
-.letter.layout-b .advice-body { display: inline; }
-.letter.layout-b .advice-why,
-.letter.layout-b .advice-effect,
-.letter.layout-b .advice-source { display: none; }
-.letter.layout-b .advice-what {
+.letter[data-layout="b"] .advice-body { display: inline; }
+.letter[data-layout="b"] .advice-why,
+.letter[data-layout="b"] .advice-effect,
+.letter[data-layout="b"] .advice-source { display: none; }
+.letter[data-layout="b"] .advice-what {
   display: inline;
   font-size: 13px;
   font-weight: 600;
 }
-.letter.layout-b .advice-price {
+.letter[data-layout="b"] .advice-price {
   display: inline;
   font-size: 11px;
   margin-left: 6px;
 }
-.letter.layout-b .advice-price::before { content: ' · '; color: var(--text3); font-weight: 400; }
+.letter[data-layout="b"] .advice-price::before { content: ' · '; color: var(--text3); font-weight: 400; }
 
 /* ===== 排版方式C：两列网格 ===== */
-.letter.layout-c .advice-list {
+.letter[data-layout="c"] .advice-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
-.letter.layout-c .advice-card {
+.letter[data-layout="c"] .advice-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -558,17 +558,17 @@ body {
   padding: 14px 10px;
   gap: 6px;
 }
-.letter.layout-c .advice-icon {
+.letter[data-layout="c"] .advice-icon {
   width: 40px; height: 40px;
   font-size: 18px;
   margin: 0;
 }
-.letter.layout-c .advice-body { width: 100%; }
-.letter.layout-c .advice-why { font-size: 10px; line-height: 1.4; }
-.letter.layout-c .advice-what { font-size: 12px; }
-.letter.layout-c .advice-effect { font-size: 10px; }
-.letter.layout-c .advice-price { font-size: 10px; margin-top: 2px; }
-.letter.layout-c .advice-source { display: none; }
+.letter[data-layout="c"] .advice-body { width: 100%; }
+.letter[data-layout="c"] .advice-why { font-size: 10px; line-height: 1.4; }
+.letter[data-layout="c"] .advice-what { font-size: 12px; }
+.letter[data-layout="c"] .advice-effect { font-size: 10px; }
+.letter[data-layout="c"] .advice-price { font-size: 10px; margin-top: 2px; }
+.letter[data-layout="c"] .advice-source { display: none; }
 
 /* 待办事项 */
 .todo-section { margin: 16px 0; }
@@ -1688,6 +1688,8 @@ function setLetterLayout(layout) {
   document.querySelectorAll('.layout-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.layout === layout);
   });
+  const letter = document.getElementById('letter');
+  if (letter) letter.setAttribute('data-layout', layout);
   renderLetter();
 }
 
@@ -1719,7 +1721,7 @@ function renderLetter() {
   const stayText = '陪你慢慢恢复 ✦';
 
   let html = `
-  <div class="letter-inner layout-${currentLetterLayout}">
+  <div class="letter-inner" data-layout="${currentLetterLayout}">
   <div class="envelope">
     <div class="envelope-header">
       <div class="envelope-seal">
