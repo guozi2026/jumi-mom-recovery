@@ -916,37 +916,68 @@ body.screenshot-mode .back-to-edit-btn {
       <div class="form-section-title"><span class="emoji">📊</span> 本周评估数据</div>
       <div class="client-info-grid">
         <div class="form-row compact">
-          <label class="form-label">腹直肌分离（指宽）</label>
-          <input class="form-input" id="inputDiastasisF" type="number" step="0.5" value="3" placeholder="如 3">
-        </div>
-        <div class="form-row compact">
-          <label class="form-label">腹直肌（厘米）</label>
-          <input class="form-input" id="inputDiastasisCm" type="number" step="0.1" value="2.5" placeholder="如 2.5">
-        </div>
-        <div class="form-row compact">
           <label class="form-label">子宫状态</label>
           <select class="form-select" id="inputUterus">
-            <option value="已入盆">已入盆</option>
+            <option value="入盆">入盆</option>
             <option value="未入盆" selected>未入盆</option>
+            <option value="脐下1指">脐下1指</option>
+            <option value="脐下2指">脐下2指</option>
+            <option value="脐下3指">脐下3指</option>
+            <option value="脐下4指">脐下4指</option>
+            <option value="脐耻之间">脐耻之间</option>
+            <option value="伤口上方">伤口上方</option>
           </select>
         </div>
         <div class="form-row compact">
-          <label class="form-label">盆底肌力（0-5级）</label>
-          <select class="form-select" id="inputPelvic">
-            <option value="0">0级</option>
-            <option value="1">Ⅰ级</option>
-            <option value="2" selected>Ⅱ级</option>
-            <option value="3">Ⅲ级</option>
-            <option value="4">Ⅳ级</option>
-            <option value="5">Ⅴ级</option>
+          <label class="form-label">乳腺状态</label>
+          <select class="form-select" id="inputBreast">
+            <option value="正常" selected>正常</option>
+            <option value="需要疏通">需要疏通</option>
+          </select>
+        </div>
+        <div class="form-row compact" style="grid-column: 1 / -1; margin-top: 4px;">
+          <label class="form-label" style="font-weight: 600; color: var(--text);">腹直肌分离 — 指宽（0.5步长）</label>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">脐上</label>
+          <select class="form-select" id="inputDiastasisUp">
+            <option value="0">0指</option><option value="0.5">0.5指</option><option value="1">1指</option><option value="1.5">1.5指</option>
+            <option value="2">2指</option><option value="2.5" selected>2.5指</option><option value="3">3指</option>
+            <option value="3.5">3.5指</option><option value="4">4指</option><option value="4.5">4.5指</option><option value="5">5指</option>
+          </select>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">脐中</label>
+          <select class="form-select" id="inputDiastasisMid">
+            <option value="0">0指</option><option value="0.5">0.5指</option><option value="1">1指</option><option value="1.5">1.5指</option>
+            <option value="2">2指</option><option value="2.5">2.5指</option><option value="3" selected>3指</option>
+            <option value="3.5">3.5指</option><option value="4">4指</option><option value="4.5">4.5指</option><option value="5">5指</option>
+          </select>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">脐下</label>
+          <select class="form-select" id="inputDiastasisDown">
+            <option value="0">0指</option><option value="0.5">0.5指</option><option value="1">1指</option><option value="1.5">1.5指</option>
+            <option value="2">2指</option><option value="2.5" selected>2.5指</option><option value="3">3指</option>
+            <option value="3.5">3.5指</option><option value="4">4指</option><option value="4.5">4.5指</option><option value="5">5指</option>
+          </select>
+        </div>
+        <div class="form-row compact" style="grid-column: 1 / -1; margin-top: 4px;">
+          <label class="form-label" style="font-weight: 600; color: var(--text);">腹直肌分离 — 拳宽（1步长）</label>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">拳宽</label>
+          <select class="form-select" id="inputDiastasisFist">
+            <option value="0">0拳</option><option value="1" selected>1拳</option><option value="2">2拳</option>
+            <option value="3">3拳</option><option value="4">4拳</option><option value="5">5拳</option>
           </select>
         </div>
         <div class="form-row compact" style="grid-column: 1 / -1">
           <label class="form-label">会阴状态</label>
           <select class="form-select" id="inputPerineal">
-            <option value="已闭合">已闭合</option>
-            <option value="未完全闭合" selected>未完全闭合</option>
-            <option value="未闭合">未闭合</option>
+            <option value="外阴口闭合">外阴口闭合</option>
+            <option value="外阴口闭合不全" selected>外阴口闭合不全</option>
+            <option value="膨出">膨出</option>
           </select>
         </div>
       </div>
@@ -957,32 +988,40 @@ body.screenshot-mode .back-to-edit-btn {
       <div class="form-section-title"><span class="emoji">📉</span> 上周数据（用于对比）</div>
       <div class="client-info-grid">
         <div class="form-row compact">
-          <label class="form-label">上周腹直肌</label>
-          <input class="form-input" id="inputLastD" type="number" step="0.5" value="4" placeholder="无对比可不填">
-        </div>
-        <div class="form-row compact">
-          <label class="form-label">上周盆底肌</label>
-          <select class="form-select" id="inputLastP">
-            <option value="">无</option>
-            <option value="0">0级</option>
-            <option value="1" selected>Ⅰ级</option>
-            <option value="2">Ⅱ级</option>
-            <option value="3">Ⅲ级</option>
+          <label class="form-label">上周子宫</label>
+          <select class="form-select" id="inputLastU">
+            <option value="入盆">入盆</option>
+            <option value="未入盆" selected>未入盆</option>
+            <option value="脐下1指">脐下1指</option>
+            <option value="脐下2指">脐下2指</option>
+            <option value="脐下3指">脐下3指</option>
+            <option value="脐下4指">脐下4指</option>
+            <option value="脐耻之间">脐耻之间</option>
+            <option value="伤口上方">伤口上方</option>
           </select>
         </div>
         <div class="form-row compact">
-          <label class="form-label">上周子宫</label>
-          <select class="form-select" id="inputLastU">
-            <option value="已入盆">已入盆</option>
-            <option value="未入盆" selected>未入盆</option>
+          <label class="form-label">上周乳腺</label>
+          <select class="form-select" id="inputLastBreast">
+            <option value="正常" selected>正常</option>
+            <option value="需要疏通">需要疏通</option>
+          </select>
+        </div>
+        <div class="form-row compact">
+          <label class="form-label">上周腹直肌（脐中）</label>
+          <select class="form-select" id="inputLastD">
+            <option value="">无对比</option>
+            <option value="0">0指</option><option value="0.5">0.5指</option><option value="1">1指</option><option value="1.5">1.5指</option>
+            <option value="2">2指</option><option value="2.5">2.5指</option><option value="3">3指</option>
+            <option value="3.5">3.5指</option><option value="4" selected>4指</option><option value="4.5">4.5指</option><option value="5">5指</option>
           </select>
         </div>
         <div class="form-row compact">
           <label class="form-label">上周会阴</label>
           <select class="form-select" id="inputLastPerineal">
-            <option value="已闭合">已闭合</option>
-            <option value="未完全闭合">未完全闭合</option>
-            <option value="未闭合" selected>未闭合</option>
+            <option value="外阴口闭合">外阴口闭合</option>
+            <option value="外阴口闭合不全">外阴口闭合不全</option>
+            <option value="膨出" selected>膨出</option>
           </select>
         </div>
       </div>
@@ -1106,14 +1145,12 @@ const AFFIRMATIONS = [
 const PRODUCT_MAP = {
   diastasis_moderate: { why: "腹直肌分离{fingers}指在产后很常见，很多妈妈通过专业训练都能恢复", what: "腹部小蛮腰", effect: "2-3周分离有望降到2指以内", price: 2980, color: "a-pink" },
   diastasis_severe: { why: "腹直肌分离{fingers}指，别担心，系统修复方案可以帮你更快恢复", what: "腹部小蛮腰运动版", effect: "4-6周分离有望降到2指以内", price: 3980, color: "a-pink" },
-  pelvic_electro: { why: "盆底肌{grade}级是很多产后妈妈都会经历的，电刺激训练可以帮助提升", what: "盆底肌电刺激", effect: "10次疗程肌力有望提升1-2级", price: 1880, color: "a-green" },
-  pelvic_magnetic: { why: "盆底肌{grade}级，磁刺激可以更深层地激活你的盆底肌群", what: "盆底肌磁刺激", effect: "8-10次疗程肌力有望提升1-2级", price: 1880, color: "a-green" },
-  pelvic_manual: { why: "盆底肌{grade}级，手法+仪器搭配，很多妈妈反馈效果更好", what: "盆底肌筋膜手法", effect: "5-8次疗程深层松弛+肌力提升", price: 3160, color: "a-green" },
-  perineal_rf: { why: "会阴没完全闭合是产后正常的，射频可以帮组织更快修复", what: "外阴射频修复", effect: "5次疗程闭合度有望明显改善", price: 5980, color: "a-lavender" },
-  perineal_inner_rf: { why: "会阴松弛很多妈妈都有，内外阴同时修复效果更明显", what: "内阴+外阴射频修复", effect: "5次疗程松弛度明显改善", price: 6980, color: "a-lavender" },
+  perineal_rf: { why: "外阴口闭合不全是产后正常的，射频可以帮组织更快修复", what: "外阴射频修复", effect: "5次疗程闭合度有望明显改善", price: 5980, color: "a-lavender" },
+  perineal_inner_rf: { why: "会阴膨出很多妈妈都有，内外阴同时修复效果更明显", what: "内阴+外阴射频修复", effect: "5次疗程膨出明显改善", price: 6980, color: "a-lavender" },
   uterus_ultrasound: { why: "产后{days}天子宫还没入盆，有些妈妈就是慢一点，超声波可以帮助促进", what: "超声波子宫复旧", effect: "5-7次治疗子宫有望入盆", price: 1876, color: "a-blue" },
-  uterus_low_freq: { why: "子宫复旧偏慢在产后挺常见的，低频电刺激可以帮它快一点收缩", what: "低频子宫复旧", effect: "3-5次治疗促进子宫收缩", price: 1680, color: "a-blue" },
- 安心卡: { why: "几项指标都需要关注，安心卡可以一次性覆盖子宫+腹直肌+盆底全套修复", what: "安心卡（含乳腺）", effect: "月子期内全方位修复", price: 5980, color: "a-pink" },
+  uterus_low_freq: { why: "子宫还在恢复途中，低频电刺激可以帮它快一点收缩", what: "低频子宫复旧", effect: "3-5次治疗促进子宫收缩", price: 1680, color: "a-blue" },
+  breast_unclog: { why: "乳腺堵塞在哺乳期很常见，专业疏通手法可以帮到你", what: "乳腺疏通", effect: "1-2次即可明显缓解", price: 680, color: "a-pink" },
+  安心卡: { why: "几项指标都需要关注，安心卡可以一次性覆盖子宫+腹直肌+乳腺全套修复", what: "安心卡（含乳腺）", effect: "月子期内全方位修复", price: 5980, color: "a-pink" },
 };
 
 // 读取表单数据
@@ -1153,16 +1190,18 @@ function getFormData() {
     nearCheckout,
     stayProgress,
     assessment: {
-      diastasisFingers: parseFloat(document.getElementById('inputDiastasisF').value) || 0,
-      diastasisCm: parseFloat(document.getElementById('inputDiastasisCm').value) || 0,
+      diastasisUp: parseFloat(document.getElementById('inputDiastasisUp').value) || 0,
+      diastasisMid: parseFloat(document.getElementById('inputDiastasisMid').value) || 0,
+      diastasisDown: parseFloat(document.getElementById('inputDiastasisDown').value) || 0,
+      diastasisFist: parseInt(document.getElementById('inputDiastasisFist').value) || 0,
       uterusPosition: document.getElementById('inputUterus').value,
-      pelvicFloorGrade: parseFloat(document.getElementById('inputPelvic').value) || 0,
+      breastStatus: document.getElementById('inputBreast').value,
       perinealClosure: document.getElementById('inputPerineal').value,
     },
     lastWeek: {
       diastasisFingers: document.getElementById('inputLastD').value ? parseFloat(document.getElementById('inputLastD').value) : null,
-      pelvicFloorGrade: document.getElementById('inputLastP').value ? parseFloat(document.getElementById('inputLastP').value) : null,
       uterusPosition: document.getElementById('inputLastU').value || null,
+      breastStatus: document.getElementById('inputLastBreast').value || null,
       perinealClosure: document.getElementById('inputLastPerineal').value || null,
     },
     doctorName: document.getElementById('inputDoctorName').value.trim() || '医生',
@@ -1175,11 +1214,6 @@ function getFormData() {
     },
     personalNote: document.getElementById('inputPersonalNote').value.trim() || '',
   };
-}
-
-function toRoman(num) {
-  const map = ['0','Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ'];
-  return map[Math.round(num)] || String(num);
 }
 
 function translateDoctorAdvice(advice) {
@@ -1197,55 +1231,51 @@ function translateDoctorAdvice(advice) {
 
 function describeChanges(asmt, last, cfg) {
   const changes = [];
-  const d = asmt.diastasisFingers, p = asmt.pelvicFloorGrade;
-  const u = asmt.uterusPosition, pc = asmt.perinealClosure;
-
-  // 腹直肌
-  if (last && last.diastasisFingers) {
-    const diff = last.diastasisFingers - d;
-    if (diff > 0) {
-      changes.push({ color: 'c-pink', sticker: '🎀', label: '腹直肌', text: `你的小肚肚从${last.diastasisFingers}指收到<span class="num">${d}</span>指啦！`, detail: `比上周窄了${diff}指，腹直肌正在努力往中间靠拢呢。再坚持${d <= 3 ? '1-2' : '2-3'}周，就能回到2指的标准线~`, compare: d <= 3 ? '这个恢复速度已经超过很多妈妈了' : '' });
-    } else if (diff === 0) {
-      changes.push({ color: 'c-pink', sticker: '💗', label: '腹直肌', text: `你的腹直肌这周保持在<span class="num">${d}</span>指，没有再变宽。`, detail: '稳定也是一种进步。你的身体在积蓄力量，下周可能就会收拢啦。', compare: '' });
-    } else {
-      changes.push({ color: 'c-pink', sticker: '🌱', label: '腹直肌', text: `你的腹直肌这周是<span class="num">${d}</span>指。`, detail: '每个人的恢复节奏不同，不用和别人比。你的身体正在按照自己的速度来。', compare: '' });
-    }
-  } else {
-    if (d <= 2) changes.push({ color: 'c-pink', sticker: '✨', label: '腹直肌', text: `你的腹直肌<span class="num">${d}</span>指，已经达标啦！`, detail: '腹直肌分离已经恢复到2指以内的标准范围，很棒！', compare: '超过大部分同龄妈妈' });
-    else changes.push({ color: 'c-pink', sticker: '🎀', label: '腹直肌', text: `你的腹直肌现在是<span class="num">${d}</span>指。`, detail: '标准线是2指以内，你离目标还有一点点距离，但产后6周内是恢复黄金期，现在努力正当时~', compare: '' });
-  }
+  const d = asmt.diastasisMid, u = asmt.uterusPosition;
+  const pc = asmt.perinealClosure, bs = asmt.breastStatus;
 
   // 子宫
-  if (u === '已入盆') {
-    changes.push({ color: 'c-blue', sticker: '☁️', label: '子宫复旧', text: `你的子宫<span class="num-blue">已入盆</span>啦！`, detail: '子宫回到了它该在的位置，复旧进展顺利。这是恢复路上的重要一步。', compare: '' });
-  } else {
+  if (u === '入盆') {
+    changes.push({ color: 'c-blue', sticker: '☁️', label: '子宫复旧', text: '你的子宫<span class="num-blue">已入盆</span>啦！', detail: '子宫回到了它该在的位置，复旧进展顺利。这是恢复路上的重要一步。', compare: '' });
+  } else if (u === '未入盆') {
     const limit = cfg.deliveryType === '顺产' ? 14 : 21;
     if (cfg.postpartumDays > limit) {
-      changes.push({ color: 'c-blue', sticker: '🏠', label: '子宫复旧', text: `你的子宫还在回家的路上，<span class="num-blue">尚未入盆</span>。`, detail: `产后${cfg.postpartumDays}天了，子宫还在恢复途中。别担心，有些妈妈就是慢一点点，可以做一些促进复旧的小训练。`, compare: '' });
+      changes.push({ color: 'c-blue', sticker: '🏠', label: '子宫复旧', text: '你的子宫<span class="num-blue">尚未入盆</span>。', detail: `产后${cfg.postpartumDays}天了，子宫还在恢复途中。别担心，有些妈妈就是慢一点点，可以做一些促进复旧的小训练。`, compare: '' });
     } else {
-      changes.push({ color: 'c-blue', sticker: '☁️', label: '子宫复旧', text: `你的子宫<span class="num-blue">还在回家路上</span>。`, detail: `这很正常！${cfg.deliveryType === '顺产' ? '顺产' : '剖宫产'}后${limit}天内入盆都算正常范围。给它一点时间~`, compare: '' });
+      changes.push({ color: 'c-blue', sticker: '☁️', label: '子宫复旧', text: '你的子宫<span class="num-blue">还在回家的路上</span>。', detail: `这很正常！${cfg.deliveryType === '顺产' ? '顺产' : '剖宫产'}后${limit}天内入盆都算正常范围。给它一点时间~`, compare: '' });
     }
+  } else {
+    // 脐下X指、脐耻之间、伤口上方
+    changes.push({ color: 'c-blue', sticker: '🌤️', label: '子宫复旧', text: `你的子宫在<span class="num-blue">${u}</span>的位置。`, detail: '子宫正在慢慢缩小、往骨盆里走。每天顺时针揉揉肚子，帮它快一点回到原位~', compare: '' });
   }
 
-  // 盆底肌
-  if (p >= 3) {
-    changes.push({ color: 'c-green', sticker: '🌟', label: '盆底肌', text: `你的盆底肌力<span class="num-green">${toRoman(p)}级</span>，达标啦！`, detail: '盆底肌力已经恢复到Ⅲ级以上，你的骨盆底很健康！继续保持。', compare: '超过同龄妈妈的78%' });
-  } else {
-    const desc = p >= 2 ? '有点力气了' : '还有点虚弱';
-    if (last && last.pelvicFloorGrade !== null && last.pelvicFloorGrade < p) {
-      changes.push({ color: 'c-green', sticker: '💪', label: '盆底肌', text: `你的盆底肌比上周更有力气了！现在是<span class="num-green">${toRoman(p)}级</span>。`, detail: `从${toRoman(last.pelvicFloorGrade)}级到${toRoman(p)}级，你的盆底肌正在变强！3个月内都是黄金训练期~`, compare: '' });
+  // 乳腺
+  if (bs === '需要疏通') {
+    changes.push({ color: 'c-pink', sticker: '🍼', label: '乳腺', text: '这周<span class="num">乳腺有些堵塞</span>，需要疏通一下。', detail: '别担心，乳腺堵塞在哺乳期很常见。不要自己硬揉，专业的疏通手法很轻柔，配合热敷很快就好了~', compare: '' });
+  }
+
+  // 腹直肌（取脐中作为主要指标）
+  if (last && last.diastasisFingers !== null) {
+    const diff = last.diastasisFingers - d;
+    if (diff > 0) {
+      changes.push({ color: 'c-pink', sticker: '🎀', label: '腹直肌', text: `你的小肚肚脐中从${last.diastasisFingers}指收到<span class="num">${d}</span>指啦！`, detail: `比上周窄了${diff}指，腹直肌正在努力往中间靠拢。脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指，${asmt.diastasisFist}拳宽~`, compare: d <= 3 ? '这个恢复速度已经超过很多妈妈了' : '' });
+    } else if (diff === 0) {
+      changes.push({ color: 'c-pink', sticker: '💗', label: '腹直肌', text: `你的腹直肌这周脐中保持在<span class="num">${d}</span>指，没有再变宽。`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽。稳定也是一种进步~`, compare: '' });
     } else {
-      changes.push({ color: 'c-green', sticker: '🌱', label: '盆底肌', text: `你的盆底肌现在<span class="num-green">${toRoman(p)}级</span>，${desc}。`, detail: `标准是Ⅲ级，你正在往那个方向走。产后3个月内是盆底肌恢复的黄金窗口期，越早训练效果越好~`, compare: '' });
+      changes.push({ color: 'c-pink', sticker: '🌱', label: '腹直肌', text: `你的腹直肌脐中是<span class="num">${d}</span>指。`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽。每个人的恢复节奏不同~`, compare: '' });
     }
+  } else {
+    if (d <= 2) changes.push({ color: 'c-pink', sticker: '✨', label: '腹直肌', text: `你的腹直肌脐中<span class="num">${d}</span>指，已经达标啦！`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽，恢复得不错~`, compare: '超过大部分同龄妈妈' });
+    else changes.push({ color: 'c-pink', sticker: '🎀', label: '腹直肌', text: `你的腹直肌脐中现在是<span class="num">${d}</span>指。`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽。标准线是2指以内~`, compare: '' });
   }
 
   // 会阴
-  if (pc === '已闭合') {
-    changes.push({ color: 'c-lavender', sticker: '🌸', label: '会阴', text: `会阴伤口<span style="color:var(--lavender);font-weight:600">已经闭合</span>啦！`, detail: '伤口完全愈合，这一关你闯过去了！', compare: '' });
-  } else if (pc === '未完全闭合') {
-    changes.push({ color: 'c-lavender', sticker: '🌷', label: '会阴', text: `会阴伤口<span style="color:var(--lavender);font-weight:600">在愈合中</span>，比之前好一些了。`, detail: '伤口正在慢慢长好，没有红肿就是好消息。再给它一点时间~', compare: '' });
+  if (pc === '外阴口闭合') {
+    changes.push({ color: 'c-lavender', sticker: '🌸', label: '会阴', text: '会阴<span style="color:var(--lavender);font-weight:600">外阴口已闭合</span>啦！', detail: '这一关你闯过去了，恢复得很好~', compare: '' });
+  } else if (pc === '外阴口闭合不全') {
+    changes.push({ color: 'c-lavender', sticker: '🌷', label: '会阴', text: '会阴<span style="color:var(--lavender);font-weight:600">外阴口闭合不全</span>，在愈合中。', detail: '伤口正在慢慢长好，比之前好一些了。再给它一点时间~', compare: '' });
   } else {
-    changes.push({ color: 'c-lavender', sticker: '🌺', label: '会阴', text: `会阴还<span style="color:var(--lavender);font-weight:600">没有完全闭合</span>。`, detail: '这需要时间，每个人的愈合速度不同。注意保持清洁，别着急~', compare: '' });
+    changes.push({ color: 'c-lavender', sticker: '🌺', label: '会阴', text: '会阴<span style="color:var(--lavender);font-weight:600">有膨出</span>。', detail: '这需要时间，每个人的愈合速度不同。注意保持清洁，我们也有修复手段可以帮忙~', compare: '' });
   }
 
   return changes;
@@ -1253,31 +1283,28 @@ function describeChanges(asmt, last, cfg) {
 
 function autoRecommend(asmt, days) {
   const recs = [];
-  const { diastasisFingers, uterusPosition, pelvicFloorGrade, perinealClosure } = asmt;
+  const { diastasisMid, uterusPosition, perinealClosure, breastStatus } = asmt;
   let abnormalCount = 0;
 
-  if (diastasisFingers >= 4) { recs.push({...PRODUCT_MAP.diastasis_severe, fingers: diastasisFingers, _key: 'diastasis'}); abnormalCount++; }
-  else if (diastasisFingers > 2) { recs.push({...PRODUCT_MAP.diastasis_moderate, fingers: diastasisFingers, _key: 'diastasis'}); abnormalCount++; }
+  if (diastasisMid >= 4) { recs.push({...PRODUCT_MAP.diastasis_severe, fingers: diastasisMid, _key: 'diastasis'}); abnormalCount++; }
+  else if (diastasisMid > 2) { recs.push({...PRODUCT_MAP.diastasis_moderate, fingers: diastasisMid, _key: 'diastasis'}); abnormalCount++; }
 
-  if (pelvicFloorGrade < 3) {
-    recs.push({...PRODUCT_MAP.pelvic_electro, grade: toRoman(pelvicFloorGrade), _key: 'pelvic'});
-    if (pelvicFloorGrade <= 1) recs.push({...PRODUCT_MAP.pelvic_manual, grade: toRoman(pelvicFloorGrade), _key: 'pelvic_extra'});
-    abnormalCount++;
-  }
-
-  if (perinealClosure !== '已闭合') {
-    recs.push({... (perinealClosure === '未闭合' ? PRODUCT_MAP.perineal_inner_rf : PRODUCT_MAP.perineal_rf), _key: 'perineal'});
+  if (perinealClosure !== '外阴口闭合') {
+    recs.push({... (perinealClosure === '膨出' ? PRODUCT_MAP.perineal_inner_rf : PRODUCT_MAP.perineal_rf), _key: 'perineal'});
     abnormalCount++;
   }
 
   if (uterusPosition === '未入盆') { recs.push({...PRODUCT_MAP.uterus_ultrasound, days, _key: 'uterus'}); abnormalCount++; }
+  else if (uterusPosition !== '入盆') { recs.push({...PRODUCT_MAP.uterus_low_freq, days, _key: 'uterus'}); abnormalCount++; }
 
-  // 3项以上异常 → 推荐安心卡（套餐）
-  if (abnormalCount >= 3) recs.push({...PRODUCT_MAP['安心卡'], _key: 'package'});
+  if (breastStatus === '需要疏通') { recs.push({...PRODUCT_MAP.breast_unclog, _key: 'breast'}); abnormalCount++; }
+
+  // 2项以上异常 → 推荐安心卡（套餐）
+  if (abnormalCount >= 2) recs.push({...PRODUCT_MAP['安心卡'], _key: 'package'});
 
   return recs.map(r => ({
     ...r,
-    why: r.why ? r.why.replace('{fingers}', asmt.diastasisFingers).replace('{grade}', toRoman(asmt.pelvicFloorGrade)).replace('{days}', days) : '',
+    why: r.why ? r.why.replace('{fingers}', r.fingers || '').replace('{days}', days) : '',
     source: '系统推荐',
   }));
 }
@@ -1297,6 +1324,7 @@ const KNOWLEDGE_MAP = {
     body: '盆底肌就像一张"吊床"，托住你的子宫、膀胱和直肠。怀孕和分娩会让它变松弛，<strong>大部分妈妈产后盆底肌都会变弱</strong>，这是正常的。通过训练（凯格尔）和仪器辅助，3个月内是恢复黄金期~',
     stats: '所里12位妈妈正在做盆底肌训练，大家都在努力'
   },
+  // 注：盆底肌科普保留但不主动推荐（该板块已从评估表单中移除）
   uterus: {
     icon: '☁️', color: 'k-blue', topic: '关于子宫复旧',
     body: '产后子宫会慢慢缩小、回到骨盆里，这个过程叫"复旧"。<strong>顺产后14天、剖宫产后21天内入盆都算正常</strong>。有些妈妈会慢一点，和体质、分娩方式都有关系，不用太焦虑~',
@@ -1304,7 +1332,7 @@ const KNOWLEDGE_MAP = {
   },
   perineal: {
     icon: '🌸', color: 'k-lavender', topic: '关于会阴恢复',
-    body: '会阴伤口愈合需要时间，<strong>大部分妈妈2-3周内会基本闭合</strong>。期间保持清洁、避免久坐就好。如果愈合较慢，也有一些修复手段可以帮忙，不用太担心~',
+    body: '产后会阴需要时间恢复，<strong>外阴口闭合不全或轻微膨出都是常见的</strong>。保持清洁、避免久坐就好。如果恢复较慢，射频修复等手段可以帮忙，不用太担心~',
     stats: '所里5位妈妈通过修复辅助，会阴恢复速度明显加快'
   },
   breast: {
@@ -1316,20 +1344,20 @@ const KNOWLEDGE_MAP = {
 
 function getKnowledgeItems(asmt) {
   const items = [];
-  const { diastasisFingers, uterusPosition, pelvicFloorGrade, perinealClosure } = asmt;
+  const { diastasisMid, uterusPosition, perinealClosure, breastStatus } = asmt;
 
   // 只对异常指标显示科普
-  if (diastasisFingers > 2) {
+  if (diastasisMid > 2) {
     items.push({ ...KNOWLEDGE_MAP.diastasis, _key: 'diastasis' });
   }
-  if (pelvicFloorGrade < 3) {
-    items.push({ ...KNOWLEDGE_MAP.pelvic, _key: 'pelvic' });
-  }
-  if (uterusPosition === '未入盆') {
+  if (uterusPosition !== '入盆') {
     items.push({ ...KNOWLEDGE_MAP.uterus, _key: 'uterus' });
   }
-  if (perinealClosure !== '已闭合') {
+  if (perinealClosure !== '外阴口闭合') {
     items.push({ ...KNOWLEDGE_MAP.perineal, _key: 'perineal' });
+  }
+  if (breastStatus === '需要疏通') {
+    items.push({ ...KNOWLEDGE_MAP.breast, _key: 'breast' });
   }
 
   return items;
@@ -1337,12 +1365,12 @@ function getKnowledgeItems(asmt) {
 
 function autoTodos(asmt) {
   const todos = [];
-  const { diastasisFingers, uterusPosition, pelvicFloorGrade, perinealClosure } = asmt;
+  const { diastasisMid, uterusPosition, perinealClosure, breastStatus } = asmt;
 
-  if (uterusPosition === '未入盆') todos.push({ action: '做子宫复旧按摩', desc: '每天顺时针揉肚子5分钟，帮助子宫回到它该在的位置' });
-  if (pelvicFloorGrade < 3) todos.push({ action: '练习凯格尔运动', desc: '每天3组，每组10次收缩，坐着躺着都能做，悄悄变强~' });
-  if (diastasisFingers > 2) todos.push({ action: '练习腹式呼吸', desc: '吸气鼓肚子、呼气收肚子，每次5分钟，帮助腹直肌往中间靠' });
-  if (perinealClosure !== '已闭合') todos.push({ action: '注意会阴清洁与休息', desc: '勤换卫生巾，避免久坐，给伤口一个安静愈合的环境' });
+  if (uterusPosition !== '入盆') todos.push({ action: '做子宫复旧按摩', desc: '每天顺时针揉肚子5分钟，帮助子宫回到它该在的位置' });
+  if (breastStatus === '需要疏通') todos.push({ action: '做乳腺疏通', desc: '喂奶后热敷5分钟再排空，不要自己硬揉，来找我们专业的疏通手法' });
+  if (diastasisMid > 2) todos.push({ action: '练习腹式呼吸', desc: '吸气鼓肚子、呼气收肚子，每次5分钟，帮助腹直肌往中间靠' });
+  if (perinealClosure !== '外阴口闭合') todos.push({ action: '注意会阴清洁与休息', desc: '勤换卫生巾，避免久坐，给伤口一个安静愈合的环境' });
 
   if (todos.length === 0) todos.push({ action: '继续保持好心情', desc: '你的各项指标都恢复得不错，休息好、吃好就是最好的恢复' });
   return todos.slice(0, 3);
@@ -1356,83 +1384,56 @@ const TEMPLATES = {
   mild: {
     name: '梦梅', deliveryType: '顺产', week: 3, days: 21,
     stayDays: 20, totalStayDays: 28,
-    assessment: { diastasisFingers: 2.5, diastasisCm: 2.0, uterusPosition: '已入盆', pelvicFloorGrade: 2, perinealClosure: '已闭合' },
-    lastWeek: { diastasisFingers: 3, pelvicFloorGrade: 1, uterusPosition: '未入盆', perinealClosure: '未完全闭合' },
-    doctorAdvice: '这周进步很明显！腹直肌从3指收到2.5指，继续做腹式呼吸。盆底肌到Ⅱ级了，凯格尔别停~',
+    assessment: { uterusPosition: '入盆', breastStatus: '正常', diastasisUp: 2, diastasisMid: 2.5, diastasisDown: 2, diastasisFist: 1, perinealClosure: '外阴口闭合' },
+    lastWeek: { diastasisFingers: 3, uterusPosition: '未入盆', breastStatus: '正常', perinealClosure: '外阴口闭合不全' },
+    doctorAdvice: '这周进步很明显！腹直肌从3指收到2.5指，继续做腹式呼吸。子宫已入盆，恢复得很好~',
     consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
-    personalNote: '梦梅妈妈，这周你每次做凯格尔都很认真，真的很棒！下周我们会加一组腹直肌训练，不疼的，放心~'
+    personalNote: '梦梅妈妈，这周你恢复得不错！下周我们会加一组腹直肌训练，不疼的，放心~'
   },
   moderate: {
     name: '梦梅', deliveryType: '顺产', week: 3, days: 21,
     stayDays: 20, totalStayDays: 28,
-    assessment: { diastasisFingers: 3, diastasisCm: 2.5, uterusPosition: '未入盆', pelvicFloorGrade: 2, perinealClosure: '未完全闭合' },
-    lastWeek: { diastasisFingers: 4, pelvicFloorGrade: 1, uterusPosition: '未入盆', perinealClosure: '未完全闭合' },
-    doctorAdvice: '盆底肌这周有进步但还没达标，凯格尔要坚持每天做。子宫还没入盆，每天顺时针揉5分钟帮帮它~',
+    assessment: { uterusPosition: '未入盆', breastStatus: '正常', diastasisUp: 3, diastasisMid: 3, diastasisDown: 2.5, diastasisFist: 1, perinealClosure: '外阴口闭合不全' },
+    lastWeek: { diastasisFingers: 4, uterusPosition: '未入盆', breastStatus: '正常', perinealClosure: '外阴口闭合不全' },
+    doctorAdvice: '腹直肌这周有进步，从4指收到3指，继续配合训练。子宫还没入盆，每天顺时针揉5分钟帮帮它~',
     consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
-    personalNote: '梦梅妈妈，这周你每次做凯格尔都很认真，真的很棒！下周我们会加一组腹直肌训练，不疼的，放心~'
+    personalNote: '梦梅妈妈，这周腹直肌进步很明显！子宫复旧也在进行中，我们一起加油~'
   },
   severe: {
     name: '梦梅', deliveryType: '顺产', week: 2, days: 14,
     stayDays: 13, totalStayDays: 42,
-    assessment: { diastasisFingers: 4, diastasisCm: 3.5, uterusPosition: '未入盆', pelvicFloorGrade: 0, perinealClosure: '未闭合' },
-    lastWeek: { diastasisFingers: 5, pelvicFloorGrade: 0, uterusPosition: '未入盆', perinealClosure: '未闭合' },
-    doctorAdvice: '腹直肌5指收到4指了，方向对的！盆底肌还在0级别急，我们这周开始电刺激。会阴保持清洁，别坐太久~',
+    assessment: { uterusPosition: '脐下3指', breastStatus: '需要疏通', diastasisUp: 4, diastasisMid: 4, diastasisDown: 3.5, diastasisFist: 2, perinealClosure: '膨出' },
+    lastWeek: { diastasisFingers: 5, uterusPosition: '脐下4指', breastStatus: '正常', perinealClosure: '膨出' },
+    doctorAdvice: '腹直肌5指收到4指了，方向对的！乳腺有些堵塞，我来帮你疏通。会阴有膨出，我们这周开始修复~',
     consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
-    personalNote: '梦梅妈妈，看到你的评估数据别担心，很多人产后第一周都是这样的。我们从现在开始慢慢调整，身体会给你惊喜的~'
-  },
-  pelvic_only: {
-    name: '梦梅', deliveryType: '顺产', week: 4, days: 28,
-    stayDays: 27, totalStayDays: 28,
-    assessment: { diastasisFingers: 1.5, diastasisCm: 1.0, uterusPosition: '已入盆', pelvicFloorGrade: 1, perinealClosure: '已闭合' },
-    lastWeek: { diastasisFingers: 2, pelvicFloorGrade: 1, uterusPosition: '已入盆', perinealClosure: '未完全闭合' },
-    doctorAdvice: '腹直肌恢复不错，重点放在盆底肌上——这周开始做凯格尔+电刺激，坚持2周会有明显提升。',
-    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
-    personalNote: '梦梅妈妈，你的腹直肌恢复得真快！现在重点关注盆底肌，多做凯格尔，有空也可以来了解下我们的盆底修复项目哦~'
+    personalNote: '梦梅妈妈，看到你的评估数据别担心，很多人产后第一周都是这样的。我们从现在开始慢慢调整~'
   },
   post_cesarean: {
     name: '梦梅', deliveryType: '剖宫产', week: 3, days: 21,
     stayDays: 20, totalStayDays: 42,
-    assessment: { diastasisFingers: 3.5, diastasisCm: 3.0, uterusPosition: '未入盆', pelvicFloorGrade: 2, perinealClosure: '已闭合' },
-    lastWeek: { diastasisFingers: 4.5, pelvicFloorGrade: 1, uterusPosition: '未入盆', perinealClosure: '已闭合' },
-    doctorAdvice: '刀口愈合很好不用担心。子宫还在恢复中，每天揉肚子5分钟。腹直肌3指，手法修复+腹式呼吸配合做~',
+    assessment: { uterusPosition: '伤口上方', breastStatus: '正常', diastasisUp: 3.5, diastasisMid: 3.5, diastasisDown: 3, diastasisFist: 1, perinealClosure: '外阴口闭合' },
+    lastWeek: { diastasisFingers: 4.5, uterusPosition: '伤口上方', breastStatus: '正常', perinealClosure: '外阴口闭合' },
+    doctorAdvice: '刀口愈合很好不用担心。子宫还在伤口上方，每天揉肚子5分钟。腹直肌3.5指，手法修复+腹式呼吸配合做~',
     consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
     personalNote: '梦梅妈妈，剖宫产恢复需要更多耐心，你的刀口长得很好！腹直肌和子宫复旧是我们这周的重点~'
   },
   all_clear: {
     name: '梦梅', deliveryType: '顺产', week: 5, days: 35,
     stayDays: 34, totalStayDays: 42,
-    assessment: { diastasisFingers: 1.5, diastasisCm: 1.0, uterusPosition: '已入盆', pelvicFloorGrade: 3, perinealClosure: '已闭合' },
-    lastWeek: { diastasisFingers: 2, pelvicFloorGrade: 2, uterusPosition: '已入盆', perinealClosure: '已闭合' },
+    assessment: { uterusPosition: '入盆', breastStatus: '正常', diastasisUp: 1.5, diastasisMid: 1.5, diastasisDown: 1, diastasisFist: 0, perinealClosure: '外阴口闭合' },
+    lastWeek: { diastasisFingers: 2, uterusPosition: '入盆', breastStatus: '正常', perinealClosure: '外阴口闭合' },
     doctorAdvice: '各项都达标了，继续保持！回家前记得做一次全面评估，把在家也能做的训练学会~',
     consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
-    personalNote: '梦梅妈妈，你恢复得太好了！还有一周就要出所了，记得回家也要坚持做凯格尔和腹式呼吸哦~'
-  },
-  perineal_only: {
-    name: '梦梅', deliveryType: '顺产', week: 2, days: 14,
-    stayDays: 13, totalStayDays: 28,
-    assessment: { diastasisFingers: 1.5, diastasisCm: 1.0, uterusPosition: '已入盆', pelvicFloorGrade: 3, perinealClosure: '未完全闭合' },
-    lastWeek: { diastasisFingers: 2, pelvicFloorGrade: 2, uterusPosition: '未入盆', perinealClosure: '未闭合' },
-    doctorAdvice: '腹直肌和盆底肌都恢复得不错！会阴伤口愈合偏慢，保持清洁别久坐，我帮你看看要不要加修复~',
-    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
-    personalNote: '梦梅妈妈，你其他方面都恢复得很好！会阴再给它一点时间，我们也可以用一些修复手段帮它快一点~'
+    personalNote: '梦梅妈妈，你恢复得太好了！还有一周就要出所了，记得回家也要坚持腹式呼吸哦~'
   },
   breast_only: {
     name: '梦梅', deliveryType: '顺产', week: 2, days: 14,
     stayDays: 13, totalStayDays: 30,
-    assessment: { diastasisFingers: 2, diastasisCm: 1.5, uterusPosition: '已入盆', pelvicFloorGrade: 3, perinealClosure: '已闭合' },
-    lastWeek: { diastasisFingers: 2.5, pelvicFloorGrade: 2, uterusPosition: '未入盆', perinealClosure: '未完全闭合' },
+    assessment: { uterusPosition: '入盆', breastStatus: '需要疏通', diastasisUp: 2, diastasisMid: 2, diastasisDown: 1.5, diastasisFist: 0, perinealClosure: '外阴口闭合' },
+    lastWeek: { diastasisFingers: 2.5, uterusPosition: '未入盆', breastStatus: '正常', perinealClosure: '外阴口闭合不全' },
     doctorAdvice: '乳腺有堵塞，别自己揉，我来帮你疏通。喂奶后排空，热敷5分钟再喂会好很多~',
     consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
     personalNote: '梦梅妈妈，乳腺堵塞不要自己硬揉哦，我们专业的乳腺疏通手法很轻柔的，放心~'
-  },
-  breast_pelvic: {
-    name: '梦梅', deliveryType: '顺产', week: 2, days: 14,
-    stayDays: 13, totalStayDays: 28,
-    assessment: { diastasisFingers: 2, diastasisCm: 1.5, uterusPosition: '已入盆', pelvicFloorGrade: 1, perinealClosure: '已闭合' },
-    lastWeek: { diastasisFingers: 3, pelvicFloorGrade: 1, uterusPosition: '未入盆', perinealClosure: '未完全闭合' },
-    doctorAdvice: '乳腺堵了，别硬揉，我来帮你通。盆底肌偏弱，凯格尔先练起来，坐躺都能做~',
-    consultant: { name: '小林', phone: '138-0000-0000', wechat: 'jumi_xiaolin', workingHours: '8:00-20:00' },
-    personalNote: '梦梅妈妈，乳腺和盆底是我们这周的两个重点，我们一起慢慢来，别着急~'
   },
 };
 
@@ -1445,8 +1446,7 @@ let currentLetterLayout = 'a'; // 信件排版方式：a=横向卡片, b=竖向�
 
 const TEMPLATE_NAMES = {
   mild: '轻度型', moderate: '常见型', severe: '重度型',
-  pelvic_only: '盆底型', perineal_only: '会阴型', breast_only: '乳腺型',
-  breast_pelvic: '乳腺+盆底型', post_cesarean: '剖宫产型', all_clear: '恢复良好型',
+  post_cesarean: '剖宫产型', all_clear: '恢复良好型', breast_only: '乳腺型',
   custom: '自定义组合'
 };
 
@@ -1462,15 +1462,17 @@ function applyTemplate(key) {
   document.getElementById('inputDelivery').value = t.deliveryType;
   document.getElementById('inputWeek').value = t.week;
   document.getElementById('inputDays').value = t.days;
-  document.getElementById('inputDiastasisF').value = t.assessment.diastasisFingers;
-  document.getElementById('inputDiastasisCm').value = t.assessment.diastasisCm;
   document.getElementById('inputUterus').value = t.assessment.uterusPosition;
-  document.getElementById('inputPelvic').value = t.assessment.pelvicFloorGrade;
+  document.getElementById('inputBreast').value = t.assessment.breastStatus;
+  document.getElementById('inputDiastasisUp').value = t.assessment.diastasisUp;
+  document.getElementById('inputDiastasisMid').value = t.assessment.diastasisMid;
+  document.getElementById('inputDiastasisDown').value = t.assessment.diastasisDown;
+  document.getElementById('inputDiastasisFist').value = t.assessment.diastasisFist;
   document.getElementById('inputPerineal').value = t.assessment.perinealClosure;
 
   if (t.lastWeek.diastasisFingers) document.getElementById('inputLastD').value = t.lastWeek.diastasisFingers;
-  if (t.lastWeek.pelvicFloorGrade !== null) document.getElementById('inputLastP').value = t.lastWeek.pelvicFloorGrade;
   if (t.lastWeek.uterusPosition) document.getElementById('inputLastU').value = t.lastWeek.uterusPosition;
+  if (t.lastWeek.breastStatus) document.getElementById('inputLastBreast').value = t.lastWeek.breastStatus;
   if (t.lastWeek.perinealClosure) document.getElementById('inputLastPerineal').value = t.lastWeek.perinealClosure;
 
   document.getElementById('inputDoctorName').value = localStorage.getItem('jumi_doctorName') || '黄医生';
