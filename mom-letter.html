@@ -334,27 +334,35 @@ body {
   font-size: 12px; color: var(--text3); margin-top: 4px;
 }
 
-/* 情绪确认卡 —— 轻量便签风 */
+/* 情绪确认卡 —— 信封便签风 */
 .affirmation {
-  background: var(--paper); border-radius: 16px; padding: 18px 16px;
-  margin: 16px 0; position: relative;
-  box-shadow: 0 2px 8px rgba(92,79,61,0.06);
-  border: 1px solid #F0E8DD;
+  background: #FDF8E8; border-radius: 4px; padding: 18px 16px 14px;
+  margin: 20px 0; position: relative;
+  transform: rotate(0.5deg);
+  box-shadow: 2px 3px 10px rgba(92,79,61,0.10);
 }
+/* 胶带装饰 */
 .affirmation::before {
-  content: '✦'; position: absolute; top: -8px; left: 24px;
-  width: 24px; height: 24px; background: var(--card);
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: 10px; color: var(--amber); border: 2px solid var(--warm2);
-  box-shadow: 0 1px 4px rgba(92,79,61,0.08);
+  content: ''; position: absolute; top: -7px; left: 35%;
+  width: 56px; height: 20px;
+  background: var(--tape);
+  border-radius: 2px;
+  transform: rotate(-1deg);
+  box-shadow: 0 1px 3px rgba(92,79,61,0.08);
+}
+/* 信封图标 */
+.affirmation::after {
+  content: '✉'; position: absolute; top: 8px; right: 12px;
+  font-size: 14px; opacity: 0.15; transform: rotate(8deg);
 }
 .affirmation-text {
-  font-size: 14px; color: var(--text); line-height: 1.9; text-align: left;
-  padding-top: 2px;
+  font-size: 14px; color: var(--text); line-height: 2; text-align: left;
+  padding-top: 4px; font-family: 'ZCOOL XiaoWei', serif;
 }
 .affirmation-text .highlight { color: var(--pink2); font-weight: 600; }
 .affirmation-sign {
-  font-size: 11px; color: var(--text3); text-align: right; margin-top: 8px; font-style: italic;
+  font-size: 11px; color: var(--text3); text-align: right; margin-top: 8px;
+  font-family: 'ZCOOL XiaoWei', serif;
 }
 
 /* 段落标签 */
@@ -397,6 +405,32 @@ body {
 .change-text .num-blue { font-size: 16px; font-weight: 700; color: var(--blue2); }
 .change-detail { font-size: 12.5px; color: var(--text2); margin-top: 6px; line-height: 1.6; }
 .change-compare { font-size: 11px; color: var(--text3); margin-top: 3px; font-style: italic; }
+/* 正常值锚点条 */
+.change-anchor {
+  margin-top: 6px; padding: 5px 10px;
+  background: var(--warm); border-radius: 8px;
+  font-size: 11px; color: var(--text2); line-height: 1.6;
+  display: flex; align-items: center; gap: 6px;
+}
+.change-anchor .anchor-standard {
+  font-weight: 600; color: var(--green2); white-space: nowrap;
+}
+.change-anchor .anchor-bar {
+  flex: 1; height: 4px; background: var(--warm2); border-radius: 2px;
+  position: relative; min-width: 60px;
+}
+.change-anchor .anchor-fill {
+  position: absolute; top: 0; left: 0; height: 100%; border-radius: 2px;
+}
+.anchor-fill.good { background: var(--green2); }
+.anchor-fill.warn { background: var(--amber); }
+.anchor-fill.alert { background: var(--pink2); }
+.change-anchor .anchor-label { white-space: nowrap; }
+/* 趋势指示 */
+.trend { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 500; margin-left: 6px; }
+.trend-up { color: var(--green2); }
+.trend-flat { color: var(--blue2); }
+.trend-new { color: var(--text3); }
 
 /* 分隔 */
 .divider { text-align: center; padding: 4px 0; }
@@ -456,6 +490,7 @@ body {
 }
 .doctor-info .d-name { font-size: 13px; font-weight: 600; color: var(--text); }
 .doctor-info .d-role { font-size: 11px; color: var(--text3); }
+.doctor-info .d-date { font-size: 10px; color: var(--text3); margin-top: 1px; }
 .doctor-words { font-size: 13.5px; color: var(--text); line-height: 1.9; }
 
 /* 建议列表 */
@@ -579,9 +614,9 @@ body {
 }
 .todo-item:last-child { border-bottom: none; }
 .todo-num {
-  width: 24px; height: 24px; border-radius: 50%;
+  width: 22px; height: 22px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 12px; color: #fff; flex-shrink: 0; margin-top: 1px;
+  font-size: 11px; color: #fff; flex-shrink: 0; margin-top: 1px;
 }
 .todo-num.n1 { background: var(--pink2); }
 .todo-num.n2 { background: var(--green2); }
@@ -589,23 +624,27 @@ body {
 .todo-action { font-size: 13.5px; color: var(--text); font-weight: 500; line-height: 1.5; }
 .todo-desc { font-size: 12px; color: var(--text2); margin-top: 1px; line-height: 1.5; }
 
-/* 产康师手记 */
+/* 产康师手记 —— 手写便签风格 */
 .personal-note-section { margin: 16px 0; }
 .personal-note-card {
-  background: var(--card);
-  border-radius: 14px; padding: 14px 12px;
-  border: 1px dashed var(--amber);
+  background: #FDF8E8;
+  border-radius: 4px; padding: 18px 16px 14px;
+  border: none;
   position: relative;
+  transform: rotate(-1.5deg);
+  box-shadow: 2px 3px 10px rgba(92,79,61,0.10);
+  font-family: 'ZCOOL XiaoWei', serif;
 }
 .personal-note-card::before {
-  content: '✎'; position: absolute; top: -8px; left: 20px;
-  width: 24px; height: 24px; background: var(--card);
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: 10px; color: var(--amber); border: 2px solid var(--warm2);
-  box-shadow: 0 1px 4px rgba(92,79,61,0.08);
+  content: ''; position: absolute; top: -6px; left: 30%;
+  width: 52px; height: 18px;
+  background: var(--tape);
+  border-radius: 2px;
+  transform: rotate(-2deg);
+  box-shadow: 0 1px 3px rgba(92,79,61,0.08);
 }
-.personal-note-title { font-size: 12.5px; color: var(--amber); margin-bottom: 8px; padding-top: 2px; }
-.personal-note-body { font-size: 13.5px; color: var(--text); line-height: 1.9; }
+.personal-note-title { font-size: 12.5px; color: var(--amber); margin-bottom: 8px; padding-top: 4px; }
+.personal-note-body { font-size: 14px; color: var(--text); line-height: 2; }
 
 /* 联系卡片 */
 .contact-section { margin: 20px 0 0; }
@@ -645,7 +684,12 @@ body {
 /* 底部 */
 .footer { text-align: left; padding: 10px 0 4px; }
 .footer-line { width: 100%; height: 0.5px; background: var(--warm2); margin: 0 0 8px; }
-.footer-note { font-size: 9.5px; color: var(--text3); line-height: 1.6; }
+.footer-note { font-size: 10px; color: var(--text3); line-height: 1.7; }
+/* 信封个人化TO行 */
+.envelope-to {
+  font-size: 11px; color: var(--text2); margin-top: 4px;
+  letter-spacing: 0.5px; font-weight: 500;
+}
 
 /* ===== 截图模式：隐藏编辑面板 ===== */
 body.screenshot-mode .editor-panel { display: none; }
@@ -1048,6 +1092,16 @@ body.screenshot-mode .back-to-edit-btn {
         <input class="form-input" id="inputDoctorName" value="黄医生" placeholder="如 黄医生">
       </div>
       <div class="form-row">
+        <label class="form-label">医生职称/科室</label>
+        <input class="form-input" id="inputDoctorTitle" value="妇产科主治医师" placeholder="如 妇产科主治医师">
+        <div class="form-hint">显示在信件中，增加专业可信度</div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">查房日期</label>
+        <input class="form-input" id="inputDoctorDate" type="date" value="">
+        <div class="form-hint">留空则显示"产后第X天查房"</div>
+      </div>
+      <div class="form-row">
         <label class="form-label">查房建议（原文）</label>
         <textarea class="form-textarea" id="inputDoctorAdvice" placeholder="建议关注盆底肌训练...">建议关注盆底肌训练，产后42天内是黄金恢复期。腹直肌恢复进展良好，子宫复旧需要加强。</textarea>
         <div class="form-hint">系统会自动转述为闺蜜口吻</div>
@@ -1156,14 +1210,28 @@ const AFFIRMATIONS = [
 ];
 
 const PRODUCT_MAP = {
-  diastasis_moderate: { why: "腹直肌分离{fingers}指在产后很常见，很多妈妈通过专业训练都能恢复", what: "腹部小蛮腰", effect: "2-3周分离有望降到2指以内", price: 2980, color: "a-pink" },
-  diastasis_severe: { why: "腹直肌分离{fingers}指，别担心，系统修复方案可以帮你更快恢复", what: "腹部小蛮腰运动版", effect: "4-6周分离有望降到2指以内", price: 3980, color: "a-pink" },
-  perineal_rf: { why: "外阴口闭合不全是产后正常的，射频可以帮组织更快修复", what: "外阴射频修复", effect: "5次疗程闭合度有望明显改善", price: 5980, color: "a-lavender" },
-  perineal_inner_rf: { why: "会阴膨出很多妈妈都有，内外阴同时修复效果更明显", what: "内阴+外阴射频修复", effect: "5次疗程膨出明显改善", price: 6980, color: "a-lavender" },
-  uterus_ultrasound: { why: "产后{days}天子宫还没入盆，有些妈妈就是慢一点，超声波可以帮助促进", what: "超声波子宫复旧", effect: "5-7次治疗子宫有望入盆", price: 1876, color: "a-blue" },
-  uterus_low_freq: { why: "子宫还在恢复途中，低频电刺激可以帮它快一点收缩", what: "低频子宫复旧", effect: "3-5次治疗促进子宫收缩", price: 1680, color: "a-blue" },
-  breast_unclog: { why: "乳腺堵塞在哺乳期很常见，专业疏通手法可以帮到你", what: "乳腺疏通", effect: "1-2次即可明显缓解", price: 680, color: "a-pink" },
-  安心卡: { why: "几项指标都需要关注，安心卡可以一次性覆盖子宫+腹直肌+乳腺全套修复", what: "安心卡（含乳腺）", effect: "月子期内全方位修复", price: 5980, color: "a-pink" },
+  // 腹直肌 — 3档
+  diastasis_mild: { why: "腹直肌分离{fingers}指，这个阶段开始做运动康复效果最好", what: "腹部小蛮腰/运动康复疗程", effect: "2-3周分离有望降到2指以内", price: 2980, color: "a-pink" },
+  diastasis_moderate: { why: "腹直肌分离{fingers}指，运动康复可以帮助你更快收紧腹部", what: "腹部小蛮腰运动", effect: "4-6周分离有望降到2指以内", price: 3980, color: "a-pink" },
+  diastasis_severe: { why: "腹直肌分离{fingers}指，修复+运动组合方案帮你系统恢复", what: "腹直肌修复结合腹直肌运动", effect: "5-8周综合修复逐步改善", price: 5000, color: "a-pink" },
+  // 子宫 — 5种情况
+  uterus_rf: { why: "产后{days}天子宫还没入盆，射频可以帮助子宫快一点收缩回到原位", what: "射频子宫修复", effect: "3-5次治疗促进子宫复旧入盆", price: 1480, color: "a-blue" },
+  uterus_ultrasound: { why: "产后{days}天，子宫正在往骨盆里走，超声波可以帮它走快一点", what: "超声子宫修复", effect: "5-7次治疗子宫有望入盆", price: 1880, color: "a-blue" },
+  uterus_breathing: { why: "子宫在伤口上方，剖宫产后腹式呼吸是最基础也是最安全的恢复方式", what: "腹式呼吸训练", effect: "每天练习促进子宫归位", price: 0, color: "a-blue" },
+  // 会阴 — 2档
+  perineal_rf: { why: "外阴口闭合不全是产后正常的恢复过程，射频可以帮助组织更快修复", what: "私密外阴射频", effect: "5次疗程闭合度有望明显改善", price: 5980, color: "a-lavender" },
+  perineal_inner_rf: { why: "会阴膨出不少妈妈都有，全段射频内外同时修复效果更明显", what: "私密内阴全段射频修复", effect: "5次疗程膨出明显改善", price: 6980, color: "a-lavender" },
+  // 乳腺
+  breast_unclog: { why: "乳腺堵塞在哺乳期很常见，专业疏通手法轻柔有效，别自己硬揉哦", what: "乳腺疏通", effect: "1-2次即可明显缓解", price: 680, color: "a-pink" },
+  // 组合套餐 — 按异常组合智能匹配
+  package_repro1: { why: "腹直肌和子宫都需要关注，生殖套餐1可以一次覆盖两项恢复", what: "生殖套餐1", effect: "腹直肌+子宫同步修复", price: 1880, color: "a-pink" },
+  package_repro2: { why: "腹直肌和盆底肌需要系统修复，生殖套餐2覆盖更全面", what: "生殖套餐2", effect: "腹直肌+盆底肌系统修复", price: 3680, color: "a-pink" },
+  package_安心卡: { why: "腹直肌+子宫+盆底肌三项指标都需要关注，安心卡一次性覆盖核心修复", what: "安心卡", effect: "月子期内核心项目全覆盖", price: 5980, color: "a-pink" },
+  package_安心卡乳腺: { why: "腹直肌+子宫+乳腺都需要关注，安心卡含乳腺版覆盖更全面", what: "安心卡（含乳腺）", effect: "月子期内全方位修复", price: 6980, color: "a-pink" },
+  // 快出所专项
+  checkout_pelvic: { why: "快出所了，盆底肌修复是回家后最重要的功课，趁在所期间打好基础", what: "盆底肌修复", effect: "出所前启动盆底肌修复黄金期", price: 1880, color: "a-green" },
+  // 剖宫产专项
+  cesarean_uterus: { why: "剖宫产后子宫复旧需要更多关注，射频可以帮助子宫更快恢复", what: "子宫修复（剖宫产专项）", effect: "3-5次促进剖宫产后子宫复旧", price: 1480, color: "a-blue" },
 };
 
 // 读取表单数据
@@ -1218,6 +1286,8 @@ function getFormData() {
       perinealClosure: document.getElementById('inputLastPerineal').value || null,
     },
     doctorName: document.getElementById('inputDoctorName').value.trim() || '医生',
+    doctorTitle: document.getElementById('inputDoctorTitle').value.trim() || '',
+    doctorDate: document.getElementById('inputDoctorDate').value || '',
     doctorAdvice: document.getElementById('inputDoctorAdvice').value.trim() || '',
     consultant: {
       name: document.getElementById('inputConsultantName').value.trim() || '',
@@ -1249,71 +1319,134 @@ function describeChanges(asmt, last, cfg) {
 
   // 子宫
   if (u === '入盆') {
-    changes.push({ color: 'c-blue', sticker: '☁️', label: '子宫复旧', text: '你的子宫<span class="num-blue">已入盆</span>啦！', detail: '子宫回到了它该在的位置，复旧进展顺利。这是恢复路上的重要一步。', compare: '' });
+    changes.push({ color: 'c-blue', sticker: '☁️', label: '子宫复旧', text: '你的子宫<span class="num-blue">已入盆</span>啦！', detail: '子宫回到了它该在的位置，复旧进展顺利。这是恢复路上的重要一步。', compare: '', trend: '', anchor: `<span class="anchor-standard">✓ 已达标</span> 入盆是子宫复旧的完成标志` });
   } else if (u === '未入盆') {
     const limit = cfg.deliveryType === '顺产' ? 14 : 21;
     if (cfg.postpartumDays > limit) {
-      changes.push({ color: 'c-blue', sticker: '🏠', label: '子宫复旧', text: '你的子宫<span class="num-blue">尚未入盆</span>。', detail: `产后${cfg.postpartumDays}天了，子宫还在恢复途中。别担心，有些妈妈就是慢一点点，可以做一些促进复旧的小训练。`, compare: '' });
+      changes.push({ color: 'c-blue', sticker: '🏠', label: '子宫复旧', text: '你的子宫<span class="num-blue">尚未入盆</span>。', detail: `产后${cfg.postpartumDays}天了，子宫还在恢复途中。别担心，有些妈妈就是慢一点点，可以做一些促进复旧的小训练。`, compare: '', trend: '', anchor: `<span class="anchor-standard">参考标准</span> ${cfg.deliveryType}后${limit}天内入盆 · 你已超过${cfg.postpartumDays - limit}天` });
     } else {
-      changes.push({ color: 'c-blue', sticker: '☁️', label: '子宫复旧', text: '你的子宫<span class="num-blue">还在回家的路上</span>。', detail: `这很正常！${cfg.deliveryType === '顺产' ? '顺产' : '剖宫产'}后${limit}天内入盆都算正常范围。给它一点时间~`, compare: '' });
+      changes.push({ color: 'c-blue', sticker: '☁️', label: '子宫复旧', text: '你的子宫<span class="num-blue">还在回家的路上</span>。', detail: `这很正常！${cfg.deliveryType === '顺产' ? '顺产' : '剖宫产'}后${limit}天内入盆都算正常范围。给它一点时间~`, compare: '', trend: '', anchor: `<span class="anchor-standard">正常范围</span> ${cfg.deliveryType}后${limit}天内入盆 · 你还在窗口期内` });
     }
   } else {
     // 脐下X指、脐耻之间、伤口上方
-    changes.push({ color: 'c-blue', sticker: '🌤️', label: '子宫复旧', text: `你的子宫在<span class="num-blue">${u}</span>的位置。`, detail: '子宫正在慢慢缩小、往骨盆里走。每天顺时针揉揉肚子，帮它快一点回到原位~', compare: '' });
+    changes.push({ color: 'c-blue', sticker: '🌤️', label: '子宫复旧', text: `你的子宫在<span class="num-blue">${u}</span>的位置。`, detail: '子宫正在慢慢缩小、往骨盆里走。每天顺时针揉揉肚子，帮它快一点回到原位~', compare: '', trend: '', anchor: `<span class="anchor-standard">恢复方向</span> 脐下→脐耻之间→入盆 · 正在向入盆靠拢` });
   }
 
   // 乳腺
   if (bs === '需要疏通') {
-    changes.push({ color: 'c-pink', sticker: '🍼', label: '乳腺', text: '这周<span class="num">乳腺有些堵塞</span>，需要疏通一下。', detail: '别担心，乳腺堵塞在哺乳期很常见。不要自己硬揉，专业的疏通手法很轻柔，配合热敷很快就好了~', compare: '' });
+    changes.push({ color: 'c-pink', sticker: '🍼', label: '乳腺', text: '这周<span class="num">乳腺有些堵塞</span>，需要疏通一下。', detail: '别担心，乳腺堵塞在哺乳期很常见。不要自己硬揉，专业的疏通手法很轻柔，配合热敷很快就好了~', compare: '', trend: '', anchor: `<span class="anchor-standard">小贴士</span> 哺乳期超过60%的妈妈会遇到乳腺堵塞，很常见` });
   }
 
   // 腹直肌（取脐中作为主要指标）
   if (last && last.diastasisFingers !== null) {
     const diff = last.diastasisFingers - d;
+    const pct = d > 0 ? Math.round((1 - d / last.diastasisFingers) * 100) : 100;
     if (diff > 0) {
-      changes.push({ color: 'c-pink', sticker: '🎀', label: '腹直肌', text: `你的小肚肚脐中从${last.diastasisFingers}指收到<span class="num">${d}</span>指啦！`, detail: `比上周窄了${diff}指，腹直肌正在努力往中间靠拢。脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指，${asmt.diastasisFist}拳宽~`, compare: d <= 3 ? '这个恢复速度已经超过很多妈妈了' : '' });
+      changes.push({ color: 'c-pink', sticker: '🎀', label: '腹直肌', text: `你的小肚肚脐中从${last.diastasisFingers}指收到<span class="num">${d}</span>指啦！<span class="trend trend-up">↓ 收窄${diff}指</span>`, detail: `比上周窄了${diff}指，腹直肌正在努力往中间靠拢。脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指，${asmt.diastasisFist}拳宽~`, compare: d <= 3 ? '这个恢复速度已经超过很多妈妈了' : '', trend: 'up', anchor: `<span class="anchor-standard">达标线 ≤2指</span> 当前${d}指 · ${d <= 2 ? '已达标！' : `还差${(d-2).toFixed(1)}指`}` });
     } else if (diff === 0) {
-      changes.push({ color: 'c-pink', sticker: '💗', label: '腹直肌', text: `你的腹直肌这周脐中保持在<span class="num">${d}</span>指，没有再变宽。`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽。稳定也是一种进步~`, compare: '' });
+      changes.push({ color: 'c-pink', sticker: '💗', label: '腹直肌', text: `你的腹直肌这周脐中保持在<span class="num">${d}</span>指，没有再变宽。<span class="trend trend-flat">→ 持平</span>`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽。稳定也是一种进步~`, compare: '', trend: 'flat', anchor: `<span class="anchor-standard">达标线 ≤2指</span> 当前${d}指 · 保持稳定` });
     } else {
-      changes.push({ color: 'c-pink', sticker: '🌱', label: '腹直肌', text: `你的腹直肌脐中是<span class="num">${d}</span>指。`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽。每个人的恢复节奏不同~`, compare: '' });
+      changes.push({ color: 'c-pink', sticker: '🌱', label: '腹直肌', text: `你的腹直肌脐中是<span class="num">${d}</span>指。`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽。每个人的恢复节奏不同~`, compare: '', trend: '', anchor: `<span class="anchor-standard">达标线 ≤2指</span> 当前${d}指 · 持续观察中` });
     }
   } else {
-    if (d <= 2) changes.push({ color: 'c-pink', sticker: '✨', label: '腹直肌', text: `你的腹直肌脐中<span class="num">${d}</span>指，已经达标啦！`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽，恢复得不错~`, compare: '超过大部分同龄妈妈' });
-    else changes.push({ color: 'c-pink', sticker: '🎀', label: '腹直肌', text: `你的腹直肌脐中现在是<span class="num">${d}</span>指。`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽。标准线是2指以内~`, compare: '' });
+    if (d <= 2) changes.push({ color: 'c-pink', sticker: '✨', label: '腹直肌', text: `你的腹直肌脐中<span class="num">${d}</span>指，已经达标啦！`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽，恢复得不错~`, compare: '超过大部分同龄妈妈', trend: '', anchor: `<span class="anchor-standard">✓ 已达标</span> ≤2指为正常范围` });
+    else changes.push({ color: 'c-pink', sticker: '🎀', label: '腹直肌', text: `你的腹直肌脐中现在是<span class="num">${d}</span>指。<span class="trend trend-new">首次评估</span>`, detail: `脐上${asmt.diastasisUp}指、脐下${asmt.diastasisDown}指、${asmt.diastasisFist}拳宽。标准线是2指以内~`, compare: '', trend: 'new', anchor: `<span class="anchor-standard">达标线 ≤2指</span> 当前${d}指 · 产后6周内恢复最快` });
   }
 
   // 会阴
   if (pc === '外阴口闭合') {
-    changes.push({ color: 'c-lavender', sticker: '🌸', label: '会阴', text: '会阴<span style="color:var(--lavender);font-weight:600">外阴口已闭合</span>啦！', detail: '这一关你闯过去了，恢复得很好~', compare: '' });
+    changes.push({ color: 'c-lavender', sticker: '🌸', label: '会阴', text: '会阴<span style="color:var(--lavender);font-weight:600">外阴口已闭合</span>啦！', detail: '这一关你闯过去了，恢复得很好~', compare: '', trend: '', anchor: `<span class="anchor-standard">✓ 已达标</span> 外阴口闭合是会阴恢复的完成标志` });
   } else if (pc === '外阴口闭合不全') {
-    changes.push({ color: 'c-lavender', sticker: '🌷', label: '会阴', text: '会阴<span style="color:var(--lavender);font-weight:600">外阴口闭合不全</span>，在愈合中。', detail: '伤口正在慢慢长好，比之前好一些了。再给它一点时间~', compare: '' });
+    changes.push({ color: 'c-lavender', sticker: '🌷', label: '会阴', text: '会阴<span style="color:var(--lavender);font-weight:600">外阴口闭合不全</span>，在愈合中。', detail: '伤口正在慢慢长好，比之前好一些了。再给它一点时间~', compare: '', trend: '', anchor: `<span class="anchor-standard">正常周期</span> 产后3-4周大部分可自行闭合 · 你的身体正在愈合` });
   } else {
-    changes.push({ color: 'c-lavender', sticker: '🌺', label: '会阴', text: '会阴<span style="color:var(--lavender);font-weight:600">有膨出</span>。', detail: '这需要时间，每个人的愈合速度不同。注意保持清洁，我们也有修复手段可以帮忙~', compare: '' });
+    changes.push({ color: 'c-lavender', sticker: '🌺', label: '会阴', text: '会阴<span style="color:var(--lavender);font-weight:600">有膨出</span>。', detail: '这需要时间，每个人的愈合速度不同。注意保持清洁，我们也有修复手段可以帮忙~', compare: '', trend: '', anchor: `<span class="anchor-standard">可改善</span> 产后膨出通过修复辅助恢复速度明显加快` });
   }
 
   return changes;
 }
 
-function autoRecommend(asmt, days) {
+function autoRecommend(asmt, days, deliveryType) {
   const recs = [];
   const { diastasisMid, uterusPosition, perinealClosure, breastStatus } = asmt;
-  let abnormalCount = 0;
+  const abnormalKeys = []; // 记录哪些维度异常，用于套餐匹配
 
-  if (diastasisMid >= 4) { recs.push({...PRODUCT_MAP.diastasis_severe, fingers: diastasisMid, _key: 'diastasis'}); abnormalCount++; }
-  else if (diastasisMid > 2) { recs.push({...PRODUCT_MAP.diastasis_moderate, fingers: diastasisMid, _key: 'diastasis'}); abnormalCount++; }
-
-  if (perinealClosure !== '外阴口闭合') {
-    recs.push({... (perinealClosure === '膨出' ? PRODUCT_MAP.perineal_inner_rf : PRODUCT_MAP.perineal_rf), _key: 'perineal'});
-    abnormalCount++;
+  // 1. 腹直肌 — 3档
+  if (diastasisMid >= 4) {
+    recs.push({...PRODUCT_MAP.diastasis_severe, fingers: diastasisMid, _key: 'diastasis'});
+    abnormalKeys.push('diastasis');
+  } else if (diastasisMid >= 3) {
+    recs.push({...PRODUCT_MAP.diastasis_moderate, fingers: diastasisMid, _key: 'diastasis'});
+    abnormalKeys.push('diastasis');
+  } else if (diastasisMid >= 2.5) {
+    recs.push({...PRODUCT_MAP.diastasis_mild, fingers: diastasisMid, _key: 'diastasis'});
+    abnormalKeys.push('diastasis');
   }
 
-  if (uterusPosition === '未入盆') { recs.push({...PRODUCT_MAP.uterus_ultrasound, days, _key: 'uterus'}); abnormalCount++; }
-  else if (uterusPosition !== '入盆') { recs.push({...PRODUCT_MAP.uterus_low_freq, days, _key: 'uterus'}); abnormalCount++; }
+  // 2. 子宫 — 5种情况（需要产后天数+分娩方式判断）
+  const isCesarean = deliveryType === '剖宫产';
+  const isOverdue = isCesarean ? days > 21 : days > 14; // 顺产14天/剖宫产21天为入盆参考线
 
-  if (breastStatus === '需要疏通') { recs.push({...PRODUCT_MAP.breast_unclog, _key: 'breast'}); abnormalCount++; }
+  if (uterusPosition === '未入盆') {
+    if (isOverdue) {
+      recs.push({...PRODUCT_MAP.uterus_rf, days, _key: 'uterus'});
+    } else {
+      recs.push({...PRODUCT_MAP.uterus_ultrasound, days, _key: 'uterus'});
+    }
+    abnormalKeys.push('uterus');
+  } else if (uterusPosition === '脐下1指' || uterusPosition === '脐下2指' || uterusPosition === '脐下3指' || uterusPosition === '脐下4指') {
+    recs.push({...PRODUCT_MAP.uterus_ultrasound, days, _key: 'uterus'});
+    abnormalKeys.push('uterus');
+  } else if (uterusPosition === '脐耻之间') {
+    recs.push({...PRODUCT_MAP.uterus_rf, days, _key: 'uterus'});
+    abnormalKeys.push('uterus');
+  } else if (uterusPosition === '伤口上方') {
+    recs.push({...PRODUCT_MAP.uterus_breathing, days, _key: 'uterus'});
+    abnormalKeys.push('uterus');
+    // 剖宫产+伤口上方 → 额外推荐剖宫产专项子宫修复
+    if (isCesarean) {
+      recs.push({...PRODUCT_MAP.cesarean_uterus, days, _key: 'cesarean_uterus'});
+    }
+  }
+  // 入盆 → 不推荐
 
-  // 2项以上异常 → 推荐安心卡（套餐）
-  if (abnormalCount >= 2) recs.push({...PRODUCT_MAP['安心卡'], _key: 'package'});
+  // 3. 会阴 — 2档
+  if (perinealClosure === '膨出') {
+    recs.push({...PRODUCT_MAP.perineal_inner_rf, _key: 'perineal'});
+    abnormalKeys.push('perineal');
+  } else if (perinealClosure === '外阴口闭合不全') {
+    recs.push({...PRODUCT_MAP.perineal_rf, _key: 'perineal'});
+    abnormalKeys.push('perineal');
+  }
+  // 外阴口闭合 → 不推荐
+
+  // 4. 乳腺
+  if (breastStatus === '需要疏通') {
+    recs.push({...PRODUCT_MAP.breast_unclog, _key: 'breast'});
+    abnormalKeys.push('breast');
+  }
+
+  // 5. 组合套餐 — 按异常组合智能匹配
+  const hasD = abnormalKeys.includes('diastasis');
+  const hasU = abnormalKeys.includes('uterus');
+  const hasP = abnormalKeys.includes('perineal');
+  const hasB = abnormalKeys.includes('breast');
+
+  // 安心卡（含乳腺）：腹直肌+子宫+乳腺
+  if (hasD && hasU && hasB) {
+    recs.push({...PRODUCT_MAP.package_安心卡乳腺, _key: 'package_安心卡乳腺'});
+  }
+  // 安心卡：腹直肌+子宫+盆底肌（这里盆底肌=会阴异常，作为盆底肌的代理指标）
+  else if (hasD && hasU && hasP) {
+    recs.push({...PRODUCT_MAP.package_安心卡, _key: 'package_安心卡'});
+  }
+  // 生殖套餐2：腹直肌+盆底肌（会阴异常视为盆底肌相关）
+  else if (hasD && hasP) {
+    recs.push({...PRODUCT_MAP.package_repro2, _key: 'package_repro2'});
+  }
+  // 生殖套餐1：腹直肌+子宫
+  else if (hasD && hasU) {
+    recs.push({...PRODUCT_MAP.package_repro1, _key: 'package_repro1'});
+  }
 
   return recs.map(r => ({
     ...r,
@@ -1330,12 +1463,12 @@ const KNOWLEDGE_MAP = {
   diastasis: {
     icon: '🎀', color: 'k-pink', topic: '关于腹直肌分离',
     body: '腹直肌就是肚子正中间的两块肌肉，怀孕时会被宝宝撑开。<strong>产后分离2指以内是正常的</strong>，超过2指可以通过训练恢复。它在产后6周内恢复最快，但即使过了6周，坚持训练也有效~',
-    stats: '这周有8位妈妈和你一样在做腹直肌修复'
+    stats: '在橘米，腹直肌修复是最多妈妈选择的恢复项目之一'
   },
   pelvic: {
     icon: '🌱', color: 'k-green', topic: '关于盆底肌',
     body: '盆底肌就像一张"吊床"，托住你的子宫、膀胱和直肠。怀孕和分娩会让它变松弛，<strong>大部分妈妈产后盆底肌都会变弱</strong>，这是正常的。通过训练（凯格尔）和仪器辅助，3个月内是恢复黄金期~',
-    stats: '所里12位妈妈正在做盆底肌训练，大家都在努力'
+    stats: '盆底肌训练是产后恢复最普遍的项目'
   },
   // 注：盆底肌科普保留但不主动推荐（该板块已从评估表单中移除）
   uterus: {
@@ -1346,12 +1479,12 @@ const KNOWLEDGE_MAP = {
   perineal: {
     icon: '🌸', color: 'k-lavender', topic: '关于会阴恢复',
     body: '产后会阴需要时间恢复，<strong>外阴口闭合不全或轻微膨出都是常见的</strong>。保持清洁、避免久坐就好。如果恢复较慢，射频修复等手段可以帮忙，不用太担心~',
-    stats: '所里5位妈妈通过修复辅助，会阴恢复速度明显加快'
+    stats: '产后3-4周内大部分妈妈的会阴都能自行闭合'
   },
   breast: {
     icon: '🍼', color: 'k-pink', topic: '关于乳腺疏通',
     body: '乳腺堵塞在哺乳期很常见，<strong>不要自己硬揉</strong>，可能会越揉越肿。专业的疏通手法很轻柔，配合热敷和正确的哺乳姿势，很快就能缓解~',
-    stats: '所里每天都有妈妈做乳腺疏通，是很常规的护理'
+    stats: '哺乳期超过一半的妈妈会遇到乳腺问题，疏通是最常规的护理'
   }
 };
 
@@ -1489,6 +1622,8 @@ function applyTemplate(key) {
   if (t.lastWeek.perinealClosure) document.getElementById('inputLastPerineal').value = t.lastWeek.perinealClosure;
 
   document.getElementById('inputDoctorName').value = localStorage.getItem('jumi_doctorName') || '黄医生';
+  document.getElementById('inputDoctorTitle').value = localStorage.getItem('jumi_doctorTitle') || '妇产科主治医师';
+  document.getElementById('inputDoctorDate').value = '';
   document.getElementById('inputDoctorAdvice').value = t.doctorAdvice;
 
   // 产康师信息从localStorage读取默认值
@@ -1650,7 +1785,7 @@ function setNoteTpl(type) {
 
 function updateRecSummary() {
   const cfg = getFormData();
-  const autoRecs = autoRecommend(cfg.assessment, cfg.postpartumDays);
+  const autoRecs = autoRecommend(cfg.assessment, cfg.postpartumDays, cfg.deliveryType);
   const summary = document.getElementById('recSummary');
   const manualList = document.getElementById('recManualList');
 
@@ -1686,6 +1821,7 @@ function toggleAutoRec(key) {
 // 保存产康师和医生信息到localStorage
 function saveDefaults() {
   localStorage.setItem('jumi_doctorName', document.getElementById('inputDoctorName').value);
+  localStorage.setItem('jumi_doctorTitle', document.getElementById('inputDoctorTitle').value);
   localStorage.setItem('jumi_consultantName', document.getElementById('inputConsultantName').value);
   localStorage.setItem('jumi_consultantPhone', document.getElementById('inputConsultantPhone').value);
   localStorage.setItem('jumi_consultantWechat', document.getElementById('inputConsultantWechat').value);
@@ -1723,8 +1859,11 @@ function renderLetter() {
   const aff = AFFIRMATIONS[affIdx] || AFFIRMATIONS[2];
 
   const docAdvice = translateDoctorAdvice(cfg.doctorAdvice);
-  const allAutoRecs = autoRecommend(asmt, cfg.postpartumDays);
-  const recs = [...allAutoRecs.filter(r => !disabledAutoRecs.has(r._key)), ...manualRecs];
+  const allAutoRecs = autoRecommend(asmt, cfg.postpartumDays, cfg.deliveryType);
+  // 快出所时额外推荐盆底肌
+  const nearCheckout = cfg.totalStayDays > 0 && cfg.stayDays >= cfg.totalStayDays - 3;
+  const checkoutRec = nearCheckout ? [{...PRODUCT_MAP.checkout_pelvic, _key: 'checkout_pelvic', why: PRODUCT_MAP.checkout_pelvic.why, source: '系统推荐'}] : [];
+  const recs = [...allAutoRecs.filter(r => !disabledAutoRecs.has(r._key)), ...checkoutRec.filter(r => !disabledAutoRecs.has(r._key)), ...manualRecs];
   const todos = autoTodos(asmt);
   const knowledgeItems = getKnowledgeItems(asmt);
   const c = cfg.consultant;
@@ -1732,6 +1871,17 @@ function renderLetter() {
   // 双时间线文案
   const postpartumText = `产后第${cfg.postpartumDays}天 · 第${cfg.currentWeek}周`;
   const stayText = '陪你慢慢恢复 ✦';
+
+  // 医生查房日期文案
+  let doctorRoleText = '';
+  if (cfg.doctorTitle) doctorRoleText = cfg.doctorTitle;
+  let doctorDateText = '';
+  if (cfg.doctorDate) {
+    const dd = new Date(cfg.doctorDate);
+    doctorDateText = `${dd.getMonth()+1}月${dd.getDate()}日查房`;
+  } else {
+    doctorDateText = `产后第${cfg.postpartumDays}天查房`;
+  }
 
   let html = `
   <div class="letter-inner" data-layout="${currentLetterLayout}">
@@ -1749,6 +1899,7 @@ function renderLetter() {
     <div class="envelope-brand">橘 米 康 复 中 心</div>
     <div class="envelope-line"></div>
     <div class="envelope-date">${postpartumText}</div>
+    <div class="envelope-to">TO：${cfg.name}妈妈 · 第${cfg.currentWeek}周周报</div>
     <div class="envelope-sub">${stayText}</div>
   </div>
 
@@ -1768,11 +1919,6 @@ function renderLetter() {
     <div class="salutation-sub">展信安 ✿ 这是你在橘米的第${cfg.stayDays || cfg.postpartumDays}天${cfg.totalStayDays > 0 ? `，还有${cfg.totalStayDays - cfg.stayDays}天就要回家啦` : ''}</div>
   </div>
 
-  <div class="affirmation">
-    <div class="affirmation-text">${aff.text.replace('{name}', cfg.name)}</div>
-    <div class="affirmation-sign">${aff.sign}</div>
-  </div>
-
   <div class="section">
     <div class="section-tag">WEEK ${cfg.currentWeek} · 产后第${cfg.postpartumDays}天</div>
     <div class="section-title"><span class="section-emoji">🌿</span><span class="hand">这周，你的身体悄悄发生了这些变化</span></div>
@@ -1784,8 +1930,14 @@ function renderLetter() {
         <div class="change-text">${c.text}</div>
         <div class="change-detail">${c.detail}</div>
         ${c.compare ? `<div class="change-compare">${c.compare}</div>` : ''}
+        ${c.anchor ? `<div class="change-anchor">${c.anchor}</div>` : ''}
       </div>`).join('')}
     </div>
+  </div>
+
+  <div class="affirmation">
+    <div class="affirmation-text">${aff.text.replace('{name}', cfg.name)}</div>
+    <div class="affirmation-sign">${aff.sign}</div>
   </div>
 
   ${knowledgeItems.length > 0 ? `
@@ -1814,8 +1966,8 @@ function renderLetter() {
       <div class="doctor-from">
         <div class="doctor-avatar">${cfg.doctorName.charAt(0)}</div>
         <div class="doctor-info">
-          <div class="d-name">${cfg.doctorName}</div>
-          <div class="d-role">产后第${cfg.postpartumDays}天查房</div>
+          <div class="d-name">${cfg.doctorName}${doctorRoleText ? ` · ${doctorRoleText}` : ''}</div>
+          <div class="d-role">${doctorDateText}</div>
         </div>
       </div>
       <div class="doctor-words">${docAdvice}</div>
@@ -1844,10 +1996,10 @@ function renderLetter() {
   <div class="advice-section">
     <div class="advice-header">
       <span class="advice-header-icon">🌿</span>
-      <span class="advice-header-text">有些妈妈会选择这些来辅助恢复</span>
+      <span class="advice-header-text">根据你的情况，这些项目可能会帮到你</span>
       ${recs.length > 2 ? `<span class="advice-header-count">${recs.length}项</span>` : ''}
     </div>
-    <div class="advice-intro">了解一下，合适再做~</div>
+    <div class="advice-intro">以下是我们根据这周评估数据整理的，供你参考选择~</div>
     <div class="advice-list">
       ${recs.map(r => `
       <div class="advice-card ${r.color}">
@@ -1867,7 +2019,7 @@ function renderLetter() {
     html += `
     <div class="personal-note-section">
       <div class="personal-note-card">
-        <div class="personal-note-title">📝 来自${c.name || '产康师'}的悄悄话</div>
+        <div class="personal-note-title">💌 ${c.name || '产康师'}写给你的</div>
         <div class="personal-note-body">${cfg.personalNote}</div>
       </div>
     </div>`;
@@ -1906,10 +2058,11 @@ function renderLetter() {
   <div class="footer">
     <div class="footer-line"></div>
     <div class="footer-note">
-      内线前台：6305 · 本信基于产后第${cfg.postpartumDays}天评估数据生成<br>
-      具体康复方案请遵医嘱，结合个人实际情况制定
+      内线前台：6305 · 以上数据来自你产后第${cfg.postpartumDays}天的评估<br>
+      方案可以随时和产康顾问沟通调整~
     </div>
   </div>
+
   </div><!-- /.letter-inner -->
   `;
 
@@ -1934,7 +2087,7 @@ document.getElementById('inputCheckInDate').addEventListener('change', calcDaysF
 document.getElementById('inputCheckOutDate').addEventListener('change', calcDaysFromDate);
 
 // 产康师信息变更时保存
-['inputDoctorName', 'inputConsultantName', 'inputConsultantPhone', 'inputConsultantWechat', 'inputConsultantHours'].forEach(id => {
+['inputDoctorName', 'inputDoctorTitle', 'inputDoctorDate', 'inputConsultantName', 'inputConsultantPhone', 'inputConsultantWechat', 'inputConsultantHours'].forEach(id => {
   document.getElementById(id).addEventListener('change', saveDefaults);
 });
 
@@ -2022,6 +2175,11 @@ updateRecSummary();
 calcDaysFromDate();
 
 renderLetter();
+
+// ═══════════════════════════════════════════════════════════
+//  交互功能
+// ═══════════════════════════════════════════════════════════
+
 </script>
 
 </body>
