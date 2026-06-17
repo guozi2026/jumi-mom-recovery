@@ -52,6 +52,7 @@ body {
 .editor-panel {
   width: 380px;
   min-width: 380px;
+  max-width: 380px;
   background: var(--editor-bg);
   border-right: 1px solid var(--warm2);
   display: flex;
@@ -198,7 +199,13 @@ body {
 .client-info-grid .form-input,
 .client-info-grid .form-select {
   width: 100%;
+  min-width: 0;
   box-sizing: border-box;
+}
+/* 网格列不允许溢出 */
+.client-info-grid > * {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .form-row.half {
