@@ -64,7 +64,7 @@ body {
 .form-nav {
   display: flex;
   gap: 6px;
-  padding: 12px 20px;
+  padding: 10px 16px;
   background: var(--editor-bg);
   border-bottom: 1px solid var(--warm2);
   position: sticky;
@@ -96,7 +96,7 @@ body {
 .form-scroll-container {
   flex: 1;
   overflow-y: auto;
-  padding: 0 20px 40px;
+  padding: 0 16px 30px;
 }
 
 .form-scroll-container::-webkit-scrollbar { width: 6px; }
@@ -166,12 +166,12 @@ body {
 }
 
 .form-section-title {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   color: var(--text);
-  padding-bottom: 8px;
+  padding-bottom: 6px;
   border-bottom: 1px solid var(--warm2);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -180,19 +180,25 @@ body {
 .form-section-title .emoji { font-size: 15px; }
 
 .form-row {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 /* 紧凑表单行 - 客户信息区使用 */
 .form-row.compact {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 /* 客户信息网格 - 双列紧凑布局 */
 .client-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0 12px;
+  gap: 0 10px;
+}
+/* 网格内所有表单控件统一宽度，防止下拉框被长选项撑宽 */
+.client-info-grid .form-input,
+.client-info-grid .form-select {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-row.half {
@@ -207,22 +213,24 @@ body {
 }
 
 .form-label {
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--text2);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   display: block;
 }
 
 .form-input, .form-select, .form-textarea {
   width: 100%;
+  max-width: 100%;
   border: 1px solid var(--warm2);
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 13px;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12.5px;
   color: var(--text);
   background: var(--card);
   font-family: inherit;
   transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
 }
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
@@ -233,8 +241,8 @@ body {
 
 .form-textarea {
   resize: vertical;
-  min-height: 60px;
-  line-height: 1.6;
+  min-height: 50px;
+  line-height: 1.5;
 }
 
 .form-hint {
