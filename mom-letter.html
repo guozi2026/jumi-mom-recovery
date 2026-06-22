@@ -681,13 +681,31 @@ body {
 }
 .contact-name { font-size: 13px; font-weight: 600; color: var(--text); }
 .contact-role { font-size: 11px; color: var(--text3); }
-.contact-methods { display: flex; flex-direction: column; gap: 6px; }
-.contact-method {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--warm); border-radius: 8px; padding: 8px 10px;
+
+/* 顾问二维码 */
+.contact-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 0;
+  padding: 10px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px dashed var(--warm2);
 }
-.contact-label { font-size: 10px; color: var(--text3); }
-.contact-value { font-size: 12px; color: var(--text); font-weight: 500; }
+.contact-qr img {
+  width: 120px;
+  height: 120px;
+  border-radius: 6px;
+  object-fit: contain;
+}
+.contact-qr-label {
+  font-size: 10px;
+  color: var(--text3);
+  margin-top: 6px;
+  text-align: center;
+}
+
 .contact-hint { font-size: 10.5px; color: var(--text3); text-align: center; margin-top: 8px; font-style: italic; }
 
 /* 信尾 */
@@ -1155,23 +1173,16 @@ body.screenshot-mode .back-to-edit-btn {
 
     <!-- 产康师信息 -->
     <div class="form-section" id="consultant">
-      <div class="form-section-title"><span class="emoji">👩‍⚕️</span> 产康顾问信息（默认值会记住）</div>
+      <div class="form-section-title"><span class="emoji">👩‍⚕️</span> 产康顾问（选择后自动显示二维码）</div>
       <div class="client-info-grid">
         <div class="form-row compact">
-          <label class="form-label">顾问姓名</label>
-          <input class="form-input" id="inputConsultantName" value="小林" placeholder="顾问姓名">
-        </div>
-        <div class="form-row compact">
-          <label class="form-label">联系电话</label>
-          <input class="form-input" id="inputConsultantPhone" value="138-0000-0000" placeholder="138-0000-0000">
-        </div>
-        <div class="form-row compact">
-          <label class="form-label">微信号</label>
-          <input class="form-input" id="inputConsultantWechat" value="jumi_xiaolin" placeholder="微信号">
-        </div>
-        <div class="form-row compact">
-          <label class="form-label">在线时间</label>
-          <input class="form-input" id="inputConsultantHours" value="8:00-20:00" placeholder="如 8:00-20:00">
+          <label class="form-label">选择顾问</label>
+          <select class="form-input" id="selectConsultant" onchange="onConsultantSelect()">
+            <option value="">-- 请选择 --</option>
+            <option value="pingping">萍萍</option>
+            <option value="peipei">培培</option>
+            <option value="yingying">英英</option>
+          </select>
         </div>
       </div>
     </div>
@@ -1223,6 +1234,46 @@ const AFFIRMATIONS = [
   { text: "你的身体在一点一点变好，{name}，每一点进步都值得被看见。", sign: "——橘米为你记录" },
   { text: "从入院到现在，你走了这么远。<span class='highlight'>你比自己以为的更勇敢</span>，{name}。", sign: "——橘米永远在你身后" },
 ];
+
+// ═══════════════════════════════════════════════════════════
+//  产康顾问档案（名字→自动填充信息+二维码）
+// ═══════════════════════════════════════════════════════════
+const CONSULTANT_MAP = {
+  pingping: {
+    name: '萍萍',
+    qrImage: 'qr-pingping.png',
+  },
+  peipei: {
+    name: '培培',
+    qrImage: 'qr-peipei.png',
+  },
+  yingying: {
+    name: '英英',
+    qrImage: 'qr-yingying.png',
+  },
+};
+
+// 选择产康顾问时自动填充信息
+function onConsultantSelect() {
+  const select = document.getElementById('selectConsultant');
+  const key = select.value;
+  if (!key) {
+    // 清空选择
+    document.getElementById('inputConsultantName').value = '';
+    saveDefaults();
+    renderLetter();
+    return;
+  }
+
+  const info = CONSULTANT_MAP[key];
+  if (!info) return;
+
+  document.getElementById('inputConsultantName').value = info.name;
+
+  // 保存到localStorage并刷新信件
+  saveDefaults();
+  renderLetter();
+}
 
 const PRODUCT_MAP = {
   // 腹直肌 — 3档
@@ -1305,13 +1356,29 @@ function getFormData() {
     doctorDate: document.getElementById('inputDoctorDate').value || '',
     doctorAdvice: document.getElementById('inputDoctorAdvice').value.trim() || '',
     consultant: {
-      name: document.getElementById('inputConsultantName').value.trim() || '',
-      phone: document.getElementById('inputConsultantPhone').value.trim() || '',
-      wechat: document.getElementById('inputConsultantWechat').value.trim() || '',
-      workingHours: document.getElementById('inputConsultantHours').value.trim() || '',
+      name: getConsultantName(),
+      qrImage: getConsultantQrImage(),
     },
     personalNote: document.getElementById('inputPersonalNote').value.trim() || '',
   };
+}
+
+function getConsultantName() {
+  const select = document.getElementById('selectConsultant');
+  const key = select ? select.value : '';
+  if (key && CONSULTANT_MAP[key]) {
+    return CONSULTANT_MAP[key].name || '';
+  }
+  return '';
+}
+
+function getConsultantQrImage() {
+  const select = document.getElementById('selectConsultant');
+  const key = select ? select.value : '';
+  if (key && CONSULTANT_MAP[key]) {
+    return CONSULTANT_MAP[key].qrImage || '';
+  }
+  return '';
 }
 
 function translateDoctorAdvice(advice) {
@@ -1642,10 +1709,13 @@ function applyTemplate(key) {
   document.getElementById('inputDoctorAdvice').value = t.doctorAdvice;
 
   // 产康师信息从localStorage读取默认值
+  const savedSelect = localStorage.getItem('jumi_consultantSelect');
+  if (savedSelect) {
+    document.getElementById('selectConsultant').value = savedSelect;
+  } else {
+    document.getElementById('selectConsultant').value = '';
+  }
   document.getElementById('inputConsultantName').value = localStorage.getItem('jumi_consultantName') || t.consultant.name;
-  document.getElementById('inputConsultantPhone').value = localStorage.getItem('jumi_consultantPhone') || t.consultant.phone;
-  document.getElementById('inputConsultantWechat').value = localStorage.getItem('jumi_consultantWechat') || t.consultant.wechat;
-  document.getElementById('inputConsultantHours').value = localStorage.getItem('jumi_consultantHours') || t.consultant.workingHours;
   document.getElementById('inputPersonalNote').value = t.personalNote;
 
   // 设置分娩日期（根据天数反推）
@@ -1838,9 +1908,7 @@ function saveDefaults() {
   localStorage.setItem('jumi_doctorName', document.getElementById('inputDoctorName').value);
   localStorage.setItem('jumi_doctorTitle', document.getElementById('inputDoctorTitle').value);
   localStorage.setItem('jumi_consultantName', document.getElementById('inputConsultantName').value);
-  localStorage.setItem('jumi_consultantPhone', document.getElementById('inputConsultantPhone').value);
-  localStorage.setItem('jumi_consultantWechat', document.getElementById('inputConsultantWechat').value);
-  localStorage.setItem('jumi_consultantHours', document.getElementById('inputConsultantHours').value);
+  localStorage.setItem('jumi_consultantSelect', document.getElementById('selectConsultant').value);
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -2042,10 +2110,14 @@ function renderLetter() {
 
   // 联系顾问
   if (c.name) {
+    const hasQr = c.qrImage && c.qrImage.trim() !== '';
+    const qrHtml = hasQr
+      ? `<div class="contact-qr"><img src="${c.qrImage}" alt="${c.name}的微信二维码"><div class="contact-qr-label">扫码添加${c.name}微信</div></div>`
+      : '';
     html += `
     <div class="contact-section">
       <div class="contact-card">
-        <div class="contact-title">想约训练或了解方案？找我聊聊 🌿</div>
+        <div class="contact-title">想约训练或了解方案？找${c.name}聊聊 🌿</div>
         <div class="contact-consultant">
           <div class="contact-avatar">${c.name.charAt(0)}</div>
           <div class="contact-info">
@@ -2053,11 +2125,7 @@ function renderLetter() {
             <div class="contact-role">你的专属产康顾问</div>
           </div>
         </div>
-        <div class="contact-methods">
-          ${c.phone ? `<div class="contact-method"><div class="contact-label">📞 电话</div><div class="contact-value">${c.phone}</div></div>` : ''}
-          ${c.wechat ? `<div class="contact-method"><div class="contact-label">💬 微信</div><div class="contact-value">${c.wechat}</div></div>` : ''}
-          ${c.workingHours ? `<div class="contact-method"><div class="contact-label">🕐 在线</div><div class="contact-value">${c.workingHours}</div></div>` : ''}
-        </div>
+        ${qrHtml}
         <div class="contact-hint">想约训练、了解恢复方案，随时跟我说～</div>
       </div>
     </div>`;
@@ -2102,9 +2170,15 @@ document.getElementById('inputCheckInDate').addEventListener('change', calcDaysF
 document.getElementById('inputCheckOutDate').addEventListener('change', calcDaysFromDate);
 
 // 产康师信息变更时保存
-['inputDoctorName', 'inputDoctorTitle', 'inputDoctorDate', 'inputConsultantName', 'inputConsultantPhone', 'inputConsultantWechat', 'inputConsultantHours'].forEach(id => {
-  document.getElementById(id).addEventListener('change', saveDefaults);
+['inputDoctorName', 'inputDoctorTitle', 'inputDoctorDate', 'selectConsultant'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('change', saveDefaults);
 });
+// 选择器变更也保存
+const selectConsultantEl = document.getElementById('selectConsultant');
+if (selectConsultantEl) {
+  selectConsultantEl.addEventListener('change', saveDefaults);
+}
 
 // 截图模式：隐藏编辑面板
 function doScreenshot() {
